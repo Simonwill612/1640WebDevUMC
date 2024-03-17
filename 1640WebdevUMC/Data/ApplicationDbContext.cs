@@ -10,7 +10,9 @@ namespace _1640WebDevUMC.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-        }
+        }  
+        public DbSet<Accounts>? Accounts { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder); // Call base implementation
@@ -18,7 +20,6 @@ namespace _1640WebDevUMC.Data
             // Configure keyless entity type for SelectListItem
             modelBuilder.Entity<SelectListGroup>().HasNoKey();
         }
-        public DbSet<Account>? Accounts { get; set; }
 
     }
 }

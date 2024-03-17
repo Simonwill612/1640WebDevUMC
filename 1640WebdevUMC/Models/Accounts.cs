@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace _1640WebDevUMC.Models
 {
-    public class Account
+    public class Accounts
     {
         public string Id { get; set; }
         public string Email { get; set; }

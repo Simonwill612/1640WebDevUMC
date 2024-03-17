@@ -1,4 +1,4 @@
-﻿@model IEnumerable<_1640WebDevUMC.Models.Account>
+﻿@model IEnumerable<_1640WebDevUMC.Models.Accounts>
 @using Microsoft.AspNetCore.Identity
 
 @{
@@ -33,7 +33,7 @@
                     @Html.DisplayFor(modelItem => item.RoleName)
                 </td>
                 <td>
-                    <a asp-action="EditAccount" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-controller="EditAccount" asp-action="EditAccount" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
             </tr>
