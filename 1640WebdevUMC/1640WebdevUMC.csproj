@@ -9,6 +9,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Guest\**" />
+    <Compile Remove="Views\Maketing Manager\**" />
+    <Compile Remove="Views\Marketing Coordinator\**" />
+    <Content Remove="Views\Guest\**" />
+    <Content Remove="Views\Maketing Manager\**" />
+    <Content Remove="Views\Marketing Coordinator\**" />
+    <EmbeddedResource Remove="Views\Guest\**" />
+    <EmbeddedResource Remove="Views\Maketing Manager\**" />
+    <EmbeddedResource Remove="Views\Marketing Coordinator\**" />
+    <None Remove="Views\Guest\**" />
+    <None Remove="Views\Maketing Manager\**" />
+    <None Remove="Views\Marketing Coordinator\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.3" />
@@ -19,12 +34,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Views\Maketing Manager\" />
-    <Folder Include="Views\Guest\" />
-    <Folder Include="Views\Marketing Coordinator\" />
   </ItemGroup>
 
   <ItemGroup>

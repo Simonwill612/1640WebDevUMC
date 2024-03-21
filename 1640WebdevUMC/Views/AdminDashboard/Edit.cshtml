@@ -1,36 +1,36 @@
-﻿@model _1640WebDevUMC.Models.Accounts
+﻿@model _1640WebDevUMC.Models.UserViewModel
 
-@{
-    ViewData["Title"] = "Edit";
-}
+<h2>Edit User</h2>
 
-<h1>Edit</h1>
+<form asp-action="EditUser" method="post">
+    <input type="hidden" asp-for="Id" />
 
-<h4>Account</h4>
-<hr />
-
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RoleName">Role</label>
-                <select asp-for="RoleName" class="form-control" asp-items="Model.RolesList">
-                    <option value="">Select Role</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    <div>
+        <label asp-for="Email"></label>
+        <input asp-for="Email" />
+        <span asp-validation-for="Email"></span>
     </div>
-</div>
+
+    <div>
+        <label asp-for="EmailConfirmed"></label>
+        <input asp-for="EmailConfirmed" />
+        <span asp-validation-for="EmailConfirmed"></span>
+    </div>
+
+    <div>
+        <label for="PasswordHash">New Password</label>
+        <input id="PasswordHash" name="PasswordHash" type="password" />
+    </div>
+
+    <div>
+        <label asp-for="Roles"></label>
+        <select asp-for="Roles" asp-items="@(new SelectList(Model.AllRoles))" multiple>
+        </select>
+        <span asp-validation-for="Roles"></span>
+    </div>
+
+    <button type="submit">Save</button>
+</form>
 
 <div>
     <a asp-action="Index">Back to List</a>
