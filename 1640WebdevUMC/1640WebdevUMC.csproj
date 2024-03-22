@@ -77,6 +77,16 @@
     <None Include="Areas\Identity\Pages\_ValidationScriptsPartial.cshtml" />
     <None Include="Areas\Identity\Pages\_ViewImports.cshtml" />
     <None Include="Areas\Identity\Pages\_ViewStart.cshtml" />
+    <None Include="Views\AcademicYears\Create.cshtml" />
+    <None Include="Views\AcademicYears\Delete.cshtml" />
+    <None Include="Views\AcademicYears\Details.cshtml" />
+    <None Include="Views\AcademicYears\Edit.cshtml" />
+    <None Include="Views\AcademicYears\Index.cshtml" />
+    <None Include="Views\Faculties\Create.cshtml" />
+    <None Include="Views\Faculties\Delete.cshtml" />
+    <None Include="Views\Faculties\Details.cshtml" />
+    <None Include="Views\Faculties\Edit.cshtml" />
+    <None Include="Views\Faculties\Index.cshtml" />
     <None Include="wwwroot\js\site.js" />
     <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map" />
     <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map" />

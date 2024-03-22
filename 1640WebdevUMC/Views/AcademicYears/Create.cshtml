@@ -1,0 +1,52 @@
+﻿@model _1640WebDevUMC.Models.AcademicYear
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>AcademicYear</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control" />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FacultyId" class="control-label"></label>
+                <select asp-for="FacultyId" class ="form-control" asp-items="ViewBag.FacultyId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="FinalDate" class="control-label"></label>
+                <input asp-for="FinalDate" class="form-control" />
+                <span asp-validation-for="FinalDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ClosureDate" class="control-label"></label>
+                <input asp-for="ClosureDate" class="form-control" />
+                <span asp-validation-for="ClosureDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label"></label>
+                <input asp-for="StartDate" class="form-control" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

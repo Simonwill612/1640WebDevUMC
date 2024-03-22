@@ -1,37 +1,92 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @model IEnumerable<IdentityRole>
 
-@{
-    ViewData["Title"] = "Roles";
-}
-
-<h1>Management Roles</h1>
-<p>
-    <a asp-action="Create">Create New Role</a>
-</p>
-
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>@Html.DisplayNameFor(model => model.Id)</th>
-            <th>@Html.DisplayNameFor(model => model.Name)</th>
-            <th>@Html.DisplayNameFor(model => model.NormalizedName)</th>
-            <th>Action</th> <!-- Added Action column -->
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@Html.DisplayFor(modelitem => item.Id)</td>
-                <td>@Html.DisplayFor(modelitem => item.Name)</td>
-                <td>@Html.DisplayFor(modelitem => item.NormalizedName)</td>
-                <td>
-                    <form asp-action="Delete" asp-route-id="@item.Id" method="post" onsubmit="return confirm('Are you sure you want to delete this role?');">
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
-                </td>
-            </tr>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Management Roles</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
         }
-    </tbody>
-</table>
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .btn-danger {
+            color: #fff;
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+            .btn-danger:hover {
+                color: #fff;
+                background-color: #c82333;
+                border-color: #bd2130;
+            }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .action-column {
+            width: 100px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Management Roles</h1>
+    <p>
+        <a href="/Create" class="btn btn-primary">Create New Role</a>
+    </p>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Normalized Name</th>
+                <th class="action-column">Action</th> <!-- Added Action column -->
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelitem => item.Id)</td>
+                    <td>@Html.DisplayFor(modelitem => item.Name)</td>
+                    <td>@Html.DisplayFor(modelitem => item.NormalizedName)</td>
+                    <td>
+                        <form asp-action="Delete" asp-route-id="@item.Id" method="post" onsubmit="return confirm('Are you sure you want to delete this role?');">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</body>
+</html>

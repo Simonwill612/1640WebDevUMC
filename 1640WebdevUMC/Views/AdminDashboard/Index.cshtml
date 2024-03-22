@@ -1,33 +1,105 @@
-﻿@model List<UserViewModel>
-<li class="nav-item">
-    <a class="nav-link" asp-area="Identity" asp-page="/Account/Register" style="color: red;">Register</a>
-</li>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Email</th>
-            <th>Email Confirmed</th>
-            <th>Password Hash</th>
-            <th>Roles</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var user in Model)
-        {
-            <tr>
-                <td>@user.Id</td>
-                <td>@user.Email</td>
-                <td>@user.EmailConfirmed</td>
-                <td>@user.PasswordHash</td>
-                <td>@string.Join(", ", user.Roles)</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@user.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@user.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@user.Id">Delete</a>
-                </td>
-            </tr>
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Manager</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
         }
-    </tbody>
-</table>
+
+        .bg-img:after {
+            position: absolute;
+            content: '';
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: rgba(0,0,0,0.7);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .nav-item {
+            list-style: none;
+            display: inline;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: red;
+        }
+
+            .nav-link:hover {
+                text-decoration: underline;
+            }
+
+        .actions a {
+            text-decoration: none;
+            margin-right: 5px;
+        }
+
+            .actions a:hover {
+                text-decoration: underline;
+            }
+    </style>
+</head>
+<body>
+
+    <ul class="nav">
+        <li class="nav-item">
+            <a class="nav-link" href="/Identity/Account/Register">Create new accounts</a>
+        </li>
+    </ul>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Email</th>
+                <th>Email Confirmed</th>
+                <th>Password Hash</th>
+                <th>Roles</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Id</td>
+                    <td>@user.Email</td>
+                    <td>@user.EmailConfirmed</td>
+                    <td>*********</td>
+                    <td>@string.Join(", ", user.Roles)</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@user.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@user.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@user.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</body>
+</html>
