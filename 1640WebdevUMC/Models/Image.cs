@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace _1640WebDevUMC.Models
 {
     public partial class Image
     {
-        public int ImageId { get; set; }
+        [Key]
+        public int ImageID { get; set; }
 
-        public int? ContributionId { get; set; }
+        [ForeignKey("Contribution")]
+        public int ContributionID { get; set; }
 
-        public byte[]? Image1 { get; set; }
+        public byte[] ImageData { get; set; }
 
-        public string? Description { get; set; }
+        public string Description { get; set; }
 
-        public virtual Contribution? Contribution { get; set; }
+        public virtual Contribution Contribution { get; set; }
     }
 }

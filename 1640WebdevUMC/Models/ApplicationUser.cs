@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 using _1640WebDevUMC.Models;
 using Microsoft.AspNetCore.Identity;
 
-namespace _1640WebDevUMC.Models;
-
-// Add profile data for application users by adding properties to the UMCPJ1640_WEND_User class
-public class ApplicationUser : IdentityUser
+namespace _1640WebDevUMC.Models
 {
-    [ForeignKey("Faculty")]
-    public string? FacultyID { get; set; }
-    public Faculty? Faculty { get; set; }
-    public DateTime CreatedTime { get; set; }
-    public List<Notification>? Notifications { get; set; }
-    public List<Contribution>? Contributions { get; set; }
-    public virtual ICollection<IdentityUserRole<string>> Roles { get; } = new List<IdentityUserRole<string>>();
+    public class ApplicationUser : IdentityUser
+    {
+        [ForeignKey("Faculty")]
+        public int? FacultyID { get; set; }
+        public virtual Faculty Faculty { get; set; }
 
+        public DateTime CreatedTime { get; set; }
+
+        public virtual ICollection<Notification> Notifications { get; set; }
+        public virtual ICollection<Contribution> Contributions { get; set; }
+        public virtual ICollection<IdentityUserRole<string>> Roles { get; } = new List<IdentityUserRole<string>>();
+    }
 }
-

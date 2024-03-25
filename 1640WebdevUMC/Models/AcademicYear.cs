@@ -6,15 +6,22 @@ namespace _1640WebDevUMC.Models
     public class AcademicYear
     {
         [Key]
-        public string Id { get; set; }=Guid.NewGuid().ToString();
+        public int YearID { get; set; }
+
+        [Required]
+        public DateTime UploadDate { get; set; }
+
+        [Required]
+        public DateTime ClosureDate { get; set; }
+
+        [Required]
+        public DateTime FinalClosureDate { get; set; }
 
         [ForeignKey("Faculty")]
-        public string FacultyId { get; set; }=string.Empty;
-        public Faculty? Faculty { get; set; }    
+        public int FacultyID { get; set; }
 
+        public virtual Faculty Faculty { get; set; }
 
-        public DateTime FinalDate { get; set; }
-        public DateTime ClosureDate { get; set; }
-        public DateTime StartDate { get; set; }
+        public virtual ICollection<Contribution> Contributions { get; set; }
     }
 }

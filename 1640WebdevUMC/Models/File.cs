@@ -1,24 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace _1640WebDevUMC.Models
 {
     public partial class File
     {
-        public int FileId { get; set; }
+        [Key]
+        public int FileID { get; set; }
 
-        public string FileName { get; set; } = null!;
+        [Required]
+        public string FileName { get; set; }
 
-        public string FileType { get; set; } = null!;
+        public string FileType { get; set; }
 
         public int FileSize { get; set; }
 
-        public DateTime? UploadDate { get; set; }
+        [Required]
+        public DateTime UploadDate { get; set; }
 
-        public byte[]? FileContent { get; set; }
+        public byte[] FileContent { get; set; }
 
-        public int? ContributionId { get; set; }
+        [ForeignKey("Contribution")]
+        public int ContributionID { get; set; }
 
-        public virtual Contribution? Contribution { get; set; }
+        public virtual Contribution Contribution { get; set; }
     }
 }
