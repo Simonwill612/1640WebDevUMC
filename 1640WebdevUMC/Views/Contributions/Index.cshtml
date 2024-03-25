@@ -1,0 +1,89 @@
+﻿@model IEnumerable<_1640WebDevUMC.Models.Contribution>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ApplicationUser)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Content)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UploadDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClosureDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FinalClosureDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Comment)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SelectedForPublication)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AcademicYear)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApplicationUser.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Content)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UploadDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClosureDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FinalClosureDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Comment)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SelectedForPublication)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AcademicYear.YearID)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ContributionID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ContributionID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ContributionID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
