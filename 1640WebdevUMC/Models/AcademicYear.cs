@@ -22,6 +22,5 @@ namespace _1640WebDevUMC.Models
 
         public virtual Faculty? Faculty { get; set; }
 
-/*        public virtual ICollection<Contribution> Contributions { get; set; }
-*/    }
+    }
 }

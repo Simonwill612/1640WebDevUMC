@@ -81,16 +81,17 @@ namespace _1640WebDevUMC.Migrations
                     UploadDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ClosureDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     FinalClosureDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    FacultyId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    FacultyID = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AcademicYears", x => x.AcademicYearID);
                     table.ForeignKey(
-                        name: "FK_AcademicYears_Faculties_FacultyId",
-                        column: x => x.FacultyId,
+                        name: "FK_AcademicYears_Faculties_FacultyID",
+                        column: x => x.FacultyID,
                         principalTable: "Faculties",
-                        principalColumn: "FacultyID");
+                        principalColumn: "FacultyID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -98,7 +99,7 @@ namespace _1640WebDevUMC.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FacultyId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    FacultyID = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -119,8 +120,8 @@ namespace _1640WebDevUMC.Migrations
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_Faculties_FacultyId",
-                        column: x => x.FacultyId,
+                        name: "FK_AspNetUsers_Faculties_FacultyID",
+                        column: x => x.FacultyID,
                         principalTable: "Faculties",
                         principalColumn: "FacultyID");
                 });
@@ -220,15 +221,13 @@ namespace _1640WebDevUMC.Migrations
                 name: "Contributions",
                 columns: table => new
                 {
-                    ContributionID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ContributionID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AcademicYearID = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AcademicYearID = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Comment = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SelectedForPublication = table.Column<bool>(type: "bit", nullable: false)
+                    CommentDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -237,8 +236,7 @@ namespace _1640WebDevUMC.Migrations
                         name: "FK_Contributions_AcademicYears_AcademicYearID",
                         column: x => x.AcademicYearID,
                         principalTable: "AcademicYears",
-                        principalColumn: "AcademicYearID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "AcademicYearID");
                     table.ForeignKey(
                         name: "FK_Contributions_AspNetUsers_Id",
                         column: x => x.Id,
@@ -254,7 +252,7 @@ namespace _1640WebDevUMC.Migrations
                     DownloadID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     MarketingManagerID = table.Column<int>(type: "int", nullable: false),
-                    ContributionID = table.Column<int>(type: "int", nullable: false),
+                    ContributionID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     DownloadDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -279,7 +277,7 @@ namespace _1640WebDevUMC.Migrations
                     FileSize = table.Column<int>(type: "int", nullable: false),
                     UploadDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     FileContent = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    ContributionID = table.Column<int>(type: "int", nullable: false)
+                    ContributionID = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -298,7 +296,7 @@ namespace _1640WebDevUMC.Migrations
                 {
                     ImageID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ContributionID = table.Column<int>(type: "int", nullable: false),
+                    ContributionID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ImageData = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -319,7 +317,7 @@ namespace _1640WebDevUMC.Migrations
                 {
                     NotificationID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ContributionID = table.Column<int>(type: "int", nullable: false),
+                    ContributionID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     RecipientUserID = table.Column<int>(type: "int", nullable: false),
                     NotificationType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -342,9 +340,9 @@ namespace _1640WebDevUMC.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AcademicYears_FacultyId",
+                name: "IX_AcademicYears_FacultyID",
                 table: "AcademicYears",
-                column: "FacultyId");
+                column: "FacultyID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -384,9 +382,9 @@ namespace _1640WebDevUMC.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_FacultyId",
+                name: "IX_AspNetUsers_FacultyID",
                 table: "AspNetUsers",
-                column: "FacultyId");
+                column: "FacultyID");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",

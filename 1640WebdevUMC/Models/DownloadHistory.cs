@@ -13,7 +13,7 @@ namespace _1640WebDevUMC.Models
         public int MarketingManagerID { get; set; }
 
         [ForeignKey("Contribution")]
-        public int ContributionID { get; set; }
+        public string ContributionID { get; set; }
 
         [Required]
         public DateTime DownloadDate { get; set; }

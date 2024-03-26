@@ -1,64 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace _1640WebDevUMC.Models
 {
-    public partial class Contribution
+    public class Contribution
     {
-
         [Key]
-        public int ContributionID { get; set; }
+        public string ContributionID { get; set; } = Guid.NewGuid().ToString();
 
         [Required]
-        [ForeignKey("ApplicationUser")]
-        public string Id { get; set; }
-        public virtual ApplicationUser ApplicationUser { get; set; }
+        public string File { get; set; }
 
-        [Required]
-        public string Title { get; set; }
-
-        public string Content { get; set; }
+        public string Image { get; set; }
 
         [ForeignKey("AcademicYear")]
         public string AcademicYearID { get; set; }
+
         public virtual AcademicYear AcademicYear { get; set; }
 
-        public DateTime? UploadDate
-        {
-            get { return AcademicYear?.UploadDate; }
-        }
+        [ForeignKey("ApplicationUser")]
+        public string Email { get; set; }
 
-        public DateTime? ClosureDate
-        {
-            get { return AcademicYear?.ClosureDate; }
-        }
-
-        public DateTime? FinalClosureDate
-        {
-            get { return AcademicYear?.FinalClosureDate; }
-        }
-
-        public virtual ICollection<File> Files { get; set; }
-
-        public virtual ICollection<Image> Images { get; set; }
-
-        public string Comment { get; set; }
-
-        public DateTime CommentDate { get; set; }
-
-        [Required]
-        public bool SelectedForPublication { get; set; }
-        /*
-                    public virtual ICollection<File> Files { get; set; }
-
-                    public virtual ICollection<Image> Images { get; set; }
-
-                    public virtual ICollection<DownloadHistory> DownloadHistories { get; set; }
-
-                    public virtual ICollection<Notification> Notifications { get; set; }*/
-
+        public virtual ApplicationUser ApplicationUser { get; set; }
 
     }
 }

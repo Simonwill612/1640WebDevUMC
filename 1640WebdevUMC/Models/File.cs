@@ -23,7 +23,7 @@ namespace _1640WebDevUMC.Models
         public byte[] FileContent { get; set; }
 
         [ForeignKey("Contribution")]
-        public int ContributionID { get; set; }
+        public string ContributionID { get; set; }
 
         public virtual Contribution Contribution { get; set; }
     }

@@ -11,7 +11,7 @@ namespace _1640WebDevUMC.Models
         public int ImageID { get; set; }
 
         [ForeignKey("Contribution")]
-        public int ContributionID { get; set; }
+        public string ContributionID { get; set; }
 
         public byte[] ImageData { get; set; }
 

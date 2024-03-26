@@ -11,7 +11,7 @@ namespace _1640WebDevUMC.Models
         public int NotificationID { get; set; }
 
         [ForeignKey("Contribution")]
-        public int ContributionID { get; set; }
+        public string ContributionID { get; set; }
 
         [Required]
         public int RecipientUserID { get; set; }
