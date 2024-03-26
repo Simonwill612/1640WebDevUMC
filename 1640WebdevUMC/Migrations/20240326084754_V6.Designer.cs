@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using _1640WebDevUMC.Data;
 
@@ -11,9 +12,11 @@ using _1640WebDevUMC.Data;
 namespace _1640WebDevUMC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240326084754_V6")]
+    partial class V6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -274,11 +277,7 @@ namespace _1640WebDevUMC.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CommentDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Content")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Id")
@@ -287,6 +286,10 @@ namespace _1640WebDevUMC.Migrations
 
                     b.Property<bool>("SelectedForPublication")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -555,7 +558,7 @@ namespace _1640WebDevUMC.Migrations
             modelBuilder.Entity("_1640WebDevUMC.Models.DownloadHistory", b =>
                 {
                     b.HasOne("_1640WebDevUMC.Models.Contribution", "Contribution")
-                        .WithMany()
+                        .WithMany("DownloadHistories")
                         .HasForeignKey("ContributionID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -592,7 +595,7 @@ namespace _1640WebDevUMC.Migrations
                         .HasForeignKey("ApplicationUserId");
 
                     b.HasOne("_1640WebDevUMC.Models.Contribution", "Contribution")
-                        .WithMany()
+                        .WithMany("Notifications")
                         .HasForeignKey("ContributionID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -611,9 +614,13 @@ namespace _1640WebDevUMC.Migrations
 
             modelBuilder.Entity("_1640WebDevUMC.Models.Contribution", b =>
                 {
+                    b.Navigation("DownloadHistories");
+
                     b.Navigation("Files");
 
                     b.Navigation("Images");
+
+                    b.Navigation("Notifications");
                 });
 
             modelBuilder.Entity("_1640WebDevUMC.Models.Faculty", b =>

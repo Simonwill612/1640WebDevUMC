@@ -31,12 +31,12 @@ namespace _1640WebDevUMC.Data
                 .WithOne(a => a.Faculty)
                 .HasForeignKey(a => a.FacultyID);
 
-            modelBuilder.Entity<AcademicYear>()
+      /*      modelBuilder.Entity<AcademicYear>()
                 .HasMany(a => a.Contributions)
                 .WithOne(c => c.AcademicYear)
-                .HasForeignKey(c => c.AcademicYearID);
+                .HasForeignKey(c => c.AcademicYearID);*/
 
-            modelBuilder.Entity<Contribution>()
+/*            modelBuilder.Entity<Contribution>()
                 .HasMany(c => c.Files)
                 .WithOne(f => f.Contribution)
                 .HasForeignKey(f => f.ContributionID);
@@ -59,7 +59,7 @@ namespace _1640WebDevUMC.Data
             modelBuilder.Entity<ApplicationUser>()
                 .HasMany(u => u.Contributions)
                 .WithOne(c => c.ApplicationUser)
-                .HasForeignKey(c => c.Id);
+                .HasForeignKey(c => c.Id);*/
         }
     }
 }
