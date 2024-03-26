@@ -2,32 +2,30 @@
 
 #nullable disable
 
-namespace _1640WebDevUMC.Data.Migrations
+namespace _1640WebDevUMC.Migrations
 {
     /// <inheritdoc />
-    public partial class v7 : Migration
+    public partial class V5 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Account");
+                name: "SelectListGroup");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Account",
+                name: "SelectListGroup",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RoleName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Disabled = table.Column<bool>(type: "bit", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Account", x => x.Id);
                 });
         }
     }

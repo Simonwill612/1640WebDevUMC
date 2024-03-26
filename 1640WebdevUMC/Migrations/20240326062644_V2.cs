@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace _1640WebDevUMC.Data.Migrations
+namespace _1640WebDevUMC.Migrations
 {
     /// <inheritdoc />
-    public partial class V27 : Migration
+    public partial class V2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

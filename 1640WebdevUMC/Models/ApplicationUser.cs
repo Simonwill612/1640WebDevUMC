@@ -9,12 +9,14 @@ using Microsoft.AspNetCore.Identity;
 namespace _1640WebDevUMC.Models
 {
     public class ApplicationUser : IdentityUser
-    {
-        [ForeignKey("Faculty")]
-        public int? FacultyID { get; set; }
+    {   [ForeignKey("Faculty")]
+        public string? FacultyID { get; set; }
         public virtual Faculty Faculty { get; set; }
 
         public DateTime CreatedTime { get; set; }
+
+
+
 
         public virtual ICollection<Notification> Notifications { get; set; }
         public virtual ICollection<Contribution> Contributions { get; set; }

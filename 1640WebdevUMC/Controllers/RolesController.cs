@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace _1640WebDevUMC.Controllers
 {
-    [Authorize(Roles = "Admin")]
-    public class RolesController : Controller
+/*    [Authorize(Roles = "Admin")]
+*/    public class RolesController : Controller
     {
         private readonly RoleManager<IdentityRole> _manager;
 

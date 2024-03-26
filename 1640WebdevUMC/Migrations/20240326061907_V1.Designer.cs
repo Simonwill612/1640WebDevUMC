@@ -9,11 +9,11 @@ using _1640WebDevUMC.Data;
 
 #nullable disable
 
-namespace _1640WebDevUMC.Data.Migrations
+namespace _1640WebDevUMC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240318103947_V18")]
-    partial class V18
+    [Migration("20240326061907_V1")]
+    partial class V1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -163,58 +163,28 @@ namespace _1640WebDevUMC.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Mvc.Rendering.SelectListGroup", b =>
-                {
-                    b.Property<bool>("Disabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.ToTable("SelectListGroup");
-                });
-
             modelBuilder.Entity("_1640WebDevUMC.Models.AcademicYear", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<string>("AcademicYearID")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("ClosureDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FacultyId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("FinalDate")
+                    b.Property<DateTime>("FinalClosureDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("StartDate")
+                    b.Property<DateTime>("UploadDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                    b.HasKey("AcademicYearID");
 
                     b.HasIndex("FacultyId");
 
                     b.ToTable("AcademicYears");
-                });
-
-            modelBuilder.Entity("_1640WebDevUMC.Models.Accounts", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RoleName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Accounts");
                 });
 
             modelBuilder.Entity("_1640WebDevUMC.Models.ApplicationUser", b =>
@@ -239,7 +209,7 @@ namespace _1640WebDevUMC.Data.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("FacultyID")
+                    b.Property<string>("FacultyId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -277,7 +247,7 @@ namespace _1640WebDevUMC.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FacultyID");
+                    b.HasIndex("FacultyId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -292,85 +262,75 @@ namespace _1640WebDevUMC.Data.Migrations
 
             modelBuilder.Entity("_1640WebDevUMC.Models.Contribution", b =>
                 {
-                    b.Property<int>("ContributionId")
+                    b.Property<int>("ContributionID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ContributionId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ContributionID"));
 
-                    b.Property<string>("AcademicYearId")
+                    b.Property<string>("AcademicYearID")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime?>("ClosureDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Comment")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Content")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("FinalClosureDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Id")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<bool?>("SelectedForPublication")
+                    b.Property<bool>("SelectedForPublication")
                         .HasColumnType("bit");
 
                     b.Property<string>("Status")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("SubmissionDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("UploadDate")
-                        .HasColumnType("datetime2");
+                    b.HasKey("ContributionID");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
+                    b.HasIndex("AcademicYearID");
 
-                    b.Property<string>("UserId1")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ContributionId");
-
-                    b.HasIndex("AcademicYearId");
-
-                    b.HasIndex("UserId1");
+                    b.HasIndex("Id");
 
                     b.ToTable("Contributions");
                 });
 
             modelBuilder.Entity("_1640WebDevUMC.Models.DownloadHistory", b =>
                 {
-                    b.Property<int>("DownloadId")
+                    b.Property<int>("DownloadID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DownloadId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DownloadID"));
 
-                    b.Property<int?>("ContributionId")
+                    b.Property<int>("ContributionID")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("DownloadDate")
+                    b.Property<DateTime>("DownloadDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("MarketingManagerId")
+                    b.Property<int>("MarketingManagerID")
                         .HasColumnType("int");
 
-                    b.HasKey("DownloadId");
+                    b.HasKey("DownloadID");
 
-                    b.HasIndex("ContributionId");
+                    b.HasIndex("ContributionID");
 
                     b.ToTable("DownloadHistories");
                 });
 
             modelBuilder.Entity("_1640WebDevUMC.Models.Faculty", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<string>("FacultyID")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FacultyName")
@@ -378,23 +338,24 @@ namespace _1640WebDevUMC.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.HasKey("Id");
+                    b.HasKey("FacultyID");
 
                     b.ToTable("Faculties");
                 });
 
             modelBuilder.Entity("_1640WebDevUMC.Models.File", b =>
                 {
-                    b.Property<int>("FileId")
+                    b.Property<int>("FileID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FileId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FileID"));
 
-                    b.Property<int?>("ContributionId")
+                    b.Property<int>("ContributionID")
                         .HasColumnType("int");
 
                     b.Property<byte[]>("FileContent")
+                        .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("FileName")
@@ -408,68 +369,94 @@ namespace _1640WebDevUMC.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("UploadDate")
+                    b.Property<DateTime>("UploadDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("FileId");
+                    b.HasKey("FileID");
 
-                    b.HasIndex("ContributionId");
+                    b.HasIndex("ContributionID");
 
                     b.ToTable("Files");
                 });
 
             modelBuilder.Entity("_1640WebDevUMC.Models.Image", b =>
                 {
-                    b.Property<int>("ImageId")
+                    b.Property<int>("ImageID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ImageId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ImageID"));
 
-                    b.Property<int?>("ContributionId")
+                    b.Property<int>("ContributionID")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("Image1")
+                    b.Property<byte[]>("ImageData")
+                        .IsRequired()
                         .HasColumnType("varbinary(max)");
 
-                    b.HasKey("ImageId");
+                    b.HasKey("ImageID");
 
-                    b.HasIndex("ContributionId");
+                    b.HasIndex("ContributionID");
 
                     b.ToTable("Images");
                 });
 
-            modelBuilder.Entity("_1640WebDevUMC.Models.Notification", b =>
+            modelBuilder.Entity("_1640WebDevUMC.Models.Log", b =>
                 {
-                    b.Property<int>("NotificationId")
+                    b.Property<int>("LogID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NotificationId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LogID"));
 
-                    b.Property<int?>("ContributionId")
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.HasKey("LogID");
+
+                    b.ToTable("Logs");
+                });
+
+            modelBuilder.Entity("_1640WebDevUMC.Models.Notification", b =>
+                {
+                    b.Property<int>("NotificationID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NotificationID"));
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("ContributionID")
                         .HasColumnType("int");
 
                     b.Property<string>("NotificationType")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("RecipientUserId")
+                    b.Property<int>("RecipientUserID")
                         .HasColumnType("int");
 
-                    b.Property<string>("RecipientUserId1")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime?>("Timestamp")
+                    b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("NotificationId");
+                    b.HasKey("NotificationID");
 
-                    b.HasIndex("ContributionId");
+                    b.HasIndex("ApplicationUserId");
 
-                    b.HasIndex("RecipientUserId1");
+                    b.HasIndex("ContributionID");
 
                     b.ToTable("Notifications");
                 });
@@ -533,9 +520,7 @@ namespace _1640WebDevUMC.Data.Migrations
                 {
                     b.HasOne("_1640WebDevUMC.Models.Faculty", "Faculty")
                         .WithMany("AcademicYears")
-                        .HasForeignKey("FacultyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FacultyId");
 
                     b.Navigation("Faculty");
                 });
@@ -544,7 +529,7 @@ namespace _1640WebDevUMC.Data.Migrations
                 {
                     b.HasOne("_1640WebDevUMC.Models.Faculty", "Faculty")
                         .WithMany("Users")
-                        .HasForeignKey("FacultyID");
+                        .HasForeignKey("FacultyId");
 
                     b.Navigation("Faculty");
                 });
@@ -552,25 +537,29 @@ namespace _1640WebDevUMC.Data.Migrations
             modelBuilder.Entity("_1640WebDevUMC.Models.Contribution", b =>
                 {
                     b.HasOne("_1640WebDevUMC.Models.AcademicYear", "AcademicYear")
-                        .WithMany()
-                        .HasForeignKey("AcademicYearId")
+                        .WithMany("Contributions")
+                        .HasForeignKey("AcademicYearID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("_1640WebDevUMC.Models.ApplicationUser", "User")
+                    b.HasOne("_1640WebDevUMC.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Contributions")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("AcademicYear");
 
-                    b.Navigation("User");
+                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("_1640WebDevUMC.Models.DownloadHistory", b =>
                 {
                     b.HasOne("_1640WebDevUMC.Models.Contribution", "Contribution")
                         .WithMany("DownloadHistories")
-                        .HasForeignKey("ContributionId");
+                        .HasForeignKey("ContributionID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Contribution");
                 });
@@ -579,7 +568,9 @@ namespace _1640WebDevUMC.Data.Migrations
                 {
                     b.HasOne("_1640WebDevUMC.Models.Contribution", "Contribution")
                         .WithMany("Files")
-                        .HasForeignKey("ContributionId");
+                        .HasForeignKey("ContributionID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Contribution");
                 });
@@ -588,24 +579,31 @@ namespace _1640WebDevUMC.Data.Migrations
                 {
                     b.HasOne("_1640WebDevUMC.Models.Contribution", "Contribution")
                         .WithMany("Images")
-                        .HasForeignKey("ContributionId");
+                        .HasForeignKey("ContributionID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Contribution");
                 });
 
             modelBuilder.Entity("_1640WebDevUMC.Models.Notification", b =>
                 {
+                    b.HasOne("_1640WebDevUMC.Models.ApplicationUser", null)
+                        .WithMany("Notifications")
+                        .HasForeignKey("ApplicationUserId");
+
                     b.HasOne("_1640WebDevUMC.Models.Contribution", "Contribution")
                         .WithMany("Notifications")
-                        .HasForeignKey("ContributionId");
-
-                    b.HasOne("_1640WebDevUMC.Models.ApplicationUser", "RecipientUser")
-                        .WithMany("Notifications")
-                        .HasForeignKey("RecipientUserId1");
+                        .HasForeignKey("ContributionID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Contribution");
+                });
 
-                    b.Navigation("RecipientUser");
+            modelBuilder.Entity("_1640WebDevUMC.Models.AcademicYear", b =>
+                {
+                    b.Navigation("Contributions");
                 });
 
             modelBuilder.Entity("_1640WebDevUMC.Models.ApplicationUser", b =>

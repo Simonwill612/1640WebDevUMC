@@ -26,7 +26,7 @@ namespace _1640WebDevUMC.Controllers
         }
 
         // GET: Faculties/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string id)
         {
             if (id == null)
             {
@@ -66,7 +66,7 @@ namespace _1640WebDevUMC.Controllers
         }
 
         // GET: Faculties/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
             {
@@ -86,7 +86,7 @@ namespace _1640WebDevUMC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FacultyID,FacultyName")] Faculty faculty)
+        public async Task<IActionResult> Edit(string id, [Bind("FacultyID,FacultyName")] Faculty faculty)
         {
             if (id != faculty.FacultyID)
             {
@@ -117,7 +117,7 @@ namespace _1640WebDevUMC.Controllers
         }
 
         // GET: Faculties/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
             {
@@ -137,7 +137,7 @@ namespace _1640WebDevUMC.Controllers
         // POST: Faculties/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var faculty = await _context.Faculties.FindAsync(id);
             if (faculty != null)
@@ -149,7 +149,7 @@ namespace _1640WebDevUMC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool FacultyExists(int id)
+        private bool FacultyExists(string id)
         {
             return _context.Faculties.Any(e => e.FacultyID == id);
         }

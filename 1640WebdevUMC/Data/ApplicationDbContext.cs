@@ -1,5 +1,6 @@
-﻿using _1640WebDevUMC.Models;
+﻿﻿using _1640WebDevUMC.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace _1640WebDevUMC.Data
@@ -33,7 +34,7 @@ namespace _1640WebDevUMC.Data
             modelBuilder.Entity<AcademicYear>()
                 .HasMany(a => a.Contributions)
                 .WithOne(c => c.AcademicYear)
-                .HasForeignKey(c => c.YearID);
+                .HasForeignKey(c => c.AcademicYearID);
 
             modelBuilder.Entity<Contribution>()
                 .HasMany(c => c.Files)
@@ -58,7 +59,7 @@ namespace _1640WebDevUMC.Data
             modelBuilder.Entity<ApplicationUser>()
                 .HasMany(u => u.Contributions)
                 .WithOne(c => c.ApplicationUser)
-                .HasForeignKey(c => c.UserID);
+                .HasForeignKey(c => c.Id);
         }
     }
 }
