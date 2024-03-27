@@ -50,7 +50,7 @@ namespace _1640WebDevUMC.Controllers
         public IActionResult Create()
         {
             ViewData["AcademicYearID"] = new SelectList(_context.AcademicYears, "AcademicYearID", "AcademicYearID");
-            ViewData["Email"] = new SelectList(_context.Users, "Email", "Email");
+            ViewData["Email"] = new SelectList(_context.Users, "Id", "Email");
             return View();
         }
 
@@ -68,7 +68,7 @@ namespace _1640WebDevUMC.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["AcademicYearID"] = new SelectList(_context.AcademicYears, "AcademicYearID", "AcademicYearID", contribution.AcademicYearID);
-            ViewData["Email"] = new SelectList(_context.Users, "Email", "Email", contribution.Email);
+            ViewData["Email"] = new SelectList(_context.Users, "Id", "Email", contribution.Email);
             return View(contribution);
         }
 
@@ -86,7 +86,7 @@ namespace _1640WebDevUMC.Controllers
                 return NotFound();
             }
             ViewData["AcademicYearID"] = new SelectList(_context.AcademicYears, "AcademicYearID", "AcademicYearID", contribution.AcademicYearID);
-            ViewData["Email"] = new SelectList(_context.Users, "Email", "Email", contribution.Email);
+            ViewData["Email"] = new SelectList(_context.Users, "Id", "Email", contribution.Email);
             return View(contribution);
         }
 
@@ -123,7 +123,7 @@ namespace _1640WebDevUMC.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["AcademicYearID"] = new SelectList(_context.AcademicYears, "AcademicYearID", "AcademicYearID", contribution.AcademicYearID);
-            ViewData["Email"] = new SelectList(_context.Users, "Email", "Email", contribution.Email);
+            ViewData["Email"] = new SelectList(_context.Users, "Id", "Email", contribution.Email);
             return View(contribution);
         }
 
