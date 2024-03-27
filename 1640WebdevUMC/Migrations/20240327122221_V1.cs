@@ -222,12 +222,10 @@ namespace _1640WebDevUMC.Migrations
                 columns: table => new
                 {
                     ContributionID = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AcademicYearID = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CommentDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AcademicYearID = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -236,12 +234,36 @@ namespace _1640WebDevUMC.Migrations
                         name: "FK_Contributions_AcademicYears_AcademicYearID",
                         column: x => x.AcademicYearID,
                         principalTable: "AcademicYears",
-                        principalColumn: "AcademicYearID");
+                        principalColumn: "AcademicYearID",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Contributions_AspNetUsers_Id",
-                        column: x => x.Id,
+                        name: "FK_Contributions_AspNetUsers_Email",
+                        column: x => x.Email,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ContributionItems",
+                columns: table => new
+                {
+                    ContributionItemID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ContributionID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UploadDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FileData = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    ImageData = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ContributionItems", x => x.ContributionItemID);
+                    table.ForeignKey(
+                        name: "FK_ContributionItems_Contributions_ContributionID",
+                        column: x => x.ContributionID,
+                        principalTable: "Contributions",
+                        principalColumn: "ContributionID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -339,6 +361,33 @@ namespace _1640WebDevUMC.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Comments",
+                columns: table => new
+                {
+                    CommentID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ContributionItemID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CommentDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comments", x => x.CommentID);
+                    table.ForeignKey(
+                        name: "FK_Comments_AspNetUsers_UserID",
+                        column: x => x.UserID,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Comments_ContributionItems_ContributionItemID",
+                        column: x => x.ContributionItemID,
+                        principalTable: "ContributionItems",
+                        principalColumn: "ContributionItemID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AcademicYears_FacultyID",
                 table: "AcademicYears",
@@ -394,14 +443,29 @@ namespace _1640WebDevUMC.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Comments_ContributionItemID",
+                table: "Comments",
+                column: "ContributionItemID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_UserID",
+                table: "Comments",
+                column: "UserID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ContributionItems_ContributionID",
+                table: "ContributionItems",
+                column: "ContributionID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Contributions_AcademicYearID",
                 table: "Contributions",
                 column: "AcademicYearID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Contributions_Id",
+                name: "IX_Contributions_Email",
                 table: "Contributions",
-                column: "Id");
+                column: "Email");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DownloadHistories_ContributionID",
@@ -448,6 +512,9 @@ namespace _1640WebDevUMC.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Comments");
+
+            migrationBuilder.DropTable(
                 name: "DownloadHistories");
 
             migrationBuilder.DropTable(
@@ -464,6 +531,9 @@ namespace _1640WebDevUMC.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "ContributionItems");
 
             migrationBuilder.DropTable(
                 name: "Contributions");

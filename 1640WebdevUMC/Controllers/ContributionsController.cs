@@ -1,171 +1,170 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using _1640WebDevUMC.Models;
-using _1640WebDevUMC.Data;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using _1640WebDevUMC.Data;
+using _1640WebDevUMC.Models;
 
-public class ContributionsController : Controller
+namespace _1640WebDevUMC.Controllers
 {
-    private readonly ApplicationDbContext _context;
-    private readonly UserManager<ApplicationUser> _userManager;
-
-    public ContributionsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+    public class ContributionsController : Controller
     {
-        _context = context;
-        _userManager = userManager;
-    }
+        private readonly ApplicationDbContext _context;
 
-    // GET: Contributions
-    public async Task<IActionResult> Index()
-    {
-        return View(await _context.Contributions.ToListAsync());
-    }
-
-    // GET: Contributions/Details/5
-    public async Task<IActionResult> Details(string id)
-    {
-        if (id == null)
+        public ContributionsController(ApplicationDbContext context)
         {
-            return NotFound();
+            _context = context;
         }
 
-        var contribution = await _context.Contributions
-            .FirstOrDefaultAsync(m => m.ContributionID == id);
-        if (contribution == null)
+        // GET: Contributions
+        public async Task<IActionResult> Index()
         {
-            return NotFound();
+            var applicationDbContext = _context.Contributions.Include(c => c.AcademicYear).Include(c => c.ApplicationUser);
+            return View(await applicationDbContext.ToListAsync());
         }
 
-        return View(contribution);
-    }
-
-    // GET: Contributions/Create
-    public async Task<IActionResult> Create()
-    {
-        var user = await _userManager.GetUserAsync(User);
-        if (user != null && await _userManager.IsInRoleAsync(user, "Student"))
+        // GET: Contributions/Details/5
+        public async Task<IActionResult> Details(string id)
         {
-            ViewBag.Email = user.Email;
-            ViewBag.AcademicYearID = new SelectList(_context.AcademicYears, "AcademicYearID", "AcademicYearID");
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var contribution = await _context.Contributions
+                .Include(c => c.AcademicYear)
+                .Include(c => c.ApplicationUser)
+                .FirstOrDefaultAsync(m => m.ContributionID == id);
+            if (contribution == null)
+            {
+                return NotFound();
+            }
+
+            return View(contribution);
+        }
+
+        // GET: Contributions/Create
+        public IActionResult Create()
+        {
+            ViewData["AcademicYearID"] = new SelectList(_context.AcademicYears, "AcademicYearID", "AcademicYearID");
+            ViewData["Email"] = new SelectList(_context.Users, "Email", "Email");
             return View();
         }
-        else
-        {
-            return View("Error", new ErrorViewModel { RequestId = "User must be a student to make a contribution." });
-        }
-    }
 
-    // POST: Contributions/Create
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("ContributionID,File,Image,AcademicYearID,Email")] Contribution contribution)
-    {
-        var user = await _userManager.FindByEmailAsync(contribution.Email);
-        if (ModelState.IsValid)
+        // POST: Contributions/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("ContributionID,Title,Content,Email,AcademicYearID")] Contribution contribution)
         {
-            var academicYear = _context.AcademicYears.Find(contribution.AcademicYearID);
-            if (academicYear != null && user != null)
+            if (ModelState.IsValid)
             {
                 _context.Add(contribution);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            else
+            ViewData["AcademicYearID"] = new SelectList(_context.AcademicYears, "AcademicYearID", "AcademicYearID", contribution.AcademicYearID);
+            ViewData["Email"] = new SelectList(_context.Users, "Email", "Email", contribution.Email);
+            return View(contribution);
+        }
+
+        // GET: Contributions/Edit/5
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (id == null)
             {
-                ModelState.AddModelError("", "The academic year is not valid or the user does not exist. You cannot submit your assignment.");
+                return NotFound();
             }
-        }
-        // Repopulate ViewBag values
-        ViewBag.Email = user?.Email;
-        ViewBag.AcademicYearID = new SelectList(_context.AcademicYears, "AcademicYearID", "AcademicYearID", contribution.AcademicYearID);
-        return View(contribution);
-    }
 
-
-    // GET: Contributions/Edit/5
-    public async Task<IActionResult> Edit(string id)
-    {
-        if (id == null)
-        {
-            return NotFound();
-        }
-
-        var contribution = await _context.Contributions.FindAsync(id);
-        if (contribution == null)
-        {
-            return NotFound();
-        }
-        return View(contribution);
-    }
-
-    // POST: Contributions/Edit/5
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(string id, [Bind("ContributionID,File,Image,AcademicYearID,Email")] Contribution contribution)
-    {
-        if (id != contribution.ContributionID)
-        {
-            return NotFound();
-        }
-
-        if (ModelState.IsValid)
-        {
-            try
+            var contribution = await _context.Contributions.FindAsync(id);
+            if (contribution == null)
             {
-                _context.Update(contribution);
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
-            catch (DbUpdateConcurrencyException)
+            ViewData["AcademicYearID"] = new SelectList(_context.AcademicYears, "AcademicYearID", "AcademicYearID", contribution.AcademicYearID);
+            ViewData["Email"] = new SelectList(_context.Users, "Email", "Email", contribution.Email);
+            return View(contribution);
+        }
+
+        // POST: Contributions/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, [Bind("ContributionID,Title,Content,Email,AcademicYearID")] Contribution contribution)
+        {
+            if (id != contribution.ContributionID)
             {
-                if (!ContributionExists(contribution.ContributionID))
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
                 {
-                    return NotFound();
+                    _context.Update(contribution);
+                    await _context.SaveChangesAsync();
                 }
-                else
+                catch (DbUpdateConcurrencyException)
                 {
-                    throw;
+                    if (!ContributionExists(contribution.ContributionID))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
+                return RedirectToAction(nameof(Index));
             }
+            ViewData["AcademicYearID"] = new SelectList(_context.AcademicYears, "AcademicYearID", "AcademicYearID", contribution.AcademicYearID);
+            ViewData["Email"] = new SelectList(_context.Users, "Email", "Email", contribution.Email);
+            return View(contribution);
+        }
+
+        // GET: Contributions/Delete/5
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var contribution = await _context.Contributions
+                .Include(c => c.AcademicYear)
+                .Include(c => c.ApplicationUser)
+                .FirstOrDefaultAsync(m => m.ContributionID == id);
+            if (contribution == null)
+            {
+                return NotFound();
+            }
+
+            return View(contribution);
+        }
+
+        // POST: Contributions/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            var contribution = await _context.Contributions.FindAsync(id);
+            if (contribution != null)
+            {
+                _context.Contributions.Remove(contribution);
+            }
+
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        return View(contribution);
-    }
 
-    // GET: Contributions/Delete/5
-    public async Task<IActionResult> Delete(string id)
-    {
-        if (id == null)
+        private bool ContributionExists(string id)
         {
-            return NotFound();
+            return _context.Contributions.Any(e => e.ContributionID == id);
         }
-
-        var contribution = await _context.Contributions
-            .FirstOrDefaultAsync(m => m.ContributionID == id);
-        if (contribution == null)
-        {
-            return NotFound();
-        }
-
-        return View(contribution);
-    }
-
-    // POST: Contributions/Delete/5
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(string id)
-    {
-        var contribution = await _context.Contributions.FindAsync(id);
-        _context.Contributions.Remove(contribution);
-        await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
-    }
-
-    private bool ContributionExists(string id)
-    {
-        return _context.Contributions.Any(e => e.ContributionID == id);
     }
 }
