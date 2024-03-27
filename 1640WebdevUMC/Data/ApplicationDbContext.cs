@@ -15,8 +15,8 @@ namespace _1640WebDevUMC.Data
         public DbSet<AcademicYear> AcademicYears { get; set; }
         public DbSet<Contribution> Contributions { get; set; }
         public DbSet<ContributionItem> ContributionItems { get; set; }
-        public DbSet<Comment> Comments { get; set; }
-        public DbSet<Faculty> Faculties { get; set; }
+/*        public DbSet<Comment> Comments { get; set; }
+*/        public DbSet<Faculty> Faculties { get; set; }
         public DbSet<DownloadHistory> DownloadHistories { get; set; }
         public DbSet<_1640WebDevUMC.Models.File> Files { get; set; }
         public DbSet<Image> Images { get; set; }
@@ -33,35 +33,49 @@ namespace _1640WebDevUMC.Data
                 .WithOne(a => a.Faculty)
                 .HasForeignKey(a => a.FacultyID);
 
-      /*      modelBuilder.Entity<AcademicYear>()
-                .HasMany(a => a.Contributions)
-                .WithOne(c => c.AcademicYear)
-                .HasForeignKey(c => c.AcademicYearID);*/
+/*            modelBuilder.Entity<Comment>()
+    .HasOne(p => p.ContributionItem)
+    .WithMany()
+    .HasForeignKey(p => p.ContributionItemID)
+    .OnDelete(DeleteBehavior.Restrict);
 
-/*            modelBuilder.Entity<Contribution>()
-                .HasMany(c => c.Files)
-                .WithOne(f => f.Contribution)
-                .HasForeignKey(f => f.ContributionID);
+            modelBuilder.Entity<Comment>()
+                .HasOne(p => p.ApplicationUser)
+                .WithMany()
+                .HasForeignKey(p => p.Email)
+                .OnDelete(DeleteBehavior.Restrict);
+*/
 
-            modelBuilder.Entity<Contribution>()
-                .HasMany(c => c.Images)
-                .WithOne(i => i.Contribution)
-                .HasForeignKey(i => i.ContributionID);
 
-            modelBuilder.Entity<Contribution>()
-                .HasMany(c => c.DownloadHistories)
-                .WithOne(d => d.Contribution)
-                .HasForeignKey(d => d.ContributionID);
+            /*      modelBuilder.Entity<AcademicYear>()
+                      .HasMany(a => a.Contributions)
+                      .WithOne(c => c.AcademicYear)
+                      .HasForeignKey(c => c.AcademicYearID);*/
 
-            modelBuilder.Entity<Contribution>()
-                .HasMany(c => c.Notifications)
-                .WithOne(n => n.Contribution)
-                .HasForeignKey(n => n.ContributionID);
+            /*            modelBuilder.Entity<Contribution>()
+                            .HasMany(c => c.Files)
+                            .WithOne(f => f.Contribution)
+                            .HasForeignKey(f => f.ContributionID);
 
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(u => u.Contributions)
-                .WithOne(c => c.ApplicationUser)
-                .HasForeignKey(c => c.Id);*/
+                        modelBuilder.Entity<Contribution>()
+                            .HasMany(c => c.Images)
+                            .WithOne(i => i.Contribution)
+                            .HasForeignKey(i => i.ContributionID);
+
+                        modelBuilder.Entity<Contribution>()
+                            .HasMany(c => c.DownloadHistories)
+                            .WithOne(d => d.Contribution)
+                            .HasForeignKey(d => d.ContributionID);
+
+                        modelBuilder.Entity<Contribution>()
+                            .HasMany(c => c.Notifications)
+                            .WithOne(n => n.Contribution)
+                            .HasForeignKey(n => n.ContributionID);
+
+                        modelBuilder.Entity<ApplicationUser>()
+                            .HasMany(u => u.Contributions)
+                            .WithOne(c => c.ApplicationUser)
+                            .HasForeignKey(c => c.Id);*/
         }
     }
 }

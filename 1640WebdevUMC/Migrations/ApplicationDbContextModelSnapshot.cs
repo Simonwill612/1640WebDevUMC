@@ -258,35 +258,6 @@ namespace _1640WebDevUMC.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("_1640WebDevUMC.Models.Comment", b =>
-                {
-                    b.Property<string>("CommentID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CommentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ContributionItemID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UserID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("CommentID");
-
-                    b.HasIndex("ContributionItemID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("Comments");
-                });
-
             modelBuilder.Entity("_1640WebDevUMC.Models.Contribution", b =>
                 {
                     b.Property<string>("ContributionID")
@@ -586,25 +557,6 @@ namespace _1640WebDevUMC.Migrations
                         .HasForeignKey("FacultyID");
 
                     b.Navigation("Faculty");
-                });
-
-            modelBuilder.Entity("_1640WebDevUMC.Models.Comment", b =>
-                {
-                    b.HasOne("_1640WebDevUMC.Models.ContributionItem", "ContributionItem")
-                        .WithMany()
-                        .HasForeignKey("ContributionItemID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("_1640WebDevUMC.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-
-                    b.Navigation("ContributionItem");
                 });
 
             modelBuilder.Entity("_1640WebDevUMC.Models.Contribution", b =>
