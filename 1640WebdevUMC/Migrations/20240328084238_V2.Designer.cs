@@ -12,8 +12,8 @@ using _1640WebDevUMC.Data;
 namespace _1640WebDevUMC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240327154315_V1")]
-    partial class V1
+    [Migration("20240328084238_V2")]
+    partial class V2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,38 @@ namespace _1640WebDevUMC.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Comment", b =>
+                {
+                    b.Property<int>("CommentID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CommentID"));
+
+                    b.Property<DateTime>("CommentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContributionItemID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("CommentID");
+
+                    b.HasIndex("ContributionItemID");
+
+                    b.HasIndex("Email");
+
+                    b.ToTable("Comments");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -368,13 +400,10 @@ namespace _1640WebDevUMC.Migrations
 
             modelBuilder.Entity("_1640WebDevUMC.Models.File", b =>
                 {
-                    b.Property<int>("FileID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("FileID")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FileID"));
-
-                    b.Property<string>("ContributionID")
+                    b.Property<string>("ContributionItemID")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
@@ -398,20 +427,17 @@ namespace _1640WebDevUMC.Migrations
 
                     b.HasKey("FileID");
 
-                    b.HasIndex("ContributionID");
+                    b.HasIndex("ContributionItemID");
 
                     b.ToTable("Files");
                 });
 
             modelBuilder.Entity("_1640WebDevUMC.Models.Image", b =>
                 {
-                    b.Property<int>("ImageID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("ImageID")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ImageID"));
-
-                    b.Property<string>("ContributionID")
+                    b.Property<string>("ContributionItemID")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
@@ -425,7 +451,7 @@ namespace _1640WebDevUMC.Migrations
 
                     b.HasKey("ImageID");
 
-                    b.HasIndex("ContributionID");
+                    b.HasIndex("ContributionItemID");
 
                     b.ToTable("Images");
                 });
@@ -485,6 +511,25 @@ namespace _1640WebDevUMC.Migrations
                     b.HasIndex("ContributionID");
 
                     b.ToTable("Notifications");
+                });
+
+            modelBuilder.Entity("Comment", b =>
+                {
+                    b.HasOne("_1640WebDevUMC.Models.ContributionItem", "ContributionItem")
+                        .WithMany()
+                        .HasForeignKey("ContributionItemID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("_1640WebDevUMC.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("Email")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("ContributionItem");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -605,24 +650,24 @@ namespace _1640WebDevUMC.Migrations
 
             modelBuilder.Entity("_1640WebDevUMC.Models.File", b =>
                 {
-                    b.HasOne("_1640WebDevUMC.Models.Contribution", "Contribution")
+                    b.HasOne("_1640WebDevUMC.Models.ContributionItem", "ContributionItem")
                         .WithMany()
-                        .HasForeignKey("ContributionID")
+                        .HasForeignKey("ContributionItemID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Contribution");
+                    b.Navigation("ContributionItem");
                 });
 
             modelBuilder.Entity("_1640WebDevUMC.Models.Image", b =>
                 {
-                    b.HasOne("_1640WebDevUMC.Models.Contribution", "Contribution")
+                    b.HasOne("_1640WebDevUMC.Models.ContributionItem", "ContributionItem")
                         .WithMany()
-                        .HasForeignKey("ContributionID")
+                        .HasForeignKey("ContributionItemID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Contribution");
+                    b.Navigation("ContributionItem");
                 });
 
             modelBuilder.Entity("_1640WebDevUMC.Models.Notification", b =>

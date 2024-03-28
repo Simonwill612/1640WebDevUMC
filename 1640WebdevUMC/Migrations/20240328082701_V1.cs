@@ -289,51 +289,6 @@ namespace _1640WebDevUMC.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Files",
-                columns: table => new
-                {
-                    FileID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FileType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FileSize = table.Column<int>(type: "int", nullable: false),
-                    UploadDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    FileContent = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    ContributionID = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Files", x => x.FileID);
-                    table.ForeignKey(
-                        name: "FK_Files_Contributions_ContributionID",
-                        column: x => x.ContributionID,
-                        principalTable: "Contributions",
-                        principalColumn: "ContributionID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Images",
-                columns: table => new
-                {
-                    ImageID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ContributionID = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ImageData = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Images", x => x.ImageID);
-                    table.ForeignKey(
-                        name: "FK_Images_Contributions_ContributionID",
-                        column: x => x.ContributionID,
-                        principalTable: "Contributions",
-                        principalColumn: "ContributionID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Notifications",
                 columns: table => new
                 {
@@ -358,6 +313,49 @@ namespace _1640WebDevUMC.Migrations
                         column: x => x.ContributionID,
                         principalTable: "Contributions",
                         principalColumn: "ContributionID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Files",
+                columns: table => new
+                {
+                    FileID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FileType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FileSize = table.Column<int>(type: "int", nullable: false),
+                    UploadDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FileContent = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    ContributionItemID = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Files", x => x.FileID);
+                    table.ForeignKey(
+                        name: "FK_Files_ContributionItems_ContributionItemID",
+                        column: x => x.ContributionItemID,
+                        principalTable: "ContributionItems",
+                        principalColumn: "ContributionItemID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Images",
+                columns: table => new
+                {
+                    ImageID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ImageData = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ContributionItemID = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Images", x => x.ImageID);
+                    table.ForeignKey(
+                        name: "FK_Images_ContributionItems_ContributionItemID",
+                        column: x => x.ContributionItemID,
+                        principalTable: "ContributionItems",
+                        principalColumn: "ContributionItemID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -436,14 +434,14 @@ namespace _1640WebDevUMC.Migrations
                 column: "ContributionID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Files_ContributionID",
+                name: "IX_Files_ContributionItemID",
                 table: "Files",
-                column: "ContributionID");
+                column: "ContributionItemID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Images_ContributionID",
+                name: "IX_Images_ContributionItemID",
                 table: "Images",
-                column: "ContributionID");
+                column: "ContributionItemID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Notifications_ApplicationUserId",
@@ -475,9 +473,6 @@ namespace _1640WebDevUMC.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "ContributionItems");
-
-            migrationBuilder.DropTable(
                 name: "DownloadHistories");
 
             migrationBuilder.DropTable(
@@ -494,6 +489,9 @@ namespace _1640WebDevUMC.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "ContributionItems");
 
             migrationBuilder.DropTable(
                 name: "Contributions");

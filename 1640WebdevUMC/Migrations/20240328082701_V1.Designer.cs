@@ -12,8 +12,8 @@ using _1640WebDevUMC.Data;
 namespace _1640WebDevUMC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240327162401_V2")]
-    partial class V2
+    [Migration("20240328082701_V1")]
+    partial class V1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -368,13 +368,10 @@ namespace _1640WebDevUMC.Migrations
 
             modelBuilder.Entity("_1640WebDevUMC.Models.File", b =>
                 {
-                    b.Property<int>("FileID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("FileID")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FileID"));
-
-                    b.Property<string>("ContributionID")
+                    b.Property<string>("ContributionItemID")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
@@ -398,20 +395,17 @@ namespace _1640WebDevUMC.Migrations
 
                     b.HasKey("FileID");
 
-                    b.HasIndex("ContributionID");
+                    b.HasIndex("ContributionItemID");
 
                     b.ToTable("Files");
                 });
 
             modelBuilder.Entity("_1640WebDevUMC.Models.Image", b =>
                 {
-                    b.Property<int>("ImageID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("ImageID")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ImageID"));
-
-                    b.Property<string>("ContributionID")
+                    b.Property<string>("ContributionItemID")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
@@ -425,7 +419,7 @@ namespace _1640WebDevUMC.Migrations
 
                     b.HasKey("ImageID");
 
-                    b.HasIndex("ContributionID");
+                    b.HasIndex("ContributionItemID");
 
                     b.ToTable("Images");
                 });
@@ -605,24 +599,24 @@ namespace _1640WebDevUMC.Migrations
 
             modelBuilder.Entity("_1640WebDevUMC.Models.File", b =>
                 {
-                    b.HasOne("_1640WebDevUMC.Models.Contribution", "Contribution")
+                    b.HasOne("_1640WebDevUMC.Models.ContributionItem", "ContributionItem")
                         .WithMany()
-                        .HasForeignKey("ContributionID")
+                        .HasForeignKey("ContributionItemID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Contribution");
+                    b.Navigation("ContributionItem");
                 });
 
             modelBuilder.Entity("_1640WebDevUMC.Models.Image", b =>
                 {
-                    b.HasOne("_1640WebDevUMC.Models.Contribution", "Contribution")
+                    b.HasOne("_1640WebDevUMC.Models.ContributionItem", "ContributionItem")
                         .WithMany()
-                        .HasForeignKey("ContributionID")
+                        .HasForeignKey("ContributionItemID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Contribution");
+                    b.Navigation("ContributionItem");
                 });
 
             modelBuilder.Entity("_1640WebDevUMC.Models.Notification", b =>

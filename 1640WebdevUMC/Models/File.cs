@@ -8,7 +8,7 @@ namespace _1640WebDevUMC.Models
     public partial class File
     {
         [Key]
-        public int FileID { get; set; }
+        public string FileID { get; set; }
 
         [Required]
         public string FileName { get; set; }
@@ -22,9 +22,9 @@ namespace _1640WebDevUMC.Models
 
         public byte[] FileContent { get; set; }
 
-        [ForeignKey("Contribution")]
-        public string ContributionID { get; set; }
+        [ForeignKey("ContributionItem")]
+        public string ContributionItemID { get; set; }
 
-        public virtual Contribution Contribution { get; set; }
+        public virtual ContributionItem ContributionItem { get; set; }
     }
 }

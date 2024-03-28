@@ -1,7 +1,9 @@
-﻿﻿using _1640WebDevUMC.Models;
+﻿using _1640WebDevUMC.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using File = _1640WebDevUMC.Models.File;
+using Image = _1640WebDevUMC.Models.Image;
+
 
 namespace _1640WebDevUMC.Data
 {
@@ -15,14 +17,14 @@ namespace _1640WebDevUMC.Data
         public DbSet<AcademicYear> AcademicYears { get; set; }
         public DbSet<Contribution> Contributions { get; set; }
         public DbSet<ContributionItem> ContributionItems { get; set; }
-/*        public DbSet<Comment> Comments { get; set; }
-*/        public DbSet<Faculty> Faculties { get; set; }
+        public DbSet<Comment> Comments { get; set; } // Uncommented DbSet
+
+        public DbSet<Faculty> Faculties { get; set; }
         public DbSet<DownloadHistory> DownloadHistories { get; set; }
-        public DbSet<_1640WebDevUMC.Models.File> Files { get; set; }
+        public DbSet<File> Files { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Log> Logs { get; set; }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -33,49 +35,17 @@ namespace _1640WebDevUMC.Data
                 .WithOne(a => a.Faculty)
                 .HasForeignKey(a => a.FacultyID);
 
-/*            modelBuilder.Entity<Comment>()
-    .HasOne(p => p.ContributionItem)
-    .WithMany()
-    .HasForeignKey(p => p.ContributionItemID)
-    .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Comment>()
+                .HasOne(c => c.ApplicationUser)
+                .WithMany()
+                .HasForeignKey(c => c.Email)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Comment>()
-                .HasOne(p => p.ApplicationUser)
+                .HasOne(c => c.ContributionItem)
                 .WithMany()
-                .HasForeignKey(p => p.Email)
+                .HasForeignKey(c => c.ContributionItemID)
                 .OnDelete(DeleteBehavior.Restrict);
-*/
-
-
-            /*      modelBuilder.Entity<AcademicYear>()
-                      .HasMany(a => a.Contributions)
-                      .WithOne(c => c.AcademicYear)
-                      .HasForeignKey(c => c.AcademicYearID);*/
-
-            /*            modelBuilder.Entity<Contribution>()
-                            .HasMany(c => c.Files)
-                            .WithOne(f => f.Contribution)
-                            .HasForeignKey(f => f.ContributionID);
-
-                        modelBuilder.Entity<Contribution>()
-                            .HasMany(c => c.Images)
-                            .WithOne(i => i.Contribution)
-                            .HasForeignKey(i => i.ContributionID);
-
-                        modelBuilder.Entity<Contribution>()
-                            .HasMany(c => c.DownloadHistories)
-                            .WithOne(d => d.Contribution)
-                            .HasForeignKey(d => d.ContributionID);
-
-                        modelBuilder.Entity<Contribution>()
-                            .HasMany(c => c.Notifications)
-                            .WithOne(n => n.Contribution)
-                            .HasForeignKey(n => n.ContributionID);
-
-                        modelBuilder.Entity<ApplicationUser>()
-                            .HasMany(u => u.Contributions)
-                            .WithOne(c => c.ApplicationUser)
-                            .HasForeignKey(c => c.Id);*/
         }
     }
 }
