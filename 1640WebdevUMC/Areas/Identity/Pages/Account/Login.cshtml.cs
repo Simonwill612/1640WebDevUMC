@@ -85,19 +85,19 @@ namespace _1640WebDevUMC.Areas.Identity.Pages.Account
                     }
                     else if (await _userManager.IsInRoleAsync(user, "Marketing Coordinator"))
                     {
-                        return RedirectToAction("MarketingCoordinatorDashboard", "Index");
+                        return RedirectToAction("Index","MarketingCoordinatorDashboard");
                     }
                     else if (await _userManager.IsInRoleAsync(user, "Marketing Manager"))
                     {
-                        return RedirectToAction("MarketingManagementDashboard", "Index");
+                        return RedirectToAction("Index", "MarketingManagementDashboard");
                     }
                     else if (await _userManager.IsInRoleAsync(user, "Student"))
                     {
-                        return RedirectToAction("Student", "Index");
+                        return RedirectToAction("Index", "Student");
                     }
                     else if (await _userManager.IsInRoleAsync(user, "Guest"))
                     {
-                        return RedirectToAction("Guest", "Index");
+                        return RedirectToAction("Index", "Guest");
                     }
                     else
                     {
