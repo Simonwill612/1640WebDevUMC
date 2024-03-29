@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace _1640WebDevUMC.Models
 {
-    public partial class ContributionItem
+    public class ContributionItem
     {
         [Key]
         public string ContributionItemID { get; set; }
@@ -13,7 +13,7 @@ namespace _1640WebDevUMC.Models
         [Required]
         [ForeignKey("Contribution")]
         public string ContributionID { get; set; }
-        public virtual Contribution? Contribution { get; set; }
+        public virtual Contribution Contribution { get; set; }
 
         [Required]
         public string Title { get; set; }
@@ -23,25 +23,21 @@ namespace _1640WebDevUMC.Models
         [Required]
         public DateTime UploadDate { get; set; }
 
-        public byte[] FileData { get; set; }
+        // Properties for file upload
+        [NotMapped]
+        public IFormFile FileUpload { get; set; }
 
-        public byte[] ImageData { get; set; }
+        [NotMapped]
+        public IFormFile ImageUpload { get; set; }
 
-        public ContributionItem()
-        {
-            UploadDate = DateTime.Now;
-        }
+        // Navigation properties
+        public string FileName { get; set; }
+        public string ImageName { get; set; }
 
-        public void UploadFile(string filePath)
-        {
-            // Assume you have a method to handle the file upload and convert it to a byte array
-            this.FileData = System.IO.File.ReadAllBytes(filePath);
-        }
+        [ForeignKey("FileName")]
+        public virtual File File { get; set; }
 
-        public void UploadImage(string imagePath)
-        {
-            // Assume you have a method to handle the image upload and convert it to a byte array
-            this.ImageData = System.IO.File.ReadAllBytes(imagePath);
-        }
+        [ForeignKey("ImageName")]
+        public virtual Image Image { get; set; }
     }
 }

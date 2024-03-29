@@ -1,22 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿// Image.cs
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace _1640WebDevUMC.Models
 {
-    public partial class Image
+    public class Image
     {
         [Key]
         public string ImageID { get; set; }
 
-        public byte[] ImageData { get; set; }
+        [Required]
+        public string ImageName { get; set; }
 
-        public string Description { get; set; }
+        [Required]
+        public byte[] ImageData { get; set; } // Thêm thuộc tính ImageData
 
-        [ForeignKey("ContributionItem")]
-        public string ContributionItemID { get; set; }
-
-        public virtual ContributionItem ContributionItem { get; set; }
+        // Other properties and relationships
     }
 }

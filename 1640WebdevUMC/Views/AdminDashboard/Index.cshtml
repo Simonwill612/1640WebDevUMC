@@ -4,67 +4,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Manager</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
 
-        .bg-img:after {
-            position: absolute;
-            content: '';
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 100%;
-            background: rgba(0,0,0,0.7);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        tr:hover {
-            background-color: #f5f5f5;
-        }
-
-        .nav-item {
-            list-style: none;
-            display: inline;
-        }
-
-        .nav-link {
-            text-decoration: none;
-            color: red;
-        }
-
-            .nav-link:hover {
-                text-decoration: underline;
-            }
-
-        .actions a {
-            text-decoration: none;
-            margin-right: 5px;
-        }
-
-            .actions a:hover {
-                text-decoration: underline;
-            }
-    </style>
 </head>
 <body>
 
@@ -73,36 +13,46 @@
             <a class="nav-link" href="/Identity/Account/Register">Create new accounts</a>
         </li>
     </ul>
+    <div class="container-fluid pt-4 px-4">
+        <div class="bg-light text-center rounded p-4">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <h6 class="mb-0">Manager Accounts</h6>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Email</th>
-                <th>Email Confirmed</th>
-                <th>Password Hash</th>
-                <th>Roles</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var user in Model)
-            {
-                <tr>
-                    <td>@user.Id</td>
-                    <td>@user.Email</td>
-                    <td>@user.EmailConfirmed</td>
-                    <td>*********</td>
-                    <td>@string.Join(", ", user.Roles)</td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@user.Id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@user.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@user.Id">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+            </div>
+            <div class="table-responsive">
+                <table class="table text-start align-middle table-bordered table-hover mb-0">
+                    <thead>
+                        <tr class="text-dark">
+                            <th scope="col">ID</th>
+                            <th scope="col">EMAIL</th>
+                            <th scope="col">EMAIL CONFIRMED</th>
+                            <th scope="col">PASSWORD</th>
+                            <th scope="col">ROLE</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+                                <td>@user.Id</td>
+                                <td>@user.Email</td>
+                                <td>@user.EmailConfirmed</td>
+                                <td>*********</td>
+                                <td>@string.Join(", ", user.Roles)</td>
+                                <td>
+                                    <a asp-action="Edit" asp-route-id="@user.Id">Edit</a> |
+                                    <a asp-action="Details" asp-route-id="@user.Id">Details</a> |
+                                    <a asp-action="Delete" asp-route-id="@user.Id">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
 
 </body>
 </html>

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using _1640WebDevUMC.Data;
 
@@ -11,9 +12,11 @@ using _1640WebDevUMC.Data;
 namespace _1640WebDevUMC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240329072005_V4")]
+    partial class V4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -333,11 +336,11 @@ namespace _1640WebDevUMC.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FileName")
+                    b.Property<string>("FileID")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ImageName")
+                    b.Property<string>("ImageID")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
@@ -352,9 +355,9 @@ namespace _1640WebDevUMC.Migrations
 
                     b.HasIndex("ContributionID");
 
-                    b.HasIndex("FileName");
+                    b.HasIndex("FileID");
 
-                    b.HasIndex("ImageName");
+                    b.HasIndex("ImageID");
 
                     b.ToTable("ContributionItems");
                 });
@@ -404,7 +407,7 @@ namespace _1640WebDevUMC.Migrations
                     b.Property<string>("FileID")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<byte[]>("FileData")
+                    b.Property<byte[]>("Data")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
@@ -422,7 +425,7 @@ namespace _1640WebDevUMC.Migrations
                     b.Property<string>("ImageID")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<byte[]>("ImageData")
+                    b.Property<byte[]>("Data")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
@@ -615,13 +618,13 @@ namespace _1640WebDevUMC.Migrations
 
                     b.HasOne("_1640WebDevUMC.Models.File", "File")
                         .WithMany()
-                        .HasForeignKey("FileName")
+                        .HasForeignKey("FileID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("_1640WebDevUMC.Models.Image", "Image")
                         .WithMany()
-                        .HasForeignKey("ImageName")
+                        .HasForeignKey("ImageID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

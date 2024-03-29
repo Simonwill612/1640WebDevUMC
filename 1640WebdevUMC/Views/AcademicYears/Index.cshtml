@@ -2,52 +2,70 @@
 
 @{
     ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
-<h1>Index</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.UploadDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ClosureDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FinalClosureDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Faculty)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.UploadDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClosureDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FinalClosureDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Faculty.FacultyID)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.AcademicYearID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.AcademicYearID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.AcademicYearID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+</head>
+<body>
+
+    <ul class="nav">
+        <li class="nav-item">
+            <a class="nav-link" href="/Identity/Account/Register">Create new accounts</a>
+        </li>
+    </ul>
+    <div class="container-fluid pt-4 px-4">
+        <div class="bg-light text-center rounded p-4">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <h6 class="mb-0">Manager Accounts</h6>
+
+            </div>
+            <div class="table-responsive">
+                <table class="table text-start align-middle table-bordered table-hover mb-0">
+                    <thead>
+                        <tr class="text-dark">
+                            <th scope="col">START DEALINE</th>
+                            <th scope="col">CLOSE DEALINE</th>
+                            <th scope="col">FINAL COLSE DEALINE</th>
+                            <th scope="col">COURES</th>
+                            <th scope="col">FACULTY</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UploadDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ClosureDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FinalClosureDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Faculty.FacultyID)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Faculty.FacultyName)
+                                </td>
+                                <td>
+                                    <a asp-action="Edit" asp-route-id="@item.AcademicYearID">Edit</a> |
+                                    <a asp-action="Details" asp-route-id="@item.AcademicYearID">Details</a> |
+                                    <a asp-action="Delete" asp-route-id="@item.AcademicYearID">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
