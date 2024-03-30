@@ -21,5 +21,6 @@ namespace _1640WebDevUMC.Models
         [ForeignKey("AcademicYear")]
         public string AcademicYearID { get; set; } = string.Empty;
         public virtual AcademicYear? AcademicYear { get; set; }
+
     }
 }

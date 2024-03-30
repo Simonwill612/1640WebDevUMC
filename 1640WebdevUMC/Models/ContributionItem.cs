@@ -15,12 +15,6 @@ namespace _1640WebDevUMC.Models
         public string ContributionID { get; set; }
         public virtual Contribution Contribution { get; set; }
 
-        [Required]
-        public string Title { get; set; }
-
-        public string Description { get; set; }
-
-        [Required]
         public DateTime UploadDate { get; set; }
 
         // Properties for file upload
@@ -31,13 +25,12 @@ namespace _1640WebDevUMC.Models
         public IFormFile ImageUpload { get; set; }
 
         // Navigation properties
-        public string FileName { get; set; }
-        public string ImageName { get; set; }
+        [ForeignKey("File")]
+        public string FileID { get; set; }
+        public virtual File? File { get; set; }
 
-        [ForeignKey("FileName")]
-        public virtual File File { get; set; }
-
-        [ForeignKey("ImageName")]
-        public virtual Image Image { get; set; }
+        [ForeignKey("Image")]
+        public string ImageID { get; set; }
+        public virtual Image? Image { get; set; }
     }
 }

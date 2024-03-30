@@ -69,7 +69,6 @@
     <None Include="Areas\Identity\Pages\_ValidationScriptsPartial.cshtml" />
     <None Include="Areas\Identity\Pages\_ViewImports.cshtml" />
     <None Include="Areas\Identity\Pages\_ViewStart.cshtml" />
-    <None Include="wwwroot\js\main.js" />
     <None Include="wwwroot\js\site.js" />
     <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map" />
     <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map" />
@@ -100,8 +99,6 @@
     <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.min.js" />
     <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map" />
     <None Include="wwwroot\lib\bootstrap\LICENSE" />
-    <None Include="wwwroot\lib\easing\easing.js" />
-    <None Include="wwwroot\lib\easing\easing.min.js" />
     <None Include="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.js" />
     <None Include="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js" />
     <None Include="wwwroot\lib\jquery-validation\dist\additional-methods.js" />
@@ -112,20 +109,6 @@
     <None Include="wwwroot\lib\jquery\dist\jquery.js" />
     <None Include="wwwroot\lib\jquery\dist\jquery.min.js" />
     <None Include="wwwroot\lib\jquery\dist\jquery.min.map" />
-    <None Include="wwwroot\lib\owlcarousel\LICENSE" />
-    <None Include="wwwroot\lib\owlcarousel\owl.carousel.js" />
-    <None Include="wwwroot\lib\owlcarousel\owl.carousel.min.js" />
-    <None Include="wwwroot\lib\waypoints\links.php" />
-    <None Include="wwwroot\lib\waypoints\waypoints.min.js" />
-    <None Include="wwwroot\lib\wow\wow.js" />
-    <None Include="wwwroot\lib\wow\wow.min.js" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="Views\Shared\AdminLayout.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
   </ItemGroup>
 
 </Project>

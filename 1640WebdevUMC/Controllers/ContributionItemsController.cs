@@ -48,68 +48,32 @@ namespace _1640WebDevUMC.Controllers
         }
 
         // GET: ContributionItems/Create
-        public IActionResult Create()
+        public IActionResult Submit()
         {
             ViewData["ContributionID"] = new SelectList(_context.Contributions, "ContributionID", "ContributionID");
-            ViewData["FileName"] = new SelectList(_context.Files, "FileID", "FileID");
-            ViewData["ImageName"] = new SelectList(_context.Images, "ImageID", "ImageID");
+            ViewData["FileID"] = new SelectList(_context.Files, "FileID", "FileName");
+            ViewData["ImageID"] = new SelectList(_context.Images, "ImageID", "ImageName");
             return View();
         }
 
-        // POST: ContributionItems/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        // POST: ContributionItems/Create
+        // POST: ContributionItems/Submit
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ContributionItemID,ContributionID,Title,Description,UploadDate,FileUpload,ImageUpload")] ContributionItem contributionItem)
+        public async Task<IActionResult> Submit([Bind("ContributionItemID,ContributionID,UploadDate,FileID,ImageID")] ContributionItem contributionItem)
         {
             if (ModelState.IsValid)
             {
-                // Kiểm tra xem người dùng đã chọn file tải lên chưa
-                if (contributionItem.FileUpload != null && contributionItem.ImageUpload != null)
-                {
-                    // Lưu tên file
-                    var fileName = Path.GetFileName(contributionItem.FileUpload.FileName);
-                    var imageName = Path.GetFileName(contributionItem.ImageUpload.FileName);
-
-                    // Lưu file vào thư mục tạm
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", fileName);
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await contributionItem.FileUpload.CopyToAsync(fileStream);
-                    }
-
-                    // Lưu hình ảnh vào thư mục tạm
-                    var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", imageName);
-                    using (var imageStream = new FileStream(imagePath, FileMode.Create))
-                    {
-                        await contributionItem.ImageUpload.CopyToAsync(imageStream);
-                    }
-
-                    // Lưu thông tin về tệp và hình ảnh vào đối tượng ContributionItem
-                    contributionItem.FileName = fileName;
-                    contributionItem.ImageName = imageName;
-
-                    // Thêm ContributionItem vào context và lưu vào cơ sở dữ liệu
-                    _context.Add(contributionItem);
-                    await _context.SaveChangesAsync();
-
-                    return RedirectToAction(nameof(Index));
-                }
-                else
-                {
-                    // Nếu người dùng không chọn file tải lên, hiển thị thông báo lỗi
-                    ModelState.AddModelError("", "Please select both file and image to upload.");
-                }
+                _context.Add(contributionItem);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
-            // Nếu ModelState không hợp lệ, hiển thị form tạo mới lại
             ViewData["ContributionID"] = new SelectList(_context.Contributions, "ContributionID", "ContributionID", contributionItem.ContributionID);
+            ViewData["FileID"] = new SelectList(_context.Files, "FileID", "FileName", contributionItem.FileID);
+            ViewData["ImageID"] = new SelectList(_context.Images, "ImageID", "ImageName", contributionItem.ImageID);
             return View(contributionItem);
         }
-
 
         // GET: ContributionItems/Edit/5
         public async Task<IActionResult> Edit(string id)
@@ -125,8 +89,8 @@ namespace _1640WebDevUMC.Controllers
                 return NotFound();
             }
             ViewData["ContributionID"] = new SelectList(_context.Contributions, "ContributionID", "ContributionID", contributionItem.ContributionID);
-            ViewData["FileName"] = new SelectList(_context.Files, "FileID", "FileID", contributionItem.FileName);
-            ViewData["ImageName"] = new SelectList(_context.Images, "ImageID", "ImageID", contributionItem.ImageName);
+            ViewData["FileID"] = new SelectList(_context.Files, "FileID", "FileName", contributionItem.FileID);
+            ViewData["ImageID"] = new SelectList(_context.Images, "ImageID", "ImageName", contributionItem.ImageID);
             return View(contributionItem);
         }
 
@@ -135,7 +99,7 @@ namespace _1640WebDevUMC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("ContributionItemID,ContributionID,Title,Description,UploadDate,FileName,ImageName")] ContributionItem contributionItem)
+        public async Task<IActionResult> Edit(string id, [Bind("ContributionItemID,ContributionID,UploadDate,FileID,ImageID")] ContributionItem contributionItem)
         {
             if (id != contributionItem.ContributionItemID)
             {
@@ -163,8 +127,8 @@ namespace _1640WebDevUMC.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ContributionID"] = new SelectList(_context.Contributions, "ContributionID", "ContributionID", contributionItem.ContributionID);
-            ViewData["FileName"] = new SelectList(_context.Files, "FileID", "FileID", contributionItem.FileName);
-            ViewData["ImageName"] = new SelectList(_context.Images, "ImageID", "ImageID", contributionItem.ImageName);
+            ViewData["FileID"] = new SelectList(_context.Files, "FileID", "FileName", contributionItem.FileID);
+            ViewData["ImageID"] = new SelectList(_context.Images, "ImageID", "ImageName", contributionItem.ImageID);
             return View(contributionItem);
         }
 
@@ -208,5 +172,73 @@ namespace _1640WebDevUMC.Controllers
         {
             return _context.ContributionItems.Any(e => e.ContributionItemID == id);
         }
+    
+
+public IActionResult Upload()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Upload(IFormFile file, IFormFile image, ContributionItem contributionItem)
+        {
+            // Check if the file is a PDF
+            if (file != null)
+            {
+                if (Path.GetExtension(file.FileName).ToLower() == ".pdf")
+                {
+                    var fileModel = new Models.File
+                    {
+                        FileID = file.FileName,
+                        FileName = file.FileName, // Set the FileName property instead of FileID
+                        FileData = await GetBytesFromFile(file)
+                    };
+
+                    _context.Files.Add(fileModel);
+                    await _context.SaveChangesAsync();
+
+                    // Update the ContributionItem with the new FileID
+                    contributionItem.FileID = fileModel.FileID;
+                }
+                else
+                {
+                    ModelState.AddModelError("", "File must be a PDF.");
+                    return View();
+                }
+            }
+
+            // Handle the image upload
+            if (image != null)
+            {
+                var imageModel = new Models.Image
+                {
+                    ImageID = image.FileName,
+                    ImageName = image.FileName, // Set the ImageName property instead of ImageID
+                    ImageData = await GetBytesFromFile(image) // Assuming GetBytesFromFile can be used for images as well
+                };
+
+                _context.Images.Add(imageModel);
+                await _context.SaveChangesAsync();
+
+                // Update the ContributionItem with the new ImageID
+                contributionItem.ImageID = imageModel.ImageID;
+            }
+
+            // Save the updated ContributionItem
+            _context.ContributionItems.Update(contributionItem);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        public async Task<byte[]> GetBytesFromFile(IFormFile file)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                await file.CopyToAsync(memoryStream);
+                return memoryStream.ToArray();
+            }
+        }
+
     }
 }
