@@ -1,0 +1,44 @@
+﻿@model List<_1640WebDevUMC.Models.Contribution>
+@using System.IO;
+
+@{
+    ViewData["Title"] = "View Upload";
+}
+
+<h1>View Upload Files</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>File Type</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var contribution in Model)
+        {
+            <tr>
+                <td>@contribution.Title</td>
+                <td>@GetFileType(contribution.FilePath)</td>
+                <td>
+                    <a href="@Url.Content(contribution.FilePath)" target="_blank">View</a> |
+                    <a href="@Url.Action("DownloadFile", "Contributions", new { id = contribution.ContributionID })">Download</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@functions
+{
+    private string GetFileType(string FilePath)
+    {
+        if (!string.IsNullOrEmpty(FilePath))
+        {
+            var extension = FilePath.Substring(FilePath.LastIndexOf('.') + 1).ToLower();
+            return extension == "pdf" || extension == "png" ? "Image" : "File";
+        }
+        return "Unknown";
+    }
+}

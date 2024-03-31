@@ -16,8 +16,8 @@ namespace _1640WebDevUMC.Data
 
         public DbSet<AcademicYear> AcademicYears { get; set; }
         public DbSet<Contribution> Contributions { get; set; }
-        public DbSet<ContributionItem> ContributionItems { get; set; }
-        public DbSet<Comment> Comments { get; set; } // Uncommented DbSet
+/*        public DbSet<ContributionItems> ContributionItems { get; set; }
+*/        public DbSet<Comment> Comments { get; set; } // Uncommented DbSet
 
         public DbSet<Faculty> Faculties { get; set; }
         public DbSet<DownloadHistory> DownloadHistories { get; set; }

@@ -1,0 +1,32 @@
+﻿@model IEnumerable<_1640WebDevUMC.Models.ContributionItems>
+
+<h2>Contribution Items</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Contribution Item ID</th>
+            <th>Contribution ID</th>
+            <th>Upload Date</th>
+            <th>File ID</th>
+            <th>Image ID</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ContributionItemID</td>
+                <td>@item.ContributionID</td>
+                <td>@item.UploadDate</td>
+                <td>@item.FileID</td>
+                <td>@item.ImageID</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ContributionItemID">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ContributionItemID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

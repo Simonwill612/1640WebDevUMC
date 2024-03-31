@@ -1,29 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using _1640WebDevUMC.Data;
 using _1640WebDevUMC.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace _1640WebDevUMC.Controllers
 {
     public class ContributionsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public ContributionsController(ApplicationDbContext context)
+        public ContributionsController(ApplicationDbContext context, IWebHostEnvironment hostingEnvironment)
         {
             _context = context;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         // GET: Contributions
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Contributions.Include(c => c.AcademicYear).Include(c => c.ApplicationUser);
-            return View(await applicationDbContext.ToListAsync());
+            var contributions = await _context.Contributions
+                .Include(c => c.AcademicYear)
+                .Include(c => c.ApplicationUser)
+                .ToListAsync();
+            return View(contributions);
         }
 
         // GET: Contributions/Details/5
@@ -55,8 +62,6 @@ namespace _1640WebDevUMC.Controllers
         }
 
         // POST: Contributions/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ContributionID,Title,Content,Email,AcademicYearID")] Contribution contribution)
@@ -91,8 +96,6 @@ namespace _1640WebDevUMC.Controllers
         }
 
         // POST: Contributions/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, [Bind("ContributionID,Title,Content,Email,AcademicYearID")] Contribution contribution)
@@ -165,6 +168,27 @@ namespace _1640WebDevUMC.Controllers
         private bool ContributionExists(string id)
         {
             return _context.Contributions.Any(e => e.ContributionID == id);
+        }
+
+        public IActionResult ViewUpload()
+        {
+            var files = _context.Contributions.Where(c => !string.IsNullOrEmpty(c.FilePath)).ToList();
+            return View(files);
+        }
+
+        public IActionResult DownloadFile(string id)
+        {
+            var contribution = _context.Contributions.FirstOrDefault(c => c.ContributionID == id);
+            if (contribution != null)
+            {
+                var filePath = Path.Combine(_hostingEnvironment.WebRootPath, contribution.FilePath.TrimStart('/'));
+                if (System.IO.File.Exists(filePath))
+                {
+                    var fileBytes = System.IO.File.ReadAllBytes(filePath);
+                    return File(fileBytes, "application/octet-stream", Path.GetFileName(filePath));
+                }
+            }
+            return NotFound();
         }
     }
 }

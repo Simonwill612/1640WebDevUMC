@@ -21,6 +21,10 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     .AddDefaultTokenProviders();
 
 builder.Services.AddControllersWithViews();
+/*builder.Services.AddScoped<IFileService, FileService>();
+builder.Services.AddScoped<IImageService, ImageService>();*/
+/*builder.Services.AddScoped<IContributionItemService, ContributionItemService>();
+*/
 
 var app = builder.Build();
 
@@ -42,6 +46,11 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "custom",
+    pattern: "Contributions/Upload/{id}",
+    defaults: new { controller = "Contributions", action = "Upload" });
 
 app.MapControllerRoute(
     name: "default",

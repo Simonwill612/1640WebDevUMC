@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using _1640WebDevUMC.Data;
 
@@ -11,9 +12,11 @@ using _1640WebDevUMC.Data;
 namespace _1640WebDevUMC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240330190410_V25")]
+    partial class V25
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -307,10 +310,6 @@ namespace _1640WebDevUMC.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("FilePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -324,7 +323,7 @@ namespace _1640WebDevUMC.Migrations
                     b.ToTable("Contributions");
                 });
 
-            modelBuilder.Entity("_1640WebDevUMC.Models.ContributionItems", b =>
+            modelBuilder.Entity("_1640WebDevUMC.Models.ContributionItem", b =>
                 {
                     b.Property<string>("ContributionItemID")
                         .HasColumnType("nvarchar(450)");
@@ -490,7 +489,7 @@ namespace _1640WebDevUMC.Migrations
 
             modelBuilder.Entity("Comment", b =>
                 {
-                    b.HasOne("_1640WebDevUMC.Models.ContributionItems", "ContributionItem")
+                    b.HasOne("_1640WebDevUMC.Models.ContributionItem", "ContributionItem")
                         .WithMany()
                         .HasForeignKey("ContributionItemID")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -601,7 +600,7 @@ namespace _1640WebDevUMC.Migrations
                     b.Navigation("ApplicationUser");
                 });
 
-            modelBuilder.Entity("_1640WebDevUMC.Models.ContributionItems", b =>
+            modelBuilder.Entity("_1640WebDevUMC.Models.ContributionItem", b =>
                 {
                     b.HasOne("_1640WebDevUMC.Models.Contribution", "Contribution")
                         .WithMany()

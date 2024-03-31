@@ -22,5 +22,7 @@ namespace _1640WebDevUMC.Models
         public string AcademicYearID { get; set; } = string.Empty;
         public virtual AcademicYear? AcademicYear { get; set; }
 
+        public string FilePath { get; set; } = string.Empty;
+
     }
 }

@@ -22,5 +22,5 @@ public class Comment
     // Foreign key to ContributionItem
     [ForeignKey("ContributionItem")]
     public string ContributionItemID { get; set; }
-    public virtual ContributionItem ContributionItem { get; set; }
+    public virtual ContributionItems ContributionItem { get; set; }
 }

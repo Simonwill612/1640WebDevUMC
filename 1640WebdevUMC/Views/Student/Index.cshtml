@@ -1,5 +1,7 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿    @model IEnumerable<_1640WebDevUMC.Models.Contribution>
+
+@{
+    ViewData["Title"] = "Student";
     Layout = "~/Views/Shared/Navbar_Layout.cshtml";
 
 }
@@ -8,6 +10,26 @@
         <h1 class="display-4">Welcome</h1>
         <p> <a href="https://www.gre.ac.uk/">University of Greenwich</a></p>
     </div>
+
+    <h1>Contributions</h1>
+
+    @foreach (var contribution in Model)
+    {
+        <div>
+            <h2>@contribution.Title</h2>
+            <p>@contribution.Content</p>
+            <p><strong>Faculty ID:</strong> @contribution.AcademicYear.FacultyID</p>
+            <p><strong>Faculty Name:</strong> @contribution.AcademicYear.Faculty.FacultyName</p>
+            <p><strong>Email:</strong> @contribution.ApplicationUser.Email</p>
+            <p><strong>Start Date:</strong> @contribution.AcademicYear.UploadDate</p>
+            <p><strong>Closed Date:</strong> @contribution.AcademicYear.ClosureDate</p>
+            <p><strong>Final Closed Date:</strong> @contribution.AcademicYear.FinalClosureDate</p>
+            <a asp-action="Upload" asp-route-id="@contribution.ContributionID">Upload</a> |
+
+            <p><strong>Upload File:</strong> <a href="@Url.Content(contribution.FilePath)">Download</a></p>
+            <hr />
+        </div>
+    }
 
     <div class="container-fluid p-0 mb-5">
         <div class="owl-carousel header-carousel position-relative">

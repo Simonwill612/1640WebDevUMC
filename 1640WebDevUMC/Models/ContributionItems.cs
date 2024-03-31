@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace _1640WebDevUMC.Models
 {
-    public class ContributionItem
+    public class ContributionItems
     {
         [Key]
         public string ContributionItemID { get; set; }

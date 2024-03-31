@@ -1,0 +1,16 @@
+﻿@model _1640WebDevUMC.Models.Contribution
+
+@{
+    ViewBag.Title = "Upload File";
+}
+
+<h2>Upload File</h2>
+
+<form method="post" enctype="multipart/form-data" asp-controller="Contributions" asp-action="Upload">
+    <div class="form-group">
+        <input type="hidden" asp-for="ContributionID" />
+        <label for="file">Choose File</label>
+        <input type="file" id="file" name="file" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-primary">Upload</button>
+</form>
