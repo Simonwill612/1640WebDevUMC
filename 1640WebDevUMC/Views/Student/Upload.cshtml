@@ -1,16 +1,28 @@
 ﻿@model _1640WebDevUMC.Models.Contribution
 
 @{
-    ViewBag.Title = "Upload File";
+    ViewData["Title"] = "Upload Files";
 }
 
-<h2>Upload File</h2>
+<h1>Upload Files</h1>
 
-<form method="post" enctype="multipart/form-data" asp-controller="Contributions" asp-action="Upload">
-    <div class="form-group">
-        <input type="hidden" asp-for="ContributionID" />
-        <label for="file">Choose File</label>
-        <input type="file" id="file" name="file" class="form-control">
+<form method="post" enctype="multipart/form-data" id="uploadForm">
+    @Html.AntiForgeryToken()
+    <div id="dropArea" class="drop-area">
+        <p class="drop-message">Drag and drop files here, or click to select files</p>
+        <input type="file" id="fileInput" name="files" multiple hidden>
     </div>
+    <div class="form-group">
+        <label for="file1">Select files from directory 1:</label>
+        <input type="file" id="file1" name="files" multiple>
+    </div>
+
+    <div class="form-group">
+        <label for="file2">Select files from directory 2:</label>
+        <input type="file" id="file2" name="files" multiple>
+    </div>
+
+
     <button type="submit" class="btn btn-primary">Upload</button>
 </form>
+

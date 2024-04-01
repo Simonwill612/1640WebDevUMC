@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿/*using Microsoft.AspNetCore.Http;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -34,3 +34,4 @@ namespace _1640WebDevUMC.Models
         public virtual Image? Image { get; set; }
     }
 }
+*/

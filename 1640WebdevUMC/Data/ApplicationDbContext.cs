@@ -16,8 +16,11 @@ namespace _1640WebDevUMC.Data
 
         public DbSet<AcademicYear> AcademicYears { get; set; }
         public DbSet<Contribution> Contributions { get; set; }
-/*        public DbSet<ContributionItems> ContributionItems { get; set; }
-*/        public DbSet<Comment> Comments { get; set; } // Uncommented DbSet
+        /*        public DbSet<ContributionItems> ContributionItems { get; set; }
+        */
+        public DbSet<ContributionWithFile> ContributionsWithFiles { get; set; }
+
+        public DbSet<Comment> Comments { get; set; } // Uncommented DbSet
 
         public DbSet<Faculty> Faculties { get; set; }
         public DbSet<DownloadHistory> DownloadHistories { get; set; }
@@ -30,6 +33,8 @@ namespace _1640WebDevUMC.Data
         {
             base.OnModelCreating(modelBuilder);
 
+/*            modelBuilder.Entity<ContributionWithFiles>().HasNoKey();
+*/
             modelBuilder.Entity<Faculty>()
                 .HasMany(f => f.AcademicYears)
                 .WithOne(a => a.Faculty)
@@ -41,11 +46,11 @@ namespace _1640WebDevUMC.Data
                 .HasForeignKey(c => c.Email)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Comment>()
+/*            modelBuilder.Entity<Comment>()
                 .HasOne(c => c.ContributionItem)
                 .WithMany()
                 .HasForeignKey(c => c.ContributionItemID)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict);*/
         }
     }
 }

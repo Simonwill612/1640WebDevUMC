@@ -1,20 +1,16 @@
-﻿// File.cs
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace _1640WebDevUMC.Models
 {
     public class File
     {
         [Key]
-        public string FileID { get; set; }
+        public int Id { get; set; }
 
-        [Required]
         public string FileName { get; set; }
 
-        [Required]
-        public byte[] FileData { get; set; } // Thêm thuộc tính FileData
+        public string FilePath { get; set; }
 
-        // Other properties and relationships
+        public string ContributionID { get; set; } // This property associates the file with a contribution
     }
 }

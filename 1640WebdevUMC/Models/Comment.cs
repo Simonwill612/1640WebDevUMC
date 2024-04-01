@@ -20,7 +20,7 @@ public class Comment
     public virtual ApplicationUser ApplicationUser { get; set; }
 
     // Foreign key to ContributionItem
-    [ForeignKey("ContributionItem")]
+/*    [ForeignKey("ContributionItem")]
     public string ContributionItemID { get; set; }
-    public virtual ContributionItems ContributionItem { get; set; }
+    public virtual ContributionItems ContributionItem { get; set; }*/
 }

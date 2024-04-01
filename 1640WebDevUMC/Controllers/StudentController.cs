@@ -41,12 +41,13 @@ public class StudentController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Upload(string id, IFormFile file)
+public IActionResult Upload(string id, List<IFormFile> files)
+{
+    try
     {
-        // Kiểm tra xem có tệp tin được chọn hay không
-        if (file == null || file.Length == 0)
+        if (files == null || files.Count == 0)
         {
-            return BadRequest("Please select a file to upload.");
+            return BadRequest("Please select at least one file to upload.");
         }
 
         var contribution = _context.Contributions.Find(id);
@@ -55,41 +56,50 @@ public class StudentController : Controller
             return NotFound();
         }
 
-        var extension = Path.GetExtension(file.FileName).ToLower();
-        if (extension != ".pdf" && extension != ".png")
+        foreach (var file in files)
         {
-            return BadRequest("Invalid file type. Only PDF and PNG files are allowed.");
+            if (file.Length > 0)
+            {
+                var extension = Path.GetExtension(file.FileName).ToLower();
+                if (extension != ".pdf" && extension != ".png")
+                {
+                    return BadRequest("Invalid file type. Only PDF and PNG files are allowed.");
+                }
+
+                var folder = extension == ".pdf" ? "files" : "images";
+                var directoryPath = Path.Combine("wwwroot", folder, id);
+
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
+
+                var fileName = $"{Guid.NewGuid()}{extension}";
+                var filePath = Path.Combine(directoryPath, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    file.CopyTo(stream);
+                }
+
+                // Assuming there's a property FilePath in Contribution
+                contribution.FilePath = $"/{folder}/{id}/{fileName}";
+
+                // Log file upload information
+                Console.WriteLine($"File uploaded successfully: {fileName}, ContributionID: {contribution.ContributionID}");
+            }
         }
 
-        try
-        {
-            var folder = extension == ".pdf" ? "files" : "images";
-            var fileName = $"{Guid.NewGuid()}{extension}";
-            var directoryPath = Path.Combine("wwwroot", folder);
+        _context.SaveChanges();
 
-            // Kiểm tra nếu thư mục không tồn tại, tạo mới thư mục
-            if (!Directory.Exists(directoryPath))
-            {
-                Directory.CreateDirectory(directoryPath);
-            }
-
-            var filePath = Path.Combine(directoryPath, fileName);
-
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                file.CopyTo(stream);
-            }
-
-            // Sử dụng đường dẫn tương đối cho tệp tin
-            contribution.FilePath = $"/{folder}/{fileName}";
-            _context.SaveChanges();
-
-            return Ok("File uploaded successfully.");
+            return RedirectToAction("Index", "Student");
         }
         catch (Exception ex)
-        {
-            // Xử lý lỗi trong quá trình lưu tệp tin
-            return StatusCode(500, $"An error occurred while uploading the file: {ex.Message}");
-        }
+    {
+        // Log the exception
+        Console.WriteLine($"An error occurred while uploading files: {ex.Message}");
+        return StatusCode(500, $"An error occurred while uploading files: {ex.Message}");
     }
+}
+
 }

@@ -49,8 +49,9 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "custom",
-    pattern: "Contributions/Upload/{id}",
-    defaults: new { controller = "Contributions", action = "Upload" });
+    pattern: "Contributions/ViewUpload/{id}",
+    defaults: new { controller = "Contributions", action = "ViewUpload" });
+
 
 app.MapControllerRoute(
     name: "default",

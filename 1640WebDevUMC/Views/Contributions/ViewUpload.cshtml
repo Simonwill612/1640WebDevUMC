@@ -1,44 +1,31 @@
-﻿@model List<_1640WebDevUMC.Models.Contribution>
-@using System.IO;
+﻿@model _1640WebDevUMC.Models.ContributionWithFile
 
 @{
-    ViewData["Title"] = "View Upload";
+    ViewData["Title"] = "View Uploads";
 }
 
-<h1>View Upload Files</h1>
+<h1>View Uploads</h1>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>File Type</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var contribution in Model)
-        {
-            <tr>
-                <td>@contribution.Title</td>
-                <td>@GetFileType(contribution.FilePath)</td>
-                <td>
-                    <a href="@Url.Content(contribution.FilePath)" target="_blank">View</a> |
-                    <a href="@Url.Action("DownloadFile", "Contributions", new { id = contribution.ContributionID })">Download</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<p><strong>Contribution ID:</strong> @Model.ContributionID</p>
+<p><strong>Title:</strong> @Model.Title</p>
 
-@functions
+@if (Model.FilePaths != null && Model.FilePaths.Any())
 {
-    private string GetFileType(string FilePath)
-    {
-        if (!string.IsNullOrEmpty(FilePath))
+    <h2>Uploaded Files:</h2>
+    <ul>
+        @foreach (var filePath in Model.FilePaths)
         {
-            var extension = FilePath.Substring(FilePath.LastIndexOf('.') + 1).ToLower();
-            return extension == "pdf" || extension == "png" ? "Image" : "File";
+            <li>
+                <a href="@Url.Content("~/" + filePath)" download>@System.IO.Path.GetFileName(filePath)</a>
+            </li>
         }
-        return "Unknown";
-    }
+    </ul>
 }
+else
+{
+    <p>No files uploaded for this contribution.</p>
+}
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

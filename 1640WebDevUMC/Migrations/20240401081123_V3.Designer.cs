@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using _1640WebDevUMC.Data;
 
@@ -11,9 +12,11 @@ using _1640WebDevUMC.Data;
 namespace _1640WebDevUMC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240401081123_V3")]
+    partial class V3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,11 +40,17 @@ namespace _1640WebDevUMC.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ContributionItemID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("CommentID");
+
+                    b.HasIndex("ContributionItemID");
 
                     b.HasIndex("Email");
 
@@ -327,6 +336,37 @@ namespace _1640WebDevUMC.Migrations
                     b.UseTphMappingStrategy();
                 });
 
+            modelBuilder.Entity("_1640WebDevUMC.Models.ContributionItems", b =>
+                {
+                    b.Property<string>("ContributionItemID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ContributionID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("FileID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ImageID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("UploadDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ContributionItemID");
+
+                    b.HasIndex("ContributionID");
+
+                    b.HasIndex("FileID");
+
+                    b.HasIndex("ImageID");
+
+                    b.ToTable("ContributionItems");
+                });
+
             modelBuilder.Entity("_1640WebDevUMC.Models.DownloadHistory", b =>
                 {
                     b.Property<int>("DownloadID")
@@ -369,25 +409,18 @@ namespace _1640WebDevUMC.Migrations
 
             modelBuilder.Entity("_1640WebDevUMC.Models.File", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("FileID")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ContributionID")
+                    b.Property<byte[]>("FileData")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("FileName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FilePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
+                    b.HasKey("FileID");
 
                     b.ToTable("Files");
                 });
@@ -480,6 +513,12 @@ namespace _1640WebDevUMC.Migrations
 
             modelBuilder.Entity("Comment", b =>
                 {
+                    b.HasOne("_1640WebDevUMC.Models.ContributionItems", "ContributionItem")
+                        .WithMany()
+                        .HasForeignKey("ContributionItemID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("_1640WebDevUMC.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("Email")
@@ -487,6 +526,8 @@ namespace _1640WebDevUMC.Migrations
                         .IsRequired();
 
                     b.Navigation("ApplicationUser");
+
+                    b.Navigation("ContributionItem");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -581,6 +622,33 @@ namespace _1640WebDevUMC.Migrations
                     b.Navigation("AcademicYear");
 
                     b.Navigation("ApplicationUser");
+                });
+
+            modelBuilder.Entity("_1640WebDevUMC.Models.ContributionItems", b =>
+                {
+                    b.HasOne("_1640WebDevUMC.Models.Contribution", "Contribution")
+                        .WithMany()
+                        .HasForeignKey("ContributionID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("_1640WebDevUMC.Models.File", "File")
+                        .WithMany()
+                        .HasForeignKey("FileID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("_1640WebDevUMC.Models.Image", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Contribution");
+
+                    b.Navigation("File");
+
+                    b.Navigation("Image");
                 });
 
             modelBuilder.Entity("_1640WebDevUMC.Models.DownloadHistory", b =>

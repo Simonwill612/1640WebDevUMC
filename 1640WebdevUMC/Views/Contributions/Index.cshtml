@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<_1640WebDevUMC.Models.Contribution>
 
+
 @{
     ViewData["Title"] = "Index";
 }
@@ -25,7 +26,6 @@
                 @Html.DisplayNameFor(model => model.AcademicYear)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FilePath)
             </th>
             <th></th>
         </tr>
@@ -47,10 +47,9 @@
                     @Html.DisplayFor(modelItem => item.AcademicYear.AcademicYearID)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.FilePath)
                 </td>
                 <td>
-                    <a href="@Url.Action("ViewUpload", "Contributions")" class="btn btn-primary">View Uploaded Files</a>
+                    <a asp-action="ViewUpload" asp-route-id="@item.ContributionID">View Uploads</a>
 
                     <a asp-action="Upload" asp-route-id="@item.ContributionID">Upload</a> |
                     <a asp-action="Edit" asp-route-id="@item.ContributionID">Edit</a> |
