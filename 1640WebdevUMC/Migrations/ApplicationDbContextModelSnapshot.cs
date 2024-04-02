@@ -297,11 +297,6 @@ namespace _1640WebDevUMC.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(21)
-                        .HasColumnType("nvarchar(21)");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -321,10 +316,6 @@ namespace _1640WebDevUMC.Migrations
                     b.HasIndex("Email");
 
                     b.ToTable("Contributions");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Contribution");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("_1640WebDevUMC.Models.DownloadHistory", b =>
@@ -458,17 +449,6 @@ namespace _1640WebDevUMC.Migrations
                     b.HasIndex("ContributionID");
 
                     b.ToTable("Notifications");
-                });
-
-            modelBuilder.Entity("_1640WebDevUMC.Models.ContributionWithFile", b =>
-                {
-                    b.HasBaseType("_1640WebDevUMC.Models.Contribution");
-
-                    b.Property<string>("FilePaths")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasDiscriminator().HasValue("ContributionWithFile");
                 });
 
             modelBuilder.Entity("Comment", b =>

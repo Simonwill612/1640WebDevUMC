@@ -18,8 +18,8 @@ namespace _1640WebDevUMC.Data
         public DbSet<Contribution> Contributions { get; set; }
         /*        public DbSet<ContributionItems> ContributionItems { get; set; }
         */
-        public DbSet<ContributionWithFile> ContributionsWithFiles { get; set; }
-
+/*        public DbSet<ContributionWithFile> ContributionsWithFiles { get; set; }
+*/
         public DbSet<Comment> Comments { get; set; } // Uncommented DbSet
 
         public DbSet<Faculty> Faculties { get; set; }

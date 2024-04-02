@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using _1640WebDevUMC.Data;
 using _1640WebDevUMC.Models;
 using System.IO.Compression;
+using System.Net;
 
 namespace _1640WebDevUMC.Controllers
 {
@@ -167,81 +168,37 @@ namespace _1640WebDevUMC.Controllers
 
 
 
-        public IActionResult ViewUpload(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var contributionWithFiles = GetContributionWithFiles(id);
-
-            if (contributionWithFiles == null)
-            {
-                return NotFound();
-            }
-
-            return View(contributionWithFiles); // Make sure contributionWithFiles is of type ContributionWithFile
-        }
-
-        private ContributionWithFile GetContributionWithFiles(string id)
-        {
-            var contribution = _context.Contributions
-                .Include(c => c.ApplicationUser)
-                .FirstOrDefault(c => c.ContributionID == id);
-
-            if (contribution == null)
-            {
-                return null;
-            }
-
-            var contributionWithFiles = new ContributionWithFile
-            {
-                ContributionID = contribution.ContributionID,
-                Title = contribution.Title,
-                FilePaths = GetFilePathsForContribution(contribution.ContributionID)
-            };
-
-            return contributionWithFiles;
-        }
-
-        private List<string> GetFilePathsForContribution(string contributionId)
-        {
-            var filePaths = _context.Files
-                .Where(f => f.ContributionID == contributionId)
-                .Select(f => f.FilePath)
-                .ToList();
-
-            return filePaths;
-        }
-
 
 
         public IActionResult DownloadFile(string id)
         {
             var contribution = _context.Contributions.FirstOrDefault(c => c.ContributionID == id);
-            if (contribution != null)
+            if (contribution != null && contribution.FilePath != null)
             {
-                var filePath = Path.Combine(_hostingEnvironment.WebRootPath, contribution.FilePath.TrimStart('/'));
-                if (System.IO.File.Exists(filePath))
+                foreach (var path in contribution.FilePath)
                 {
-                    // Create the path for the zip file
-                    var zipFilePath = Path.ChangeExtension(filePath, ".zip");
+                    var filePath = Path.Combine(_hostingEnvironment.WebRootPath, path.TrimStart('/'));
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        // Create the path for the zip file
+                        var zipFilePath = Path.ChangeExtension(filePath, ".zip");
 
-                    // Create a zip file and add the original file to it
-                    ZipFile.CreateFromDirectory(Path.GetDirectoryName(filePath), zipFilePath, CompressionLevel.Fastest, false);
+                        // Create a zip file and add the original file to it
+                        ZipFile.CreateFromDirectory(Path.GetDirectoryName(filePath), zipFilePath, CompressionLevel.Fastest, false);
 
-                    // Read data from the zip file and return it to the user
-                    var fileBytes = System.IO.File.ReadAllBytes(zipFilePath);
-                    var zipFileName = Path.ChangeExtension(Path.GetFileName(filePath), ".zip");
+                        // Read data from the zip file and return it to the user
+                        var fileBytes = System.IO.File.ReadAllBytes(zipFilePath);
+                        var zipFileName = Path.ChangeExtension(Path.GetFileName(filePath), ".zip");
 
-                    // Delete the zip file after it has been created
-                    System.IO.File.Delete(zipFilePath);
+                        // Delete the zip file after it has been created
+                        System.IO.File.Delete(zipFilePath);
 
-                    return File(fileBytes, "application/zip", zipFileName);
+                        return File(fileBytes, "application/zip", zipFileName);
+                    }
                 }
             }
             return NotFound();
         }
+
     }
-    }
+}

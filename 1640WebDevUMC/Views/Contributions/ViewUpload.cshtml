@@ -1,4 +1,4 @@
-﻿@model _1640WebDevUMC.Models.ContributionWithFile
+﻿@* @model IEnumerable<_1640WebDevUMC.Models.Contribution>
 
 @{
     ViewData["Title"] = "View Uploads";
@@ -6,26 +6,30 @@
 
 <h1>View Uploads</h1>
 
-<p><strong>Contribution ID:</strong> @Model.ContributionID</p>
-<p><strong>Title:</strong> @Model.Title</p>
+@foreach (var contribution in Model)
+{
+    <p><strong>Contribution ID:</strong> @contribution.ContributionID</p>
+    <p><strong>Title:</strong> @contribution.Title</p>
 
-@if (Model.FilePaths != null && Model.FilePaths.Any())
-{
-    <h2>Uploaded Files:</h2>
-    <ul>
-        @foreach (var filePath in Model.FilePaths)
-        {
-            <li>
-                <a href="@Url.Content("~/" + filePath)" download>@System.IO.Path.GetFileName(filePath)</a>
-            </li>
-        }
-    </ul>
-}
-else
-{
-    <p>No files uploaded for this contribution.</p>
+    @if (contribution.FilePath != null && contribution.FilePath.Any())
+    {
+        <h2>Uploaded Files:</h2>
+        <ul>
+            @foreach (var file in contribution.FilePath)
+            {
+                <p>
+                    <a href="@Url.Content(file)">@(System.IO.Path.GetFileName(file))</a>
+                </p>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No files uploaded for this contribution.</p>
+    }
 }
 
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+ *@

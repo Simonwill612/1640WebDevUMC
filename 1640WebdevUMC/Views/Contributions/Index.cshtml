@@ -1,6 +1,5 @@
 ﻿@model IEnumerable<_1640WebDevUMC.Models.Contribution>
 
-
 @{
     ViewData["Title"] = "Index";
 }
@@ -25,8 +24,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.AcademicYear)
             </th>
-            <th>
-            </th>
+            
             <th></th>
         </tr>
     </thead>
@@ -46,12 +44,9 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.AcademicYear.AcademicYearID)
                 </td>
-                <td>
-                </td>
-                <td>
-                    <a asp-action="ViewUpload" asp-route-id="@item.ContributionID">View Uploads</a>
+           
 
-                    <a asp-action="Upload" asp-route-id="@item.ContributionID">Upload</a> |
+                <td>
                     <a asp-action="Edit" asp-route-id="@item.ContributionID">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.ContributionID">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.ContributionID">Delete</a>

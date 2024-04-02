@@ -1,5 +1,6 @@
 ﻿@model _1640WebDevUMC.Models.Contribution
 
+
 @{
     ViewData["Title"] = "Details";
 }
@@ -34,6 +35,18 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.AcademicYear.AcademicYearID)
         </dd>
+        <dd>
+            @foreach (var file in Model.FilePath)
+            {
+                <p>
+                    <a href="@Url.Content(file)">@(System.IO.Path.GetFileName(file))</a>
+                </p>
+            }
+        </dd>
+        <a href="path_to_your_file" download>
+            <button>Download</button>
+        </a>
+
     </dl>
 </div>
 <div>
