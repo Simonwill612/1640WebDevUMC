@@ -12,8 +12,8 @@ using _1640WebDevUMC.Data;
 namespace _1640WebDevUMC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240405160046_V2")]
-    partial class V2
+    [Migration("20240407111832_V")]
+    partial class V
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,26 +27,27 @@ namespace _1640WebDevUMC.Migrations
 
             modelBuilder.Entity("Comment", b =>
                 {
-                    b.Property<int>("CommentID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CommentID"));
-
-                    b.Property<DateTime>("CommentDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("CommentID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Email")
+                    b.Property<string>("ContributionID")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("SubmissionTime")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("CommentID");
 
-                    b.HasIndex("Email");
+                    b.HasIndex("ContributionID");
 
                     b.ToTable("Comments");
                 });
@@ -460,13 +461,13 @@ namespace _1640WebDevUMC.Migrations
 
             modelBuilder.Entity("Comment", b =>
                 {
-                    b.HasOne("_1640WebDevUMC.Models.ApplicationUser", "ApplicationUser")
+                    b.HasOne("_1640WebDevUMC.Models.Contribution", "Contribution")
                         .WithMany()
-                        .HasForeignKey("Email")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasForeignKey("ContributionID")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ApplicationUser");
+                    b.Navigation("Contribution");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

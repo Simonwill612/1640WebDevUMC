@@ -25,5 +25,6 @@ namespace _1640WebDevUMC.Models
         public virtual AcademicYear? AcademicYear { get; set; }
 
         public List<string> FilePath { get; set; } = new List<string>();
+        public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }
 }

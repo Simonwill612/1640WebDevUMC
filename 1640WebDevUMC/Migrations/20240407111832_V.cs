@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace _1640WebDevUMC.Migrations
 {
     /// <inheritdoc />
-    public partial class V1 : Migration
+    public partial class V : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -244,27 +244,6 @@ namespace _1640WebDevUMC.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Comments",
-                columns: table => new
-                {
-                    CommentID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CommentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Comments", x => x.CommentID);
-                    table.ForeignKey(
-                        name: "FK_Comments_AspNetUsers_Email",
-                        column: x => x.Email,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Contributions",
                 columns: table => new
                 {
@@ -272,6 +251,7 @@ namespace _1640WebDevUMC.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    StudentEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AcademicYearID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FilePath = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -289,6 +269,27 @@ namespace _1640WebDevUMC.Migrations
                         column: x => x.Email,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Comments",
+                columns: table => new
+                {
+                    CommentID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SubmissionTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ContributionID = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comments", x => x.CommentID);
+                    table.ForeignKey(
+                        name: "FK_Comments_Contributions_ContributionID",
+                        column: x => x.ContributionID,
+                        principalTable: "Contributions",
+                        principalColumn: "ContributionID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -396,9 +397,9 @@ namespace _1640WebDevUMC.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_Email",
+                name: "IX_Comments_ContributionID",
                 table: "Comments",
-                column: "Email");
+                column: "ContributionID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Contributions_AcademicYearID",

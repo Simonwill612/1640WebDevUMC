@@ -24,6 +24,15 @@
             <p><strong>Start Date:</strong> @contribution.AcademicYear.UploadDate</p>
             <p><strong>Closed Date:</strong> @contribution.AcademicYear.ClosureDate</p>
             <p><strong>Final Closed Date:</strong> @contribution.AcademicYear.FinalClosureDate</p>
+            <h3>Comments</h3>
+            @foreach (var comment in contribution.Comments)
+            {
+                <div>
+                    <p><strong>@comment.Email</strong></p>
+                    <p>@comment.Content</p>
+                    <p><small>@comment.SubmissionTime</small></p>
+                </div>
+            }
             <a asp-action="Upload" asp-route-id="@contribution.ContributionID">Upload</a> |
 
             <hr />

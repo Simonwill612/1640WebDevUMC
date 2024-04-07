@@ -24,26 +24,27 @@ namespace _1640WebDevUMC.Migrations
 
             modelBuilder.Entity("Comment", b =>
                 {
-                    b.Property<int>("CommentID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CommentID"));
-
-                    b.Property<DateTime>("CommentDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("CommentID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Email")
+                    b.Property<string>("ContributionID")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("SubmissionTime")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("CommentID");
 
-                    b.HasIndex("Email");
+                    b.HasIndex("ContributionID");
 
                     b.ToTable("Comments");
                 });
@@ -457,13 +458,13 @@ namespace _1640WebDevUMC.Migrations
 
             modelBuilder.Entity("Comment", b =>
                 {
-                    b.HasOne("_1640WebDevUMC.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("Email")
-                        .OnDelete(DeleteBehavior.Restrict)
+                    b.HasOne("_1640WebDevUMC.Models.Contribution", "Contribution")
+                        .WithMany("Comments")
+                        .HasForeignKey("ContributionID")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ApplicationUser");
+                    b.Navigation("Contribution");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -593,6 +594,11 @@ namespace _1640WebDevUMC.Migrations
                     b.Navigation("Notifications");
 
                     b.Navigation("Roles");
+                });
+
+            modelBuilder.Entity("_1640WebDevUMC.Models.Contribution", b =>
+                {
+                    b.Navigation("Comments");
                 });
 
             modelBuilder.Entity("_1640WebDevUMC.Models.Faculty", b =>

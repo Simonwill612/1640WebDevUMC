@@ -40,11 +40,11 @@ namespace _1640WebDevUMC.Data
                 .WithOne(a => a.Faculty)
                 .HasForeignKey(a => a.FacultyID);
 
-            modelBuilder.Entity<Comment>()
+/*            modelBuilder.Entity<Comment>()
                 .HasOne(c => c.ApplicationUser)
                 .WithMany()
                 .HasForeignKey(c => c.Email)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict);*/
 
 /*            modelBuilder.Entity<Comment>()
                 .HasOne(c => c.ContributionItem)
