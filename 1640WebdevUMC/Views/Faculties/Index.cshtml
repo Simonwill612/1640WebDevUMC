@@ -1,24 +1,47 @@
-﻿@model IEnumerable<_1640WebDevUMC.Models.Faculty>
+﻿@using Newtonsoft.Json
+@model IEnumerable<_1640WebDevUMC.Models.Faculty>
+@{
+    var data = Context.Session.GetString("IsGuest");
+    string IsGuest = "";
+    if (data != null)
+    {
+        IsGuest = JsonConvert.DeserializeObject<string>(data);
+    }
+
+}
 
 @{
     ViewData["Title"] = "Index";
 }
 
 <h1>Index</h1>
+@if (string.IsNullOrEmpty(IsGuest))
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.FacultyName)
+                @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.FacultyID)
             </th>
-            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.FacultyName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FacultyGuest)
+            </th>
+            @if (string.IsNullOrEmpty(IsGuest))
+            {
+                <th></th>
+            }
+
         </tr>
     </thead>
     <tbody>
@@ -26,16 +49,27 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.FacultyName)
+                    @Html.DisplayFor(modelItem => item.Id)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.FacultyID)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.FacultyID">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.FacultyID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.FacultyID">Delete</a>
+                    @Html.DisplayFor(modelItem => item.FacultyName)
                 </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FacultyGuest)
+                </td>
+                @if (string.IsNullOrEmpty(IsGuest))
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                }
+
+
             </tr>
         }
     </tbody>
