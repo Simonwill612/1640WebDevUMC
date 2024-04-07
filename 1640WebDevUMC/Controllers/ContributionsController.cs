@@ -200,8 +200,8 @@ namespace _1640WebDevUMC.Controllers
             return NotFound();
         }
        
-     /*   [HttpPost]
-        public async Task<IActionResult> Create(string contributionId, string content)*/
+/*        [HttpPost]
+        public async Task<IActionResult> Create(string contributionId, string content)
         {
             var comment = new Comment
             {
@@ -214,6 +214,6 @@ namespace _1640WebDevUMC.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Details", "Contributions", new { id = contributionId });
-        }
+        }*/
     }
 }
