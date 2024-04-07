@@ -7,41 +7,22 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using _1640WebDevUMC.Data;
 using _1640WebDevUMC.Models;
-using Newtonsoft.Json;
 
 namespace _1640WebDevUMC.Controllers
 {
     public class FacultiesController : Controller
     {
         private readonly ApplicationDbContext _context;
-        public IHttpContextAccessor _httpContextAccessor;
-        public FacultiesController(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor)
+
+        public FacultiesController(ApplicationDbContext context)
         {
-            _httpContextAccessor = httpContextAccessor;
             _context = context;
         }
 
         // GET: Faculties
         public async Task<IActionResult> Index()
         {
-            //var data = _httpContextAccessor.HttpContext.Session.GetString("IsGuest");
-            //var IsGuest = JsonConvert.DeserializeObject<bool>(data);
-            //if (IsGuest)
-            //{
-
-            //}
-            var data = _httpContextAccessor.HttpContext.Session.GetString("IsGuest");
-            var dataDb = await _context.Faculties.ToListAsync();
-            string IsGuest = "";
-            if (data != null)
-            {
-                IsGuest = JsonConvert.DeserializeObject<string>(data);
-                if (!string.IsNullOrEmpty(IsGuest))
-                {
-                    dataDb = dataDb.Where(p => p.FacultyGuest == IsGuest).ToList();
-                }
-            }
-            return View(dataDb);
+            return View(await _context.Faculties.ToListAsync());
         }
 
         // GET: Faculties/Details/5
@@ -53,7 +34,7 @@ namespace _1640WebDevUMC.Controllers
             }
 
             var faculty = await _context.Faculties
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.FacultyID == id);
             if (faculty == null)
             {
                 return NotFound();
@@ -73,7 +54,7 @@ namespace _1640WebDevUMC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FacultyID,FacultyName,FacultyGuest")] Faculty faculty)
+        public async Task<IActionResult> Create([Bind("FacultyID,FacultyName")] Faculty faculty)
         {
             if (ModelState.IsValid)
             {
@@ -91,6 +72,7 @@ namespace _1640WebDevUMC.Controllers
             {
                 return NotFound();
             }
+
             var faculty = await _context.Faculties.FindAsync(id);
             if (faculty == null)
             {
@@ -104,9 +86,9 @@ namespace _1640WebDevUMC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,FacultyID,FacultyName,FacultyGuest")] Faculty faculty)
+        public async Task<IActionResult> Edit(string id, [Bind("FacultyID,FacultyName")] Faculty faculty)
         {
-            if (id != faculty.Id)
+            if (id != faculty.FacultyID)
             {
                 return NotFound();
             }
@@ -120,7 +102,7 @@ namespace _1640WebDevUMC.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!FacultyExists(faculty.Id))
+                    if (!FacultyExists(faculty.FacultyID))
                     {
                         return NotFound();
                     }
@@ -143,7 +125,7 @@ namespace _1640WebDevUMC.Controllers
             }
 
             var faculty = await _context.Faculties
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.FacultyID == id);
             if (faculty == null)
             {
                 return NotFound();
@@ -169,7 +151,7 @@ namespace _1640WebDevUMC.Controllers
 
         private bool FacultyExists(string id)
         {
-            return _context.Faculties.Any(e => e.Id == id);
+            return _context.Faculties.Any(e => e.FacultyID == id);
         }
     }
 }

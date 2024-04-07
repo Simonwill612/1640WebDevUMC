@@ -200,7 +200,7 @@ namespace _1640WebDevUMC.Controllers
             return NotFound();
         }
        
-/*        [HttpPost]
+       /* [HttpPost]
         public async Task<IActionResult> Create(string contributionId, string content)
         {
             var comment = new Comment
