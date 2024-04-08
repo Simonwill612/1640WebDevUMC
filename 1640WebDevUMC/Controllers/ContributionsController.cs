@@ -28,7 +28,7 @@ namespace _1640WebDevUMC.Controllers
             var contributions = await _context.Contributions
                 .Include(c => c.AcademicYear)
                 .Include(c => c.ApplicationUser)
-                                                .Include(c => c.Comments) // Include comments
+                .Include(c => c.Comments) // Include comments
 
                 .ToListAsync();
             return View(contributions);

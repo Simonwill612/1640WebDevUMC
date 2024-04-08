@@ -24,12 +24,20 @@ public class StudentController : Controller
 
     public async Task<IActionResult> Index()
     {
+        // Get the current user
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        // Get the contributions of the current user
         var contributions = await _context.Contributions
             .Include(c => c.AcademicYear)
                 .ThenInclude(a => a.Faculty) // Include Faculty within AcademicYear
-                                                .Include(c => c.Comments) // Include comments
-
+            .Include(c => c.Comments) // Include comments
             .Include(c => c.ApplicationUser)
+            .Where(c => c.ApplicationUser.Email == user.Email) // Filter by the current user
             .ToListAsync();
 
         return View(contributions);
