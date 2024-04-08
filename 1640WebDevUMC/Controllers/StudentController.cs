@@ -49,7 +49,6 @@ public class StudentController : Controller
 
         return View(contribution);
     }
-
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Upload(string id, List<IFormFile> files)
@@ -131,11 +130,19 @@ public class StudentController : Controller
 
                 // Use a relative path for the file
                 var relativeFilePath = $"/{folder}/{contribution.ContributionID}/{fileName}";
-                contribution.FilePath.Add(relativeFilePath); // Add the new path to the FilePath list
-            }
 
-            // Update the StudentEmail in the Contribution
-            contribution.StudentEmail = user.Email;
+                // Create a new File object
+                var uploadedFile = new _1640WebDevUMC.Models.File
+                {
+                    ContributionID = contribution.ContributionID,
+                    FileName = fileName,
+                    FilePath = relativeFilePath,
+                    StudentEmail = user.Email
+                };
+
+                // Add the new File object to the database
+                _context.Files.Add(uploadedFile);
+            }
 
             _context.SaveChanges();
 
@@ -148,6 +155,8 @@ public class StudentController : Controller
             return View();
         }
     }
+
+
 
     [HttpPost]
 public async Task<IActionResult> AddComment(string contributionId, string content)

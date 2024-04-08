@@ -1,6 +1,5 @@
 ﻿@model _1640WebDevUMC.Models.Contribution
 
-
 @{
     ViewData["Title"] = "Details";
 }
@@ -43,30 +42,35 @@
                 <thead>
                     <tr>
                         <th>Email</th>
-                        <th>Submission Time</th>
                         <th>PDF File</th>
                         <th>Image File</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var file in Model.FilePath)
+                    @foreach (var file in Model.Files)
                     {
                         <tr>
-                           <td>@Model.StudentEmail</td>
-                            <td>@DateTime.Now</td>
+                            <td>@file.StudentEmail</td>
                             <td>
-                                @if (System.IO.Path.GetExtension(file) == ".pdf")
+                                @if (System.IO.Path.GetExtension(file.FilePath) == ".pdf")
                                 {
-                                    <a href='@Url.Content(file)'>@(System.IO.Path.GetFileName(file))</a>
+                                    <a href='@Url.Content(file.FilePath)'>@(System.IO.Path.GetFileName(file.FilePath))</a>
+                                }
+                                else
+                                {
+                                    @:N/A
                                 }
                             </td>
                             <td>
-                                @if (System.IO.Path.GetExtension(file) == ".png")
+                                @if (System.IO.Path.GetExtension(file.FilePath) == ".png")
                                 {
-                                    <a href='@Url.Content(file)'>@(System.IO.Path.GetFileName(file))</a>
+                                    <a href='@Url.Content(file.FilePath)'>@(System.IO.Path.GetFileName(file.FilePath))</a>
+                                }
+                                else
+                                {
+                                    @:N/A
                                 }
                             </td>
-
                         </tr>
                     }
                 </tbody>
@@ -80,7 +84,4 @@
     <a href="@Url.Action("DownloadFile", "Contributions", new { id = Model.ContributionID })">
         <button>Download</button>
     </a>
-
-
 </div>
-

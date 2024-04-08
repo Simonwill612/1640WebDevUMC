@@ -24,7 +24,7 @@ namespace _1640WebDevUMC.Data
 
         public DbSet<Faculty> Faculties { get; set; }
         public DbSet<DownloadHistory> DownloadHistories { get; set; }
-        public DbSet<File> Files { get; set; }
+        public DbSet<File> Files{ get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Log> Logs { get; set; }

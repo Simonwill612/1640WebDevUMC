@@ -34,20 +34,29 @@
                     <tbody>
                         @foreach (var user in Model)
                         {
-                            <tr>
-                                <td>@user.Id</td>
-                                <td>@user.Email</td>
-                                <td>@user.EmailConfirmed</td>
-                                <td>*********</td>
-                                <td>@string.Join(", ", user.Roles)</td>
-                                <td>
-                                    <a asp-action="Edit" asp-route-id="@user.Id">Edit</a> |
-                                    <a asp-action="Details" asp-route-id="@user.Id">Details</a> |
-                                    <a asp-action="Delete" asp-route-id="@user.Id">Delete</a>
-                                </td>
-                            </tr>
+                            @if (!user.Roles.Contains("Admin"))
+                            {
+                                <tr>
+                                    <td>@user.Id</td>
+                                    <td>@user.Email</td>
+                                    <td>@user.EmailConfirmed</td>
+                                    <td>*********</td>
+                                    <td>
+
+                                        @string.Join(", ", user.Roles)
+
+                                    </td>
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@user.Id">Edit</a> |
+                                        <a asp-action="Details" asp-route-id="@user.Id">Details</a> |
+                                        <a asp-action="Delete" asp-route-id="@user.Id">Delete</a>
+                                    </td>
+                                </tr>
+                            }
                         }
+
                     </tbody>
+
                 </table>
             </div>
         </div>
