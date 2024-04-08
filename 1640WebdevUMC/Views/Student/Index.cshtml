@@ -44,9 +44,14 @@
                         <p><strong>Comment ID:</strong> @comment.CommentID</p>
                         <p><strong>Content:</strong> @comment.Content</p>
                         <p><strong>Comment Date:</strong> @comment.CommentDate</p>
-                        <p><strong>Email:</strong> @comment.Email</p>
+                        <p><strong>Email:</strong> @comment.ApplicationUser.Email</p>
                         <p><strong>Contribution ID:</strong> @comment.ContributionID</p>
                     </div>
+                    <form asp-action="DeleteComment" method="post">
+                        <input type="hidden" name="commentId" value="@comment.CommentID" />
+                        <button type="submit">Delete comment</button>
+                    </form>
+
                 }
             }
             else

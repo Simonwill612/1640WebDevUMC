@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using _1640WebDevUMC.Data;
 using Microsoft.AspNetCore.Identity;
 using _1640WebDevUMC.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 public class StudentController : Controller
 {
@@ -57,31 +58,36 @@ public class StudentController : Controller
         var user = await _userManager.GetUserAsync(User);
         if (user == null)
         {
-            return Unauthorized();
+            ModelState.AddModelError(string.Empty, "You must be logged in to upload files.");
+            return View();
         }
 
         // Check if the user's email is confirmed
         if (!await _userManager.IsEmailConfirmedAsync(user))
         {
-            return BadRequest("Please confirm your email before uploading files.");
+            ModelState.AddModelError(string.Empty, "Please confirm your email before uploading files.");
+            return View();
         }
 
         // Check if the user has the "Student" role
         if (!await _userManager.IsInRoleAsync(user, "Student"))
         {
-            return BadRequest("Only students are allowed to upload files.");
+            ModelState.AddModelError(string.Empty, "Only students are allowed to upload files.");
+            return View();
         }
 
         // Check if a file is selected
         if (files == null || files.Count == 0)
         {
-            return BadRequest("Please select a file to upload.");
+            ModelState.AddModelError(string.Empty, "Please select a file to upload.");
+            return View();
         }
 
         var contribution = _context.Contributions.Find(id);
         if (contribution == null)
         {
-            return NotFound();
+            ModelState.AddModelError(string.Empty, "Contribution not found.");
+            return View();
         }
 
         // Fetch the AcademicYear using the AcademicYearID from the contribution
@@ -90,7 +96,8 @@ public class StudentController : Controller
         // Check if the deadline has passed
         if (DateTime.Now > academicYear.FinalClosureDate)
         {
-            return BadRequest("The deadline has passed. You cannot upload files.");
+            ModelState.AddModelError(string.Empty, "The deadline has passed. You cannot upload files.");
+            return View();
         }
 
         try
@@ -100,7 +107,8 @@ public class StudentController : Controller
                 var extension = Path.GetExtension(file.FileName).ToLower();
                 if (extension != ".pdf" && extension != ".png")
                 {
-                    return BadRequest("Invalid file type. Only PDF and PNG files are allowed.");
+                    ModelState.AddModelError(string.Empty, "Invalid file type. Only PDF and PNG files are allowed.");
+                    return View();
                 }
 
                 // Determine the folder based on the file type
@@ -116,7 +124,6 @@ public class StudentController : Controller
                 var fileName = $"{Path.GetFileNameWithoutExtension(file.FileName)}{extension}";
                 var filePath = Path.Combine(directoryPath, fileName);
 
-
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     file.CopyTo(stream);
@@ -127,6 +134,9 @@ public class StudentController : Controller
                 contribution.FilePath.Add(relativeFilePath); // Add the new path to the FilePath list
             }
 
+            // Update the StudentEmail in the Contribution
+            contribution.StudentEmail = user.Email;
+
             _context.SaveChanges();
 
             return Ok("Files uploaded successfully.");
@@ -134,10 +144,11 @@ public class StudentController : Controller
         catch (Exception ex)
         {
             // Handle errors during file saving
-            return StatusCode(500, $"An error occurred while uploading the files: {ex.Message}");
+            ModelState.AddModelError(string.Empty, $"An error occurred while uploading the files: {ex.Message}");
+            return View();
         }
-
     }
+
     [HttpPost]
 public async Task<IActionResult> AddComment(string contributionId, string content)
 {
@@ -147,9 +158,10 @@ public async Task<IActionResult> AddComment(string contributionId, string conten
     {
         return NotFound();
     }
+        ViewData["Email"] = new SelectList(_context.Comments.Select(c => c.Email), "Email", "Email");
 
-    // Sử dụng email từ contribution
-    var email = contribution.Email;
+        // Sử dụng email từ contribution
+        var email = contribution.Email;
 
     // Tạo CommentID dựa trên ContributionID
     var commentId = contributionId + "_" + Guid.NewGuid().ToString();
@@ -165,8 +177,27 @@ public async Task<IActionResult> AddComment(string contributionId, string conten
 
     _context.Comments.Add(comment);
     await _context.SaveChangesAsync();
+        ViewData["Email"] = new SelectList(_context.Comments.Select(c => c.Email), "Email", "Email");
 
-    return RedirectToAction("Index");
+        return RedirectToAction("Index");
 }
+    [HttpPost]
+    public async Task<IActionResult> DeleteComment(string commentId)
+    {
+        // Tìm comment bằng ID
+        var comment = await _context.Comments.FindAsync(commentId);
+        if (comment == null)
+        {
+            return NotFound();
+        }
+
+        // Xóa comment
+        _context.Comments.Remove(comment);
+        await _context.SaveChangesAsync();
+        ViewData["Email"] = new SelectList(_context.Comments.Select(c => c.Email), "Email", "Email");
+
+        return RedirectToAction("Index");
+    }
+
 
 }
