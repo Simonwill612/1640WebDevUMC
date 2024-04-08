@@ -18,7 +18,7 @@ namespace _1640WebDevUMC.Models
         public string Email { get; set; } = string.Empty;
         public virtual ApplicationUser? ApplicationUser { get; set; }
 
-        public string StudentEmail { get; set; } = string.Empty; // New field to store the email of the student who submitted the contribution
+        public string StudentEmail { get; set; } = string.Empty;
 
         [ForeignKey("AcademicYear")]
         public string AcademicYearID { get; set; } = string.Empty;

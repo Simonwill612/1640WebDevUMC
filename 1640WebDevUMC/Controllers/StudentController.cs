@@ -26,6 +26,8 @@ public class StudentController : Controller
         var contributions = await _context.Contributions
             .Include(c => c.AcademicYear)
                 .ThenInclude(a => a.Faculty) // Include Faculty within AcademicYear
+                                                .Include(c => c.Comments) // Include comments
+
             .Include(c => c.ApplicationUser)
             .ToListAsync();
 
@@ -111,8 +113,9 @@ public class StudentController : Controller
                     Directory.CreateDirectory(directoryPath);
                 }
 
-                var fileName = $"{Guid.NewGuid()}{extension}";
+                var fileName = $"{Path.GetFileNameWithoutExtension(file.FileName)}{extension}";
                 var filePath = Path.Combine(directoryPath, fileName);
+
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
@@ -133,9 +136,37 @@ public class StudentController : Controller
             // Handle errors during file saving
             return StatusCode(500, $"An error occurred while uploading the files: {ex.Message}");
         }
+
+    }
+    [HttpPost]
+public async Task<IActionResult> AddComment(string contributionId, string content)
+{
+    // Tìm contribution bằng ID
+    var contribution = _context.Contributions.Find(contributionId);
+    if (contribution == null)
+    {
+        return NotFound();
     }
 
+    // Sử dụng email từ contribution
+    var email = contribution.Email;
 
+    // Tạo CommentID dựa trên ContributionID
+    var commentId = contributionId + "_" + Guid.NewGuid().ToString();
 
+    var comment = new Comment
+    {
+        CommentID = commentId,
+        ContributionID = contributionId,
+        Email = email,
+        Content = content,
+        CommentDate = DateTime.Now
+    };
+
+    _context.Comments.Add(comment);
+    await _context.SaveChangesAsync();
+
+    return RedirectToAction("Index");
+}
 
 }

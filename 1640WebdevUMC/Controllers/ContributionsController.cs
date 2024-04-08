@@ -25,6 +25,8 @@ namespace _1640WebDevUMC.Controllers
             var contributions = await _context.Contributions
                 .Include(c => c.AcademicYear)
                 .Include(c => c.ApplicationUser)
+                                                .Include(c => c.Comments) // Include comments
+
                 .ToListAsync();
             return View(contributions);
         }
@@ -40,11 +42,19 @@ namespace _1640WebDevUMC.Controllers
             var contribution = await _context.Contributions
                 .Include(c => c.AcademicYear)
                 .Include(c => c.ApplicationUser)
+                                .Include(c => c.Comments) // Include comments
+
                 .FirstOrDefaultAsync(m => m.ContributionID == id);
             if (contribution == null)
             {
                 return NotFound();
             }
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+           
 
             return View(contribution);
         }
@@ -199,21 +209,8 @@ namespace _1640WebDevUMC.Controllers
             }
             return NotFound();
         }
-       
-       /* [HttpPost]
-        public async Task<IActionResult> Create(string contributionId, string content)
-        {
-            var comment = new Comment
-            {
-                ContributionID = contributionId,
-                Content = content,
-                // Add other fields as necessary
-            };
 
-            _context.Add(comment);
-            await _context.SaveChangesAsync();
+     
 
-            return RedirectToAction("Details", "Contributions", new { id = contributionId });
-        }*/
     }
 }

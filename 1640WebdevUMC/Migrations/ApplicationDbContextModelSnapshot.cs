@@ -27,6 +27,9 @@ namespace _1640WebDevUMC.Migrations
                     b.Property<string>("CommentID")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<DateTime>("CommentDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -37,14 +40,13 @@ namespace _1640WebDevUMC.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("SubmissionTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("CommentID");
 
                     b.HasIndex("ContributionID");
+
+                    b.HasIndex("Email");
 
                     b.ToTable("Comments");
                 });
@@ -461,8 +463,16 @@ namespace _1640WebDevUMC.Migrations
                     b.HasOne("_1640WebDevUMC.Models.Contribution", "Contribution")
                         .WithMany("Comments")
                         .HasForeignKey("ContributionID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("_1640WebDevUMC.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("Email")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ApplicationUser");
 
                     b.Navigation("Contribution");
                 });

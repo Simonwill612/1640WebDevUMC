@@ -48,6 +48,7 @@ namespace _1640WebDevUMC.Controllers
         public IActionResult Create()
         {
             ViewData["ContributionID"] = new SelectList(_context.Contributions, "ContributionID", "ContributionID");
+            ViewData["EmailID"] = new SelectList(_context.Comments.Select(c => c.Email), "EmailID", "EmailID");
             return View();
         }
 

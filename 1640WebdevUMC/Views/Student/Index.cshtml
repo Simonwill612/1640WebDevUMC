@@ -1,10 +1,10 @@
-﻿    @model IEnumerable<_1640WebDevUMC.Models.Contribution>
+﻿@model IEnumerable<_1640WebDevUMC.Models.Contribution>
 
 @{
     ViewData["Title"] = "Student";
     Layout = "~/Views/Shared/Navbar_Layout.cshtml";
-
 }
+
 <body>
     <div class="text-center">
         <h1 class="display-4">Welcome</h1>
@@ -25,17 +25,34 @@
             <p><strong>Closed Date:</strong> @contribution.AcademicYear.ClosureDate</p>
             <p><strong>Final Closed Date:</strong> @contribution.AcademicYear.FinalClosureDate</p>
             <h3>Comments</h3>
-            @foreach (var comment in contribution.Comments)
-            {
-                <div>
-                    <p><strong>@comment.Email</strong></p>
-                    <p>@comment.Content</p>
-                    <p><small>@comment.SubmissionTime</small></p>
-                </div>
-            }
             <a asp-action="Upload" asp-route-id="@contribution.ContributionID">Upload</a> |
 
             <hr />
+            <form asp-action="AddComment" method="post">
+                <input type="hidden" name="contributionId" value="@contribution.ContributionID" />
+                <textarea name="content" placeholder="Your comment"></textarea>
+                <button type="submit">Add comment</button>
+            </form>
+
+            <!-- Hiển thị comments -->
+            <h3>Comments:</h3>
+            @if (contribution.Comments != null && contribution.Comments.Any())
+            {
+                foreach (var comment in contribution.Comments)
+                {
+                    <div>
+                        <p><strong>Comment ID:</strong> @comment.CommentID</p>
+                        <p><strong>Content:</strong> @comment.Content</p>
+                        <p><strong>Comment Date:</strong> @comment.CommentDate</p>
+                        <p><strong>Email:</strong> @comment.Email</p>
+                        <p><strong>Contribution ID:</strong> @comment.ContributionID</p>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>No comments available.</p>
+            }
         </div>
     }
 
@@ -47,7 +64,6 @@
                     <div class="container">
                         <div class="row justify-content-start">
                             <div class="col-sm-10 col-lg-8">
-
                             </div>
                         </div>
                     </div>
@@ -59,7 +75,6 @@
                     <div class="container">
                         <div class="row justify-content-start">
                             <div class="col-sm-10 col-lg-8">
-
                             </div>
                         </div>
                     </div>

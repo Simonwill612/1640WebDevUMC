@@ -52,10 +52,21 @@
                     @foreach (var file in Model.FilePath)
                     {
                         <tr>
-                            <td>@Html.DisplayFor(model => model.StudentEmail)</td>
-                            <td>@DateTime.Now</td> <!-- Replace with actual submission time -->
-                            <td>@(System.IO.Path.GetExtension(file) == ".pdf" ? $"<a href='@Url.Content(file)'>@(System.IO.Path.GetFileName(file))</a>" : "")</td>
-                            <td>@(System.IO.Path.GetExtension(file) == ".png" ? $"<a href='@Url.Content(file)'>@(System.IO.Path.GetFileName(file))</a>" : "")</td>
+                           <td>@Model.StudentEmail</td>
+                            <td>@DateTime.Now</td>
+                            <td>
+                                @if (System.IO.Path.GetExtension(file) == ".pdf")
+                                {
+                                    <a href='@Url.Content(file)'>@(System.IO.Path.GetFileName(file))</a>
+                                }
+                            </td>
+                            <td>
+                                @if (System.IO.Path.GetExtension(file) == ".png")
+                                {
+                                    <a href='@Url.Content(file)'>@(System.IO.Path.GetFileName(file))</a>
+                                }
+                            </td>
+
                         </tr>
                     }
                 </tbody>
@@ -66,9 +77,10 @@
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.ContributionID">Edit</a> |
     <a asp-action="Index">Back to List</a>
-    <a href="path_to_your_file" download>
+    <a href="@Url.Action("DownloadFile", "Contributions", new { id = Model.ContributionID })">
         <button>Download</button>
     </a>
+
 
 </div>
 
