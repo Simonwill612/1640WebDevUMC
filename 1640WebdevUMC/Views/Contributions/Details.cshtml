@@ -44,6 +44,7 @@
                         <th>Email</th>
                         <th>PDF File</th>
                         <th>Image File</th>
+                        <th>Comments</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -60,6 +61,28 @@
                                 {
                                     @:N/A
                                 }
+                                @if (file.Comments != null && file.Comments.Any())
+                                {
+                                    foreach (var comment in file.Comments)
+                                    {
+                                        <div class="card my-3">
+                                            <div class="card-body">
+                                                <p><strong>Comment ID:</strong> @comment.CommentID</p>
+                                                <p><strong>Content:</strong> @comment.Content</p>
+                                                <p><strong>Comment Date:</strong> @comment.CommentDate</p>
+                                                <p><strong>Email:</strong> @comment.ApplicationUser.Email</p>
+                                                <form asp-action="DeleteComment" method="post">
+                                                    <input type="hidden" name="commentId" value="@comment.CommentID" />
+                                                    <button type="submit" class="btn btn-danger">Delete comment</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <p>No comments available.</p>
+                                }
                             </td>
                             <td>
                                 @if (System.IO.Path.GetExtension(file.FilePath) == ".png")
@@ -70,6 +93,39 @@
                                 {
                                     @:N/A
                                 }
+                                @if (file.Comments != null && file.Comments.Any())
+                                {
+                                    foreach (var comment in file.Comments)
+                                    {
+                                        <div class="card my-3">
+                                            <div class="card-body">
+                                                <p><strong>Comment ID:</strong> @comment.CommentID</p>
+                                                <p><strong>Content:</strong> @comment.Content</p>
+                                                <p><strong>Comment Date:</strong> @comment.CommentDate</p>
+                                                <p><strong>Email:</strong> @comment.ApplicationUser.Email</p>
+                                                <form asp-action="DeleteComment" method="post">
+                                                    <input type="hidden" name="commentId" value="@comment.CommentID" />
+                                                    <button type="submit" class="btn btn-danger">Delete comment</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <p>No comments available.</p>
+                                }
+                            </td>
+                            <td>
+                                <h4>Add Comment</h4>
+                                <hr />
+                                <form asp-action="AddComment" method="post">
+                                    <input type="hidden" name="contributionId" value="@Model.ContributionID" />
+                                    <input type="hidden" name="fileId" value="@file.FileID" />
+                                    <textarea name="content" placeholder="Your comment" class="form-control"></textarea>
+                                    <button type="submit" class="btn btn-success mt-2">Add comment</button>
+                                </form>
+
                             </td>
                         </tr>
                     }

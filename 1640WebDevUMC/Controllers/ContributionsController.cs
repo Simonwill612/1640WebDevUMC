@@ -221,7 +221,51 @@ namespace _1640WebDevUMC.Controllers
             return NotFound();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AddComment(string contributionId, string fileId, string content)
+        {
+            // Tìm contribution bằng ID
+            var contribution = await _context.Contributions.FindAsync(contributionId);
+            if (contribution == null)
+            {
+                return NotFound();
+            }
 
+            // Lấy email của người dùng từ contribution
+            var userEmail = contribution.Email;
+
+/*            // Kiểm tra và tạo mới vai trò "Marketing Coordinator" nếu không tồn tại
+            var roleExists = await _roleManager.RoleExistsAsync("Marketing Coordinator");
+            if (!roleExists)
+            {
+                await _roleManager.CreateAsync(new IdentityRole("Marketing Coordinator"));
+            }
+
+            // Kiểm tra và gán vai trò "Marketing Coordinator" cho người dùng
+            var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user != null && !(await _userManager.IsInRoleAsync(user, "Marketing Coordinator")))
+            {
+                await _userManager.AddToRoleAsync(user, "Marketing Coordinator");
+            }
+*/
+            // Tạo mới một comment
+            var comment = new Comment
+            {
+                CommentID = $"{contributionId}_{Guid.NewGuid().ToString()}",
+                Content = content,
+                CommentDate = DateTime.Now,
+                FileID = fileId,
+                Email = userEmail,
+                ContributionID = contributionId
+            };
+
+            // Thêm comment vào database
+            _context.Comments.Add(comment);
+            await _context.SaveChangesAsync();
+
+            // Redirect về trang index hoặc trang chi tiết contribution tùy theo logic của bạn
+            return RedirectToAction("Index", "Home");
+        }
 
     }
 }

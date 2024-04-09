@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using File = _1640WebDevUMC.Models.File;
 using Image = _1640WebDevUMC.Models.Image;
 
-
 namespace _1640WebDevUMC.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -16,15 +15,10 @@ namespace _1640WebDevUMC.Data
 
         public DbSet<AcademicYear> AcademicYears { get; set; }
         public DbSet<Contribution> Contributions { get; set; }
-        /*        public DbSet<ContributionItems> ContributionItems { get; set; }
-        */
-/*        public DbSet<ContributionWithFile> ContributionsWithFiles { get; set; }
-*/
-        public DbSet<Comment> Comments { get; set; } // Uncommented DbSet
-
+        public DbSet<Comment> Comments { get; set; }
         public DbSet<Faculty> Faculties { get; set; }
         public DbSet<DownloadHistory> DownloadHistories { get; set; }
-        public DbSet<File> Files{ get; set; }
+        public DbSet<File> Files { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Log> Logs { get; set; }
@@ -33,30 +27,31 @@ namespace _1640WebDevUMC.Data
         {
             base.OnModelCreating(modelBuilder);
 
-/*            modelBuilder.Entity<ContributionWithFiles>().HasNoKey();
-*/
             modelBuilder.Entity<Faculty>()
                 .HasMany(f => f.AcademicYears)
                 .WithOne(a => a.Faculty)
                 .HasForeignKey(a => a.FacultyID);
 
+            // Configure foreign key relationship between Comment and ApplicationUser
+            modelBuilder.Entity<Comment>()
+                   .HasOne(c => c.ApplicationUser)
+                   .WithMany()
+                   .HasForeignKey(c => c.Email)
+                   .OnDelete(DeleteBehavior.Restrict); // or DeleteBehavior.NoAction depending on your requirements
+
+            // Configure foreign key relationship between Comment and Contribution
             modelBuilder.Entity<Comment>()
                 .HasOne(c => c.Contribution)
-                .WithMany(p => p.Comments)
+                .WithMany(con => con.Comments) // Assuming Contribution has a navigation property 'Comments'
                 .HasForeignKey(c => c.ContributionID)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Restrict); // or DeleteBehavior.NoAction depending on your requirements
 
-            /*            modelBuilder.Entity<Comment>()
-                            .HasOne(c => c.ApplicationUser)
-                            .WithMany()
-                            .HasForeignKey(c => c.Email)
-                            .OnDelete(DeleteBehavior.Restrict);*/
-
-            /*            modelBuilder.Entity<Comment>()
-                            .HasOne(c => c.ContributionItem)
-                            .WithMany()
-                            .HasForeignKey(c => c.ContributionItemID)
-                            .OnDelete(DeleteBehavior.Restrict);*/
+            // Configure foreign key relationship between Comment and File
+            modelBuilder.Entity<Comment>()
+                .HasOne(c => c.File)
+                .WithMany(file => file.Comments) // Assuming File has a navigation property 'Comments'
+                .HasForeignKey(c => c.FileID)
+                .OnDelete(DeleteBehavior.Restrict); // or DeleteBehavior.NoAction depending on your requirements
         }
     }
 }

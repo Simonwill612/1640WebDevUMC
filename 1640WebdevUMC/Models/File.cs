@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace _1640WebDevUMC.Models
 {
-    public class File 
+    public class File
     {
         [Key]
         public string FileID { get; set; } = Guid.NewGuid().ToString(); // Unique ID for each file
@@ -17,5 +17,8 @@ namespace _1640WebDevUMC.Models
         public string FilePath { get; set; }
 
         public string StudentEmail { get; set; } // This property stores the email of the uploader
+
+        public virtual ICollection<Comment> Comments { get; set; }
+
     }
 }

@@ -38,6 +38,30 @@
                                     <input type="hidden" name="fileId" value="@file.FileID" />
                                     <button type="submit" class="btn btn-danger">Delete</button>
                                 </form>
+
+                                <!-- Comments for this file -->
+                                <h4>Comments for @file.FileName:</h4>
+                                @if (file.Comments != null && file.Comments.Any())
+                                {
+                                    foreach (var comment in file.Comments)
+                                    {
+                                        <div class="card my-3">
+                                            <div class="card-body">
+                                                <p><strong>Comment ID:</strong> @comment.CommentID</p>
+                                                <p><strong>Content:</strong> @comment.Content</p>
+                                                <p><strong>Comment Date:</strong> @comment.CommentDate</p>
+                                                <p><strong>Email:</strong> @comment.ApplicationUser.Email</p>
+                                                <p><strong>Contribution ID:</strong> @comment.ContributionID</p>
+
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <p>No comments available.</p>
+                                }
+
                             </div>
                         }
                     </div>
@@ -47,38 +71,6 @@
                     </div>
 
                     <hr />
-
-                    <form asp-action="AddComment" method="post">
-                        <input type="hidden" name="contributionId" value="@contribution.ContributionID" />
-                        <textarea name="content" placeholder="Your comment" class="form-control"></textarea>
-                        <button type="submit" class="btn btn-success mt-2">Add comment</button>
-                    </form>
-
-                    <!-- Hiển thị comments -->
-                    <h3 class="mt-4">Comments:</h3>
-                    @if (contribution.Comments != null && contribution.Comments.Any())
-                    {
-                        foreach (var comment in contribution.Comments)
-                        {
-                            <div class="card my-3">
-                                <div class="card-body">
-                                    <p><strong>Comment ID:</strong> @comment.CommentID</p>
-                                    <p><strong>Content:</strong> @comment.Content</p>
-                                    <p><strong>Comment Date:</strong> @comment.CommentDate</p>
-                                    <p><strong>Email:</strong> @comment.ApplicationUser.Email</p>
-                                    <p><strong>Contribution ID:</strong> @comment.ContributionID</p>
-                                    <form asp-action="DeleteComment" method="post">
-                                        <input type="hidden" name="commentId" value="@comment.CommentID" />
-                                        <button type="submit" class="btn btn-danger">Delete comment</button>
-                                    </form>
-                                </div>
-                            </div>
-                        }
-                    }
-                    else
-                    {
-                        <p>No comments available.</p>
-                    }
                 </div>
             </div>
         }
