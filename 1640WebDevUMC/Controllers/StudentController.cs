@@ -25,20 +25,28 @@ public class StudentController : Controller
     public async Task<IActionResult> Index()
     {
         // Get the current user
-        var user = await _userManager.GetUserAsync(User);
-        if (user == null)
+        var currentUser = await _userManager.GetUserAsync(User);
+        if (currentUser == null)
         {
             return NotFound();
         }
 
-        // Get the contributions of the current user
+        // Get all contributions
         var contributions = await _context.Contributions
             .Include(c => c.AcademicYear)
                 .ThenInclude(a => a.Faculty) // Include Faculty within AcademicYear
             .Include(c => c.Comments) // Include comments
             .Include(c => c.ApplicationUser)
-            .Where(c => c.ApplicationUser.Email == user.Email) // Filter by the current user
             .ToListAsync();
+
+        // Iterate through contributions to fetch files for the current user
+        foreach (var contribution in contributions)
+        {
+            // Fetch files associated with the contribution for the current user
+            contribution.Files = await _context.Files
+                .Where(f => f.ContributionID == contribution.ContributionID && f.StudentEmail == currentUser.Email)
+                .ToListAsync();
+        }
 
         return View(contributions);
     }
@@ -212,6 +220,22 @@ public async Task<IActionResult> AddComment(string contributionId, string conten
         _context.Comments.Remove(comment);
         await _context.SaveChangesAsync();
         ViewData["Email"] = new SelectList(_context.Comments.Select(c => c.Email), "Email", "Email");
+
+        return RedirectToAction("Index");
+    }
+    [HttpPost]
+    public async Task<IActionResult> DeleteFile(string fileId)
+    {
+        // Tìm file bằng ID
+        var file = await _context.Files.FindAsync(fileId);
+        if (file == null)
+        {
+            return NotFound();
+        }
+
+        // Xóa file
+        _context.Files.Remove(file);
+        await _context.SaveChangesAsync();
 
         return RedirectToAction("Index");
     }

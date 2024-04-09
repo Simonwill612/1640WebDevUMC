@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Student";
     Layout = "~/Views/Shared/Navbar_Layout.cshtml";
+    var currentUserEmail = User.Identity.Name; // Lấy email của người dùng hiện tại
 }
 
 <body>
@@ -11,55 +12,77 @@
         <p> <a href="https://www.gre.ac.uk/">University of Greenwich</a></p>
     </div>
 
-    <h1>Contributions</h1>
+    <div class="container mt-5">
+        <h1>Contributions</h1>
 
-    @foreach (var contribution in Model)
-    {
-        <div>
-            <h2>@contribution.Title</h2>
-            <p>@contribution.Content</p>
-            <p><strong>Faculty ID:</strong> @contribution.AcademicYear.FacultyID</p>
-            <p><strong>Faculty Name:</strong> @contribution.AcademicYear.Faculty.FacultyName</p>
-            <p><strong>Email:</strong> @contribution.ApplicationUser.Email</p>
-            <p><strong>Start Date:</strong> @contribution.AcademicYear.UploadDate</p>
-            <p><strong>Closed Date:</strong> @contribution.AcademicYear.ClosureDate</p>
-            <p><strong>Final Closed Date:</strong> @contribution.AcademicYear.FinalClosureDate</p>
+        @foreach (var contribution in Model)
+        {
+            <div class="card my-4">
+                <div class="card-body">
+                    <h2>@contribution.Title</h2>
+                    <p>@contribution.Content</p>
+                    <p><strong>Faculty ID:</strong> @contribution.AcademicYear.FacultyID</p>
+                    <p><strong>Faculty Name:</strong> @contribution.AcademicYear.Faculty.FacultyName</p>
+                    <p><strong>Email:</strong> @contribution.ApplicationUser.Email</p>
+                    <p><strong>Start Date:</strong> @contribution.AcademicYear.UploadDate</p>
+                    <p><strong>Closed Date:</strong> @contribution.AcademicYear.ClosureDate</p>
+                    <p><strong>Final Closed Date:</strong> @contribution.AcademicYear.FinalClosureDate</p>
 
-            <a asp-action="Upload" asp-route-id="@contribution.ContributionID">Upload</a> |
-
-            <hr />
-            <form asp-action="AddComment" method="post">
-                <input type="hidden" name="contributionId" value="@contribution.ContributionID" />
-                <textarea name="content" placeholder="Your comment"></textarea>
-                <button type="submit">Add comment</button>
-            </form>
-
-            <!-- Hiển thị comments -->
-            <h3>Comments:</h3>
-            @if (contribution.Comments != null && contribution.Comments.Any())
-            {
-                foreach (var comment in contribution.Comments)
-                {
                     <div>
-                        <p><strong>Comment ID:</strong> @comment.CommentID</p>
-                        <p><strong>Content:</strong> @comment.Content</p>
-                        <p><strong>Comment Date:</strong> @comment.CommentDate</p>
-                        <p><strong>Email:</strong> @comment.ApplicationUser.Email</p>
-                        <p><strong>Contribution ID:</strong> @comment.ContributionID</p>
+                        @foreach (var file in contribution.Files.Where(f => f.StudentEmail == currentUserEmail))
+                        {
+                            <div>
+                                <h2>@file.FileName</h2>
+                                <p><a href="@file.FilePath">Download</a></p>
+                                <form asp-action="DeleteFile" method="post">
+                                    <input type="hidden" name="fileId" value="@file.FileID" />
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </div>
+                        }
                     </div>
-                    <form asp-action="DeleteComment" method="post">
-                        <input type="hidden" name="commentId" value="@comment.CommentID" />
-                        <button type="submit">Delete comment</button>
+
+                    <div class="mt-3">
+                        <a asp-action="Upload" asp-route-id="@contribution.ContributionID" class="btn btn-primary">Upload</a>
+                    </div>
+
+                    <hr />
+
+                    <form asp-action="AddComment" method="post">
+                        <input type="hidden" name="contributionId" value="@contribution.ContributionID" />
+                        <textarea name="content" placeholder="Your comment" class="form-control"></textarea>
+                        <button type="submit" class="btn btn-success mt-2">Add comment</button>
                     </form>
 
-                }
-            }
-            else
-            {
-                <p>No comments available.</p>
-            }
-        </div>
-    }
+                    <!-- Hiển thị comments -->
+                    <h3 class="mt-4">Comments:</h3>
+                    @if (contribution.Comments != null && contribution.Comments.Any())
+                    {
+                        foreach (var comment in contribution.Comments)
+                        {
+                            <div class="card my-3">
+                                <div class="card-body">
+                                    <p><strong>Comment ID:</strong> @comment.CommentID</p>
+                                    <p><strong>Content:</strong> @comment.Content</p>
+                                    <p><strong>Comment Date:</strong> @comment.CommentDate</p>
+                                    <p><strong>Email:</strong> @comment.ApplicationUser.Email</p>
+                                    <p><strong>Contribution ID:</strong> @comment.ContributionID</p>
+                                    <form asp-action="DeleteComment" method="post">
+                                        <input type="hidden" name="commentId" value="@comment.CommentID" />
+                                        <button type="submit" class="btn btn-danger">Delete comment</button>
+                                    </form>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>No comments available.</p>
+                    }
+                </div>
+            </div>
+        }
+    </div>
 
     <div class="container-fluid p-0 mb-5">
         <div class="owl-carousel header-carousel position-relative">
@@ -88,3 +111,4 @@
         </div>
     </div>
 </body>
+</html>

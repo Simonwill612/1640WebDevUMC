@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace _1640WebDevUMC.Models
 {
-    public class File
+    public class File 
     {
         [Key]
         public string FileID { get; set; } = Guid.NewGuid().ToString(); // Unique ID for each file
