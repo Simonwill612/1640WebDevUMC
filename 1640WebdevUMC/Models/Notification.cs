@@ -1,27 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace _1640WebDevUMC.Models
 {
-    public partial class Notification
+    public class Notification
     {
         [Key]
-        public int NotificationID { get; set; }
+        public string NotificationID { get; set; } = Guid.NewGuid().ToString();
 
-        [ForeignKey("Contribution")]
+        [Required]
         public string ContributionID { get; set; }
 
-        [Required]
-        public int RecipientUserID { get; set; }
-
-        [Required]
-        public string NotificationType { get; set; }
-
-        [Required]
-        public DateTime Timestamp { get; set; }
-
+        [ForeignKey("ContributionID")]
         public virtual Contribution Contribution { get; set; }
+
+        [Required]
+        public string Message { get; set; } = string.Empty;
+
+        public DateTime DueDate { get; set; }
+
+        public bool IsCompleted { get; set; } = false;
     }
 }

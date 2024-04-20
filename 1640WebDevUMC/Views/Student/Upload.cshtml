@@ -1,7 +1,7 @@
 ﻿@model _1640WebDevUMC.Models.Contribution
 
 @{
-    ViewData["Title"] = "Upload Files";
+    ViewData["Title"] = "Upload";
 }
 
 <style>
@@ -36,16 +36,35 @@
     }
 
 </style>
+
 <h1>Upload Files</h1>
 
-<form method="post" enctype="multipart/form-data" id="uploadForm">
-    @Html.AntiForgeryToken()
-    <div id="dropArea" class="drop-area">
-        <input type="file" id="fileInput" name="files" multiple hidden>
-    </div>
-    <div class="form-group conatiner">
-        <input type="file" class="upload-box" id="file1" name="files" multiple>
-    </div>
+<h4>@Model.Title</h4>
+<p>@Model.Content</p>
 
-    <button type="submit" class="btn btn-primary">Upload</button>
-</form>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Upload" asp-route-id="@Model.ContributionID" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label for="uploadTitle">Upload Title:</label>
+                <input type="text" class="form-control" id="uploadTitle" name="uploadTitle" required>
+            </div>
+            <div class="form-group">
+                <label for="files">Select Files:</label>
+                <input type="file" class="form-control-file" id="files" name="files" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+    </div>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["ErrorMessage"]
+    </div>
+}

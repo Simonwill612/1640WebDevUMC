@@ -1,0 +1,79 @@
+﻿@model _1640WebDevUMC.Models.Contribution
+
+@{
+    ViewData["Title"] = "Contribution Details";
+}
+
+<h1>@Model.Title</h1>
+<p>@Model.Content</p>
+
+<hr />
+
+<h3>Uploaded Files</h3>
+@if (Model.Files.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>File</th>
+                <th>Upload Title</th>
+                <th>Upload Time</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var file in Model.Files)
+            {
+                <tr>
+                    <td>@file.FileName</td>
+                    <td>@file.UploadTitle</td> <!-- Hiển thị upload title -->
+                    <td>@file.UploadTime</td> <!-- Hiển thị thời gian upload -->
+                    <td>
+                        <a asp-action="DownloadFile" asp-route-id="@file.FileID">Download</a> |
+@*                         <form asp-action="DeleteFile" method="post" onsubmit="return confirmDelete();">
+                            <input type="hidden" name="fileId" value="@file.FileID" />
+                            <button type="submit">Delete</button>
+                        </form>
+ *@                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No files uploaded.</p>
+}
+
+<hr />
+
+<h3>Comments</h3>
+@if (Model.Comments.Any())
+{
+    @foreach (var file in Model.Files)
+    {
+        <h4>Comments for @file.FileName</h4>
+        <ul>
+            @foreach (var comment in Model.Comments.Where(c => c.FileID == file.FileID))
+            {
+                <li>@comment.Email</li> <!-- Hiển thị email của người dùng từ comment -->
+                <li>@comment.CommentDate</li>
+                <li>@comment.Content</li>
+            }
+        </ul>
+    }
+}
+else
+{
+    <p>No comments.</p>
+}
+
+
+@* <a asp-action="Upload" class="card-action-button" asp-route-id="@Model.ContributionID">Submit</a>
+ *@
+
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

@@ -59,7 +59,7 @@
         }
 </style>
 
-<h1 style="margin-left: -46px;" >Management Contribute</h1>
+<h1 style="margin-left: -46px;">Management Contribute</h1>
 <p>
     <a href="/Contributions/Create" class="btn btn-primary" style="margin-left: -44px;">Create new Contributions</a>
 </p>
@@ -70,17 +70,17 @@
         </div>
         <div class="table-responsive">
             <table class="table text-start align-middle table-bordered table-hover mb-0">
-
-    <thead>
-
+                <thead>
                     <tr class="text-dark">
                         <th scope="col">Title</th>
                         <th scope="col">Content</th>
                         <th scope="col">ApplicationUser</th>
-                        <th scope="col">COURES</th>
+                        <th scope="col">Course</th>
+                        <th scope="col">Status</th> <!-- Thêm cột Status -->
+                        <th scope="col">Actions</th>
                     </tr>
-    </thead>
-    <tbody>
+                </thead>
+                <tbody>
                     @foreach (var item in Model)
                     {
                         <tr>
@@ -95,6 +95,16 @@
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.AcademicYear.AcademicYearID)
+                            </td>
+                            <td>
+                                @if (item.IsPublic)
+                                {
+                                    <span class="badge bg-success">Public</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Private</span>
+                                }
                             </td>
                             <td>
                                 <button class="btn btn-danger">  <a class="tag-a" asp-action="Edit" asp-route-id="@item.ContributionID">Edit</a></button>

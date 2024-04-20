@@ -29,14 +29,21 @@ public class AdminDashboardController : Controller
         foreach (var user in users)
         {
             var roles = await _userManager.GetRolesAsync(user);
-            userData.Add(new UserViewModel
+
+            // Kiểm tra nếu người dùng không thuộc vai trò "Guest" hoặc "Admin"
+            if (!roles.Contains("Guest") && !roles.Contains("Admin"))
             {
-                Id = user.Id,
-                Email = user.Email,
-                EmailConfirmed = user.EmailConfirmed,
-                PasswordHash = user.PasswordHash,
-                Roles = roles
-            });
+                var faculties = _context.Faculties.Where(f => f.Users.Any(u => u.Id == user.Id)).Select(f => f.FacultyName).ToList(); // Get the faculty names
+                userData.Add(new UserViewModel
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    EmailConfirmed = user.EmailConfirmed,
+                    PasswordHash = user.PasswordHash,
+                    Roles = roles,
+                    Faculties = faculties // Add faculties to the UserViewModel
+                });
+            }
         }
         return View(userData);
     }
@@ -50,18 +57,23 @@ public class AdminDashboardController : Controller
             return NotFound();
         }
 
+        var userRoles = await _userManager.GetRolesAsync(user);
+        var faculties = _context.Faculties.Where(f => f.Users.Any(u => u.Id == user.Id)).Select(f => f.FacultyName).ToList(); // Get the faculty names
+
         var userDetails = new UserViewModel
         {
             Id = user.Id,
             Email = user.Email,
             EmailConfirmed = user.EmailConfirmed,
             PasswordHash = user.PasswordHash,
-            Roles = await _userManager.GetRolesAsync(user)
+            Roles = userRoles,
+            Faculties = faculties // Set faculties
         };
 
         return View(userDetails);
     }
 
+    // GET: /Account/Edit
     // GET: /Account/Edit
     public async Task<IActionResult> Edit(string id)
     {
@@ -72,7 +84,15 @@ public class AdminDashboardController : Controller
         }
 
         var userRoles = await _userManager.GetRolesAsync(user);
-        var allRoles = _roleManager.Roles.Select(r => r.Name).ToList(); // Get all roles
+
+        // Lấy danh sách tất cả các vai trò
+        var allRoles = _roleManager.Roles
+            .Where(role => role.Name != "Guest") // Loại bỏ vai trò "Guest"
+            .Select(r => r.Name)
+            .ToList();
+
+        var faculties = _context.Faculties.Where(f => f.Users.Any(u => u.Id == user.Id)).Select(f => f.FacultyName).ToList(); // Get the faculty names
+        var allFaculties = _context.Faculties.Select(f => f.FacultyName).Distinct().ToList(); // Get all distinct faculties
 
         var model = new UserViewModel
         {
@@ -81,11 +101,14 @@ public class AdminDashboardController : Controller
             EmailConfirmed = user.EmailConfirmed,
             PasswordHash = user.PasswordHash,
             Roles = userRoles,
-            AllRoles = allRoles // Set all roles
+            AllRoles = allRoles, // Set all roles without "Guest"
+            Faculties = faculties, // Set faculties
+            AllFaculties = allFaculties // Set all distinct faculties
         };
 
         return View(model);
     }
+
     [HttpPost]
     public async Task<IActionResult> EditUser(UserViewModel model)
     {
@@ -143,6 +166,41 @@ public class AdminDashboardController : Controller
             }
         }
 
+        // Get the current user faculties
+        var currentFaculties = _context.Faculties.Where(f => f.Users.Any(u => u.Id == user.Id)).Select(f => f.FacultyName).ToList();
+
+        // Determine faculties to be added (faculties in the model that are not in the current faculties)
+        var facultiesToAdd = model.Faculties.Except(currentFaculties);
+
+        // Determine faculties to be removed (faculties in the current faculties that are not in the model)
+        var facultiesToRemove = currentFaculties.Except(model.Faculties);
+
+        // Add new faculties
+        foreach (var faculty in facultiesToAdd)
+        {
+            var facultyInDb = _context.Faculties.FirstOrDefault(f => f.FacultyName == faculty);
+
+            if (facultyInDb != null)
+            {
+                if (facultyInDb.Users == null)
+                {
+                    facultyInDb.Users = new List<ApplicationUser>();
+                }
+                facultyInDb.Users.Add(user);
+            }
+
+        }
+
+        // Remove faculties not in the model
+        foreach (var faculty in facultiesToRemove)
+        {
+            var facultyInDb = _context.Faculties.FirstOrDefault(f => f.FacultyName == faculty);
+            if (facultyInDb != null)
+            {
+                facultyInDb.Users.Remove(user);
+            }
+        }
+
         // Save changes
         var updateResult = await _userManager.UpdateAsync(user);
         if (!updateResult.Succeeded)
@@ -150,6 +208,8 @@ public class AdminDashboardController : Controller
             AddErrors(updateResult);
             return View(model);
         }
+
+        await _context.SaveChangesAsync(); // Save changes in the database
 
         return RedirectToAction("Index");
     }
@@ -165,26 +225,41 @@ public class AdminDashboardController : Controller
 
 
 
+
+
     // POST: /Account/Delete
+    // GET: /Account/Delete
     public async Task<IActionResult> Delete(string id)
     {
-        if (string.IsNullOrEmpty(id))
-        {
-            return BadRequest("Invalid user ID");
-        }
-
-        if (_userManager == null)
-        {
-            return NotFound();
-        }
-
-        var user = await _userManager?.FindByIdAsync(id);
+        var user = await _userManager.FindByIdAsync(id);
         if (user == null)
         {
             return NotFound();
         }
 
-        var currentUser = await _userManager?.GetUserAsync(User);
+        var userDetails = new UserViewModel
+        {
+            Id = user.Id,
+            Email = user.Email,
+            EmailConfirmed = user.EmailConfirmed,
+            PasswordHash = user.PasswordHash,
+            Roles = await _userManager.GetRolesAsync(user)
+        };
+
+        return View(userDetails);
+    }
+
+    // POST: /Account/DeleteConfirmed
+    [HttpPost, ActionName("Delete")]
+    public async Task<IActionResult> DeleteConfirmed(string id)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        var currentUser = await _userManager.GetUserAsync(User);
         if (currentUser == null)
         {
             return BadRequest("No current user found");
@@ -195,8 +270,8 @@ public class AdminDashboardController : Controller
             return BadRequest("Cannot delete the currently logged in admin account");
         }
 
-        var result = await _userManager?.DeleteAsync(user);
-        if (result == null || !result.Succeeded)
+        var result = await _userManager.DeleteAsync(user);
+        if (!result.Succeeded)
         {
             return BadRequest("Failed to delete user");
         }

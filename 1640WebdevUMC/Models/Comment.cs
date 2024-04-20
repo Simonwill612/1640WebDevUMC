@@ -13,6 +13,8 @@ public class Comment
     [Required]
     public DateTime CommentDate { get; set; }
 
+    public bool IsPublic { get; set; } // Indicates if the file is public
+
     // Foreign key to the file
     [ForeignKey("File")]
     public string FileID { get; set; }

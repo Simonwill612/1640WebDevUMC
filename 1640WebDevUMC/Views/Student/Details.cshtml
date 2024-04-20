@@ -1,0 +1,173 @@
+﻿@model _1640WebDevUMC.Models.Contribution
+
+@{
+    ViewData["Title"] = "Contribution Details";
+}
+
+<style>
+    table {
+        border-collapse: collapse;
+    }
+
+    th {
+        background: #ccc;
+    }
+
+    th, td {
+        border: 1px solid #ccc;
+        padding: 8px;
+    }
+
+    thead {
+        background: #4992ff;
+    }
+
+    tr:nth-child(even) {
+        background: #efefef;
+    }
+
+    tr:hover {
+        background: #d1d1d1;
+    }
+
+    .comments-box {
+        border: 1px solid #ccc;
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 5px;
+    }
+
+    .file-comments {
+        margin-bottom: 20px;
+    }
+
+        .file-comments h4 {
+            margin-top: 0;
+        }
+
+        .file-comments ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .file-comments li {
+            margin-bottom: 10px;
+        }
+
+    .comment-content {
+        font-size: 16px;
+        color: #333;
+        font-weight: 900;
+    }
+
+    .comment-date {
+        font-size: 12px;
+        color: #999;
+    }
+
+</style>
+
+<h1>@Model.Title</h1>
+<p>@Model.Content</p>
+
+<hr />
+
+<h3>Uploaded Files</h3>
+@if (Model.Files.Any())
+{
+    var latestPdfFile = Model.Files.Where(f => f.FileName.EndsWith(".pdf")).OrderByDescending(f => f.UploadTime).FirstOrDefault();
+    var latestImageFile = Model.Files.Where(f => f.FileName.EndsWith(".jpg") || f.FileName.EndsWith(".jpeg") || f.FileName.EndsWith(".png") || f.FileName.EndsWith(".gif")).OrderByDescending(f => f.UploadTime).FirstOrDefault();
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Upload Title</th>
+                <th>File Name</th>
+                <th>Upload Time</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (latestPdfFile != null)
+            {
+                <tr>
+                    <td>@latestPdfFile.UploadTitle</td>
+                    <td>@latestPdfFile.FileName</td>
+                    <td>@latestPdfFile.UploadTime</td>
+                    <td>
+                        <a class="btn btn-danger" asp-action="DownloadFile" asp-route-id="@latestPdfFile.FileID">Download</a>
+                        <form asp-action="DeleteFile" method="post" onsubmit="return confirmDelete();">
+                            <input type="hidden" name="fileId" value="@latestPdfFile.FileID" />
+                            <button class="btn btn-primary" type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            @if (latestImageFile != null)
+            {
+                <tr>
+                    <td>@latestImageFile.UploadTitle</td>
+                    <td>@latestImageFile.FileName</td>
+                    <td>@latestImageFile.UploadTime</td>
+                    <td>
+                        <a class="btn btn-danger" asp-action="DownloadFile" asp-route-id="@latestImageFile.FileID">Download</a>
+                        <form asp-action="DeleteFile" method="post" onsubmit="return confirmDelete();">
+                            <input type="hidden" name="fileId" value="@latestImageFile.FileID" />
+                            <button type="submit" class="btn btn-primary">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No files uploaded.</p>
+}
+
+
+
+<div class="comments-box">
+    <h3>Comments</h3>
+    @if (Model.Comments.Any())
+    {
+        @foreach (var file in Model.Files)
+            @foreach (var comment in Model.Comments.Where(c => c.FileID == file.FileID))
+
+            {
+                <div class="file-comments">
+                    <h4>Comments for @file.FileName</h4>
+                    <ul>
+                        
+                        <li>
+                            <p><strong>Email:</strong> @comment.ApplicationUser.Email</p>
+                            <div class="comment-content">@comment.Content</div>
+
+                            <div class="comment-date">@comment.CommentDate</div>
+                        </li>
+                        
+                    </ul>
+                </div>
+            }
+    }
+    else
+    {
+        <p>No comments.</p>
+    }
+</div>
+
+
+
+
+
+<div>
+    <a class="btn btn-danger" asp-action="Upload" class="card-action-button" asp-route-id="@Model.ContributionID">Submit</a>
+    <a class="btn btn-primary" asp-action="Index">Back to List</a>
+</div>
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["ErrorMessage"]
+    </div>
+}

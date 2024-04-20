@@ -1,12 +1,153 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-    Layout = "~/Views/Shared/Navbar_Layout.cshtml";
+﻿@model IEnumerable<_1640WebDevUMC.Models.Contribution>
 
+@{
+    ViewData["Title"] = "Student";
+    Layout = "~/Views/Shared/Navbar_Layout.cshtml";
+    var currentUserEmail = User.Identity.Name; // Lấy email của người dùng hiện tại
 }
+
 <body>
+    <style>
+        h1 {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .clearfix:before,
+        .clearfix:after {
+            content: " ";
+            display: table;
+        }
+
+        .clearfix:after {
+            clear: both;
+        }
+
+        .rows {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card-wrapper {
+            width: 18%; /* Đảm bảo mỗi card chiếm khoảng 19% của chiều rộng tổng của hàng */
+            margin-bottom: 20px; /* Khoảng cách giữa các thẻ card */
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 2px;
+            box-shadow: -1px 2px 4px rgba(0,0,0,.25), 1px 1px 3px rgba(0,0,0,.1);
+            margin: 0 auto;
+            max-width: 340px;
+        }
+
+        .card-media {
+            width: 100%;
+        }
+
+        .card-details {
+            padding: 5px 15px;
+        }
+
+        .card-head {
+            font-weight: 400;
+        }
+
+        .card-head {
+            font-size: 26px;
+            margin-bottom: 15px;
+        }
+
+        .card-action-button {
+            border-radius: 2px;
+            color: #FFAB40;
+            cursor: pointer;
+            display: inline-block;
+            font-weight: 500;
+            margin: 0;
+            padding: 10px;
+            text-decoration: none;
+        }
+
+            .card-action-button:hover {
+                background-color: rgba(255,168,58, .2);
+            }
+
+
+
+        .comments-section {
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+
+        .comment-box {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .add-comment-button,
+        .delete-comment-button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 15px 10px;
+            cursor: pointer;
+        }
+
+            .add-comment-button:hover,
+            .delete-comment-button:hover {
+                background-color: #0056b3;
+            }
+
+        .form-card {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .fileItem:nth-child(n+3) {
+            display: none;
+        }
+
+    </style>
     <div class="text-center">
         <h1 class="display-4">Welcome</h1>
         <p> <a href="https://www.gre.ac.uk/">University of Greenwich</a></p>
+    </div>
+    <div class="container mt-5">
+        <h1>Contributions</h1>
+
+        @foreach (var contribution in Model)
+        {
+            <div class="card-wrapper">
+                <div class="card">
+                    <img src="https://cms.greenwich.edu.vn/pluginfile.php/1/theme_adaptable/frontpagerendererdefaultimage/1698976651/edu-survey-landing-image.jpg" class="card-media" />
+                    <div class="card-details">
+                        <h2 class="card-head">@contribution.Title</h2>
+                        <p>@contribution.Content</p>
+                        <p><strong>Faculty ID:</strong> @contribution.AcademicYear.FacultyID</p>
+                        <p><strong>Faculty Name:</strong> @contribution.AcademicYear.Faculty.FacultyName</p>
+                        <p><strong>Email:</strong> @contribution.ApplicationUser.Email</p>
+                        <p><strong>Start Date:</strong> @contribution.AcademicYear.UploadDate</p>
+                        <p><strong>Closed Date:</strong> @contribution.AcademicYear.ClosureDate</p>
+                        <p><strong>Final Closed Date:</strong> @contribution.AcademicYear.FinalClosureDate</p>
+                        <a asp-action="Details" class="card-action-button" asp-route-id="@contribution.ContributionID">Submit</a>
+
+
+                    </div>
+                </div>
+            </div>
+        }
     </div>
 
     <div class="container-fluid p-0 mb-5">
@@ -17,7 +158,6 @@
                     <div class="container">
                         <div class="row justify-content-start">
                             <div class="col-sm-10 col-lg-8">
-
                             </div>
                         </div>
                     </div>
@@ -29,7 +169,6 @@
                     <div class="container">
                         <div class="row justify-content-start">
                             <div class="col-sm-10 col-lg-8">
-
                             </div>
                         </div>
                     </div>
@@ -37,4 +176,31 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const showMoreBtn = document.getElementById("showMoreBtn");
+            const showLessBtn = document.getElementById("showLessBtn");
+            const fileContainer = document.getElementById("fileContainer");
+
+            showMoreBtn.addEventListener("click", function () {
+                const hiddenItems = fileContainer.querySelectorAll(".fileItem:nth-child(n+3)");
+                hiddenItems.forEach(function (item) {
+                    item.style.display = "block";
+                });
+                showMoreBtn.style.display = "none";
+                showLessBtn.style.display = "inline-block";
+            });
+
+            showLessBtn.addEventListener("click", function () {
+                const visibleItems = fileContainer.querySelectorAll(".fileItem:nth-child(n+3)");
+                visibleItems.forEach(function (item) {
+                    item.style.display = "none";
+                });
+                showMoreBtn.style.display = "inline-block";
+                showLessBtn.style.display = "none";
+            });
+        });
+
+    </script>
 </body>
+</html>

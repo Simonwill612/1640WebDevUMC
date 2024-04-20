@@ -29,52 +29,50 @@
 
     <!-- Template Stylesheet -->
     <link href="csss/style.css" rel="stylesheet">
+    <link href="csss/responsive.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container-xxl position-relative bg-white d-flex p-0" style="margin-top: -20px;">
-        <!-- Spinner Start -->
-        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>
-        <!-- Spinner End -->
+    <div class=" position-relative bg-white d-flex p-0" style="margin-top: -20px;">
         <!-- Sidebar Start -->
         <div class="sidebar pe-4 pb-3">
             <nav class="navbar bg-light navbar-light">
                 <a href="AdminDashboard" class="navbar-brand mx-4 mb-3">
-                    <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>ADMIN</h3>
+                    <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>Coordinator</h3>
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
                 </div>
                 <div class="navbar-nav w-100">
-                    <a href="#" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Manager Guest</a>
-                    <a href="/Contributions" class="nav-item nav-link"><i class="fa fa-th me-2"></i> Contributions</a>
+                    <a href="Contributions" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Contributions</a>
+                    <a href="Guest" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Guest</a>
                 </div>
+                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" style=" margin-right: 30px">Hello @User.Identity?.Name!</a>
+                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <button type="submit" class="btn btn-primary">Logout</button>
+                </form>
             </nav>
         </div>
         <!-- Sidebar End -->
         <!-- Content Start -->
-        <div class="content" style="margin-top: -20px;">
+        <div class="content" style="padding-left: 60px;">
             <!-- Navbar Start -->
-            <nav>
-                <div class="navbar-nav align-items-center ms-auto" style="margin-top: 15px;">
-                    <div class="d-flex align-items-center" style="margin-left: 700px; margin-top: 20px;">
-                        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" style=" margin-right: 30px">Hello @User.Identity?.Name!</a>
-                        <li class="nav-item">
-                            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                                <button type="submit" class="btn btn-primary">Logout</button>
-                            </form>
-                        </li>
-                    </div>
-            </nav>
             <!-- Navbar End -->
             <div class="container">
                 <main role="main" class="pb-3">
                     @RenderBody()
                 </main>
             </div>
+        </div>
 
+        <div class="fixed-bottom w-100 px-4 p-2 sidebar-mobile" style="background-color: #000;">
+            <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" style=" margin-right: 30px; color:#fff;">Hello @User.Identity?.Name!</a>
+            <div class="d-flex  justify-content-between d-flex">
+                <a class="navbar-mobile" href="Guest"><i class="fa fa-tachometer-alt"></i></a>
+                <a class="navbar-mobile" href="Contributions"><i class="fa fa-chart-bar"></i></a>
+                <!-- Thay thế button Logout bằng một biểu tượng -->
+                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <button type="submit" class="btn btn-link navbar-mobile"><i class="fa fa-sign-out-alt"></i></button>
+                </form>
+            </div>
         </div>
         <!-- Content End -->
         <!-- Back to Top -->

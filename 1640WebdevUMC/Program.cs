@@ -25,7 +25,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IImageService, ImageService>();*/
 /*builder.Services.AddScoped<IContributionItemService, ContributionItemService>();
 */
-
+builder.Services.AddScoped<EmailService>();
+/*builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+*/
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -47,15 +49,12 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "custom",
-    pattern: "Contributions/Upload/{id}",
-    defaults: new { controller = "Contributions", action = "Upload" });
+/*app.MapControllerRoute(
+           name: "studentDetails",
+        pattern: "Student/Details/{contributionId}/{id?}", // Adjusted route template
+        defaults: new { controller = "Student", action = "Details" });
+*/
 
-app.MapControllerRoute(
-    name: "custom",
-    pattern: "Contributions/ViewUpload/{id}",
-    defaults: new { controller = "Contributions", action = "ViewUpload" });
 
 
 app.MapControllerRoute(

@@ -4,24 +4,70 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1>Delete</h1>
+<style>
+    .user-details {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border: 1px solid #ccc;
+        padding: 20px;
+        border-radius: 10px;
+        background-color: #fff;
+        width: 300px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Thêm bóng đổ */
+    }
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Faculty</h4>
+        .user-details h2 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .user-details div {
+            margin-bottom: 15px;
+        }
+
+        .user-details h4 {
+            margin: 5px 0;
+            color: #666;
+        }
+
+        .user-details p {
+            margin: 0;
+        }
+
+        .user-details ul {
+            padding-left: 20px;
+            margin: 0;
+        }
+
+        .user-details li {
+            list-style-type: none;
+            margin-bottom: 5px;
+        }
+
+        .user-details a {
+            text-decoration: none;
+            color: #fff;
+        }
+
+            .user-details a:hover {
+                text-decoration: underline;
+            }
+</style>
+
+
+<div class="user-details">
+    <h4>Delete</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FacultyName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FacultyName)
-        </dd>
-    </dl>
+    <div>
+        <h4>FacultyName:</h4>
+        <p>@Model.FacultyName</p>
+    </div>
     
     <form asp-action="Delete">
+        <a class="btn btn-primary" asp-action="Index">Back to List</a>  
         <input type="hidden" asp-for="FacultyID" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="Delete" class="btn btn-danger" /> 
     </form>
 </div>

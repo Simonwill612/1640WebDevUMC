@@ -1,9 +1,8 @@
-﻿
-@model _1640WebDevUMC.Models.UserViewModel
+﻿@model _1640WebDevUMC.Models.UserViewModel
 <style>
     .emailconfirm {
-        display:flex;
-        gap:30px;
+        display: flex;
+        gap: 30px;
     }
     /* Định dạng chung cho form */
     form {
@@ -20,9 +19,8 @@
         /* Định dạng cho các nhãn và ô input */
         form div {
             margin-bottom: 15px;
-            
         }
- 
+
 
         form label {
             display: block;
@@ -84,47 +82,52 @@
         margin-top: 20px;
     }
 
-    .button-flex{
-        display:flex;
+    .button-flex {
+        display: flex;
         justify-content: space-between;
     }
 </style>
-
-
 <form asp-action="EditUser" method="post">
-    <h2>Edit Account</h2>
-    <hr />
     <input type="hidden" asp-for="Id" />
 
     <div>
         <label asp-for="Email"></label>
         <input asp-for="Email" />
-        <span asp-validation-for="Email"></span>
     </div>
 
-    <div class="emailconfirm">
+    <div>
         <label asp-for="EmailConfirmed"></label>
-        <input asp-for="EmailConfirmed" />
-        <span asp-validation-for="EmailConfirmed"></span>
+        <input asp-for="EmailConfirmed" type="checkbox" />
     </div>
 
     <div>
-        <label for="PasswordHash">New Password</label>
-        <input id="PasswordHash" name="PasswordHash" type="password" />
+        <label asp-for="PasswordHash"></label>
+        <input asp-for="PasswordHash" type="password" />
     </div>
 
     <div>
-        <label asp-for="Roles"></label>
-        <select asp-for="Roles" asp-items="@(new SelectList(Model.AllRoles))" multiple>
-        </select>
-        <span asp-validation-for="Roles"></span>
+        <label>Roles</label>
+        @foreach (var role in Model.AllRoles)
+        {
+            <div>
+                <input type="checkbox" name="Roles" value="@role" @(Model.Roles.Contains(role) ? "checked" : "") />
+                <label>@role</label>
+            </div>
+        }
     </div>
-    <div class="button-flex">
-    <span>
-        <a class="btn btn-primary" asp-action="Index">Back to List</a>
-    </span>
-        <button class="btn btn-danger" type="submit">Save</button>
+
+    <div>
+        <label>Faculties</label>
+        @foreach (var faculty in Model.AllFaculties)
+        {
+            <div>
+                <input type="checkbox" name="Faculties" value="@faculty" @(Model.Faculties.Contains(faculty) ? "checked" : "") />
+                <label>@faculty</label>
+            </div>
+        }
     </div>
+
+    <button type="submit">Save</button>
 </form>
 
 
