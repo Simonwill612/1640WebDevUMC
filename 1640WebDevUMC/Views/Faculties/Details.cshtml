@@ -1,0 +1,30 @@
+﻿@model _1640WebDevUMC.Models.Faculty
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<body style="max-width: 400px; padding: 20px; margin: auto; background-color: #f9f9f9; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); margin-top:200px;">
+    <div style="text-align: center;">
+        <h2>Faculty Details</h2>
+        <hr />
+        <div>
+            <h4>Name:</h4>
+            <p>@Model.FacultyName</p>
+        </div>
+        <div>
+            <h4>Code Subject:</h4>
+            <p>@Model.CodeSubject</p>
+        </div>
+        <!-- Optionally display FacultyID if needed -->
+         <div> 
+            <h4>Faculty ID:</h4>
+            <p>@Model.FacultyID</p>
+        </div> 
+
+        <div style="justify-content: space-between; display: flex; ">
+            <a class="btn btn-primary" asp-action="Index" style="margin-top: 20px;">Back to List</a>
+            <a class="btn btn-danger" asp-action="Edit" asp-route-id="@Model?.FacultyID" style="background-color: #0d6efd; border-color: #0d6efd;margin-top: 20px;">Edit</a>
+        </div>
+    </div>
+</body>

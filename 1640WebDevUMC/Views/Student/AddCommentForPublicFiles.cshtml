@@ -1,0 +1,155 @@
+﻿@model _1640WebDevUMC.Models.Contribution
+
+@{
+    ViewData["Title"] = "Student Details";
+}
+
+<style>
+    /* CSS styles */
+</style>
+
+<h1>@Model.Title</h1>
+<p>@Model.Content</p>
+
+<hr />
+
+<h3>Uploaded Files</h3>
+@if (Model.Files.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Upload Title</th>
+                <th>File Name</th>
+                <th>Upload Time</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var file in Model.Files)
+            {
+                <tr>
+                    <td>@file.UploadTitle</td>
+                    <td>@file.FileName</td>
+                    <td>@file.UploadTime</td>
+                    <td>
+                        <a class="btn btn-danger" asp-action="DownloadFile" asp-route-id="@file.FileID">Download</a>
+                        <form asp-action="DeleteFile" method="post" onsubmit="return confirmDelete();">
+                            <input type="hidden" name="fileId" value="@file.FileID" />
+                            <button class="btn btn-primary" type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No files uploaded.</p>
+}
+
+<div class="comments-box">
+    <h3>Comments</h3>
+    @if (Model.Comments.Any())
+    {
+        // Comments for specific files
+        @foreach (var file in Model.Files)
+        {
+            var fileComments = Model.Comments.Where(c => c.FileID == file.FileID).ToList();
+            if (fileComments.Any())
+            {
+                <div class="file-comments">
+                    <h4>Comments for @file.FileName</h4>
+                    <ul>
+                        @foreach (var comment in fileComments)
+                        {
+                            <li>
+                                <p><strong>Email:</strong> @comment.ApplicationUser.Email</p>
+                                <div class="comment-content">@comment.Content</div>
+                                <div class="comment-date">@comment.CommentDate</div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            }
+        }
+
+        // Form to add comments for specific files and public files
+        @foreach (var file in Model.Files)
+        {
+            var fileComments = Model.Comments.Where(c => c.FileID == file.FileID).ToList();
+            if (fileComments.Any())
+            {
+                <div class="card my-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Add Comment for @file.FileName</h5>
+                        <form asp-action="AddComment" method="post">
+                            <input type="hidden" name="contributionId" value="@Model.ContributionID" />
+                            <input type="hidden" name="fileId" value="@file.FileID" />
+                            <input type="hidden" name="isPublic" value="false" /> <!-- Comments are not public -->
+                            <div class="form-group">
+                                <label for="commentContent">Comment:</label>
+                                <textarea class="form-control" id="commentContent" name="content" rows="3"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            }
+        }
+
+                // Form to add comments to public files
+        @if (Model.Files.Any(f => f.IsPublic))
+        {
+            <div class="card my-3">
+                <div class="card-body">
+                    <h5 class="card-title">Add Comment for Public Files</h5>
+                    <form asp-action="AddCommentForPublicFiles" method="post">
+                        <input type="hidden" name="contributionId" value="@Model.ContributionID" />
+                        <input type="hidden" name="isPublic" value="true" /> <!-- Comments are public -->
+                        <div class="form-group">
+                            <label for="publicFileCommentContent">Comment:</label>
+                            <textarea class="form-control" id="publicFileCommentContent" name="content" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        }
+
+        // Display public comments
+        <div class="public-comments">
+            <h4>Public Comments</h4>
+            <ul>
+                @foreach (var publicComment in Model.Comments.Where(c => c.IsPublic))
+                {
+                    <li>
+                        <p><strong>Email:</strong> @publicComment.ApplicationUser.Email</p>
+                        <div class="comment-content">@publicComment.Content</div>
+                        <div class="comment-date">@publicComment.CommentDate</div>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+    else
+    {
+        <p>No comments.</p>
+    }
+</div>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@section Scripts {
+    <script>
+        function confirmDelete() {
+            return confirm("Are you sure you want to delete this file?");
+        }
+    </script>
+}

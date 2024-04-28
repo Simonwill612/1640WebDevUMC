@@ -1,0 +1,70 @@
+﻿@model _1640WebDevUMC.Models.Contribution
+
+@{
+    ViewData["Title"] = "Upload";
+}
+
+<style>
+    .conatiner {
+        margin-bottom: 20px;
+    }
+
+    .upload-box {
+        font-size: 16px;
+        background: white;
+        border-radius: 50px;
+        box-shadow: 0px 1px 3px black;
+        width: 350px;
+        outline: none;
+    }
+
+    ::-webkit-file-upload-button {
+        color: white;
+        background: #206a5d;
+        padding: 20px;
+        border: none;
+        border-radius: 50px;
+        box-shadow: 1px 0 1px 1px #6b4559;
+        outline: none;
+    }
+
+    h1 {
+        font-size: 20px;
+        font-weight: 500;
+        margin-bottom: 25px;
+        text-align: center;
+    }
+
+</style>
+
+<h1>Upload Files</h1>
+
+<h4>@Model.Title</h4>
+<p>@Model.Content</p>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Upload" asp-route-id="@Model.ContributionID" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label for="uploadTitle">Upload Title:</label>
+                <input type="text" class="form-control" id="uploadTitle" name="uploadTitle" required>
+            </div>
+            <div class="form-group">
+                <label for="files">Select Files:</label>
+                <input type="file" class="form-control-file" id="files" name="files" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+    </div>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["ErrorMessage"]
+    </div>
+}

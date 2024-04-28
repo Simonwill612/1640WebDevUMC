@@ -1,0 +1,56 @@
+﻿@{
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+    <h1 style="margin-left: -46px;">Management Account</h1>
+    <p>
+        <a href="/Identity/Account/Register" class="btn btn-primary" style="margin-left: -44px;">Create new account</a>
+    </p>
+    <div class="container-fluid pt-4 px-4">
+        <div class="bg-light text-center rounded p-4" style="margin-left: -68px;">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+            </div>
+            <div class="table-responsive">
+                <table class="table text-start align-middle table-bordered table-hover mb-0">
+                    <thead>
+                        <tr class="text-dark">
+                            <th scope="col">ID</th>
+                            <th scope="col">EMAIL</th>
+                            <th scope="col">EMAIL CONFIRMED</th>
+                            <th scope="col">PASSWORD</th>
+                            <th scope="col">ROLE</th>
+                            <th scope="col">FACULTY</th> <!-- New column for Faculty -->
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            @if (!user.Roles.Contains("Admin"))
+                            {
+                                <tr>
+                                    <td>@user.Id</td>
+                                    <td>@user.Email</td>
+                                    <td>@user.EmailConfirmed</td>
+                                    <td>*********</td>
+                                    <td>@string.Join(", ", user.Roles)</td>
+                                    <td>@string.Join(", ", user.Faculties)</td>
+                                    <td style="display: flex; gap: 5px;">
+                                        <button class="btn btn-danger"><a class="tag-a" asp-action="Edit" asp-route-id="@user.Id" style="color:aliceblue">Edit</a></button>
+                                        <button class="btn btn-danger"><a class="tag-a" asp-action="Details" asp-route-id="@user.Id" style="color:aliceblue">Details</a></button>
+                                        <button class="btn btn-danger"><a class="tag-a" asp-action="Delete" asp-route-id="@user.Id" style="color:aliceblue">Delete</a></button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

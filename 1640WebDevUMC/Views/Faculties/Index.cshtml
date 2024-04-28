@@ -1,0 +1,51 @@
+﻿@model IEnumerable<_1640WebDevUMC.Models.Faculty>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+
+<h1 style="margin-left: -46px;">Management Faculties</h1>
+
+<p>
+    <a href="/Faculties/Create" class="btn btn-primary">Create new Faculty</a>
+</p>
+
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-light text-center rounded p-4">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Faculty Name</th>
+                        <th scope="col">Faculty ID</th>
+                        <th scope="col">Code Subject</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.FacultyName</td>
+                            <td>@item.FacultyID</td>
+                            <td>@item.CodeSubject</td>
+                            <td>
+                                <form asp-action="Edit" asp-route-id="@item.FacultyID" method="get">
+                                    <button type="submit" class="btn btn-primary">Edit</button>
+                                </form>
+                                <form asp-action="Details" asp-route-id="@item.FacultyID" method="get">
+                                    <button type="submit" class="btn btn-info">Details</button>
+                                </form>
+                                <form asp-action="Delete" asp-route-id="@item.FacultyID" method="post">
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this faculty?')">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
