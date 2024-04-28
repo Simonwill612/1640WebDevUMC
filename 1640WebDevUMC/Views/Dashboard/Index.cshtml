@@ -1,182 +1,82 @@
 ﻿@{
     ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/AdminLayout.cshtml";
+    Layout = "~/Views/Shared/MarketingCoordinatorLayout.cshtml";
 }
-<style>
-    .barchar{
-        height: 550px;
-        width: 550px;
-    }
 
+<link href="./css/chart.css" rel="stylesheet">
 
-    .linechart {
-        height: 550px;
-        width: 550px;
-    }
+<body style="padding:20px;">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    .radarchart{
-        height: 350px;
-        width: 350px;
-    }
+    <h2 style="margin-top:25px;">Statistics</h2>
+    <div class="chart-column">
+        <div class="barchar">
+            <canvas width="100" height="100" id="myChart"></canvas>
+        </div>
 
-    .piechart {
-        height: 350px;
-        width: 350px;
-    }
+    </div>
+    <div class="chart-column">
+        <div class="piechart">
+            <canvas height="300" id="myPieChart"></canvas>
+        </div>
 
-    .piechart {
-        height: 350px;
-        width: 350px;
-    }
-
-
-
-    .chart-column{
-        display: flex;
-        justify-content: space-around;
-        margin-top: 30px;
-    }
-</style>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<h2>Statistics</h2>
-<div class="chart-column">
-    <div class="barchar">
-        <canvas width="100" height="100" id="myChart"></canvas>
     </div>
 
-    <div class="linechart">
-        <canvas height="300" id="myLineChart"></canvas>
-    </div>
-  
-</div>
-<div class="chart-column">
-<div class="piechart">
-    <canvas height="300" id="myPieChart"></canvas>
-</div>
+    @* barchar *@
+    <script>
+        const ctx = document.getElementById('myChart');
 
-<div class="radarchart">
-    <canvas height="300" id="myRadarChart"></canvas>
-</div>
-</div>
+        async function updateChartData() {
+            const fileCountByUpdateTimeResponse = await fetch('/Contributions/GetFileCountByUpdateTime');
+            const fileCountByUpdateTimeData = await fileCountByUpdateTimeResponse.json();
 
-@* barchar *@
-<script>
-    const ctx = document.getElementById('myChart');
+            const labels = fileCountByUpdateTimeData.map(entry => entry.date);
+            const data = fileCountByUpdateTimeData.map(entry => entry.count);
 
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-</script>
-@* piechar *@
-<script>
-    const pieCtx = document.getElementById('myPieChart');
-
-    new Chart(pieCtx, {
-        type: 'pie',
-        data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    display: false
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Total File upload in day',
+                        data: data,
+                        borderWidth: 2, // Độ rộng của đường viền cột
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)', // Màu nền của các cột
+                        borderColor: 'rgba(54, 162, 235, 1)' // Màu của đường viền cột
+                    }]
                 },
-                x: {
-                    display: false
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Total Upload Files'
+                            },
+                            ticks: {
+                                stepSize: 1, // Bước giữa mỗi giá trị
+                                callback: function (value, index, values) {
+                                    if (value % 1 === 0) {
+                                        return value; // Chỉ hiển thị nếu là số nguyên
+                                    }
+                                }
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        }
+                    }
                 }
-            }
+            });
         }
-    });
-</script>
 
-@* linechart *@
-<script>
-    const lineCtx = document.getElementById('myLineChart');
+        updateChartData();
 
-    new Chart(lineCtx, {
-        type: 'line',
-        data: {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [{
-                label: 'Number of Items Sold',
-                data: [65, 59, 80, 81, 56, 55, 40],
-                fill: false,
-                borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-</script>
 
-@* radar cahr *@
-<script>
-    const radarCtx = document.getElementById('myRadarChart');
 
-    new Chart(radarCtx, {
-        type: 'radar',
-        data: {
-            labels: ['Eating', 'Drinking', 'Sleeping', 'Designing', 'Coding', 'Cycling', 'Running'],
-            datasets: [{
-                label: 'My Radar Chart',
-                data: [65, 59, 90, 81, 56, 55, 40],
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                r: {
-                    angleLines: {
-                        display: true
-                    },
-                    suggestedMin: 0,
-                    suggestedMax: 100
-                }
-            }
-        }
-    });
-</script>
+    </script>
+
+</body>

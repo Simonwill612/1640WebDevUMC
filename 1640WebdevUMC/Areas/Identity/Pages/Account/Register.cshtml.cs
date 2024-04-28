@@ -1,5 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
+﻿// The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
 using System;
@@ -10,6 +9,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using _1640WebDevUMC.Data;
 using _1640WebDevUMC.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace _1640WebDevUMC.Areas.Identity.Pages.Account
@@ -32,6 +33,8 @@ namespace _1640WebDevUMC.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ApplicationDbContext _context;
+
 
 
 
@@ -40,8 +43,9 @@ namespace _1640WebDevUMC.Areas.Identity.Pages.Account
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            RoleManager<IdentityRole> roleManage,
-            IEmailSender emailSender)
+            RoleManager<IdentityRole> roleManager,
+            IEmailSender emailSender,
+            ApplicationDbContext context) // Inject the DbContext here
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -49,8 +53,10 @@ namespace _1640WebDevUMC.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
-            _roleManager = roleManage;
+            _roleManager = roleManager;
+            _context = context; // Assign the injected context
         }
+
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -86,7 +92,7 @@ namespace _1640WebDevUMC.Areas.Identity.Pages.Account
             [Display(Name = "Email")]
             public string Email { get; set; }
 
-            /// <summary>
+/*            /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
@@ -104,10 +110,13 @@ namespace _1640WebDevUMC.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
-
+*/
             public string Role { get; set; }
             public IEnumerable<SelectListItem> Roles { get; set; }
             public IQueryable<SelectListItem> RolesList { get; internal set; }
+            public string Faculty { get; set; } // Thuộc tính mới để lưu trữ tên khoa được chọn
+
+            public IEnumerable<SelectListItem> Faculties { get; set; } // Danh sách các khoa
         }
 
 
@@ -115,13 +124,28 @@ namespace _1640WebDevUMC.Areas.Identity.Pages.Account
         {
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+            // Retrieve a list of unique faculty names from the database
+            var uniqueFaculties = await _context.Faculties
+                .Select(f => f.FacultyName)
+                .Distinct()
+                .ToListAsync();
+
+            // Create a list of SelectListItem from the list of unique faculty names
+            var facultiesList = uniqueFaculties.Select(f => new SelectListItem
+            {
+                Text = f,
+                Value = f
+            }).ToList();
+
             Input = new InputModel
             {
-                RolesList = _roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem
+                RolesList = _roleManager.Roles.Select(x => new SelectListItem
                 {
-                    Text = i,
-                    Value = i
-                })
+                    Text = x.Name,
+                    Value = x.Name
+                }), // Assign a collection of SelectListItem
+                Faculties = facultiesList
             };
         }
 
@@ -131,39 +155,52 @@ namespace _1640WebDevUMC.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = CreateUser();
+                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email };
 
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
-                await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-                var result = await _userManager.CreateAsync(user, Input.Password);
+                // Check if the provided faculty name exists in the database
+                var faculty = await _context.Faculties.FirstOrDefaultAsync(f => f.FacultyName == Input.Faculty);
+                if (faculty == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid faculty name.");
+                    return Page();
+                }
+
+                user.Faculty = faculty;
+
+                // Generate a random password for the user
+                var password = GenerateRandomPassword();
+                var result = await _userManager.CreateAsync(user, password);
 
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-
                     await _userManager.AddToRoleAsync(user, Input.Role);
 
                     var userId = await _userManager.GetUserIdAsync(user);
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
+                        "/Account/ResetPassword",
                         pageHandler: null,
-                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                        values: new { area = "Identity", userId = userId, code = code },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    await _emailSender.SendEmailAsync(Input.Email, "Reset your password",
+                        $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                    if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                    // Determine the user's role and redirect to the corresponding Dashboard
+                    if (await _userManager.IsInRoleAsync(user, "Admin"))
                     {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
+                        return RedirectToAction("AdminDashboard", "Index");
+                    }
+                    else if (await _userManager.IsInRoleAsync(user, "MarketingCoordinator"))
+                    {
+                        return RedirectToAction("MarketingCoordinatorDashboard", "Index");
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                        return LocalRedirect(returnUrl); // Redirect to default page if no specific role
                     }
                 }
                 foreach (var error in result.Errors)
@@ -175,7 +212,23 @@ namespace _1640WebDevUMC.Areas.Identity.Pages.Account
             // If we got this far, something failed, redisplay form
             return Page();
         }
+        private string GenerateRandomPassword()
+        {
+            const string alphanumericChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            const string specialChars = "!@#$%^&*()-_=+[]{}|;:,.<>?";
+            var random = new Random();
 
+            var passwordBuilder = new StringBuilder();
+            passwordBuilder.Append(alphanumericChars[random.Next(alphanumericChars.Length)]);
+            for (int i = 1; i < 7; i++) 
+            {
+                passwordBuilder.Append(alphanumericChars[random.Next(alphanumericChars.Length)]);
+            }
+            passwordBuilder.Insert(random.Next(1, 7), specialChars[random.Next(specialChars.Length)]); 
+            passwordBuilder.Append(random.Next(10)); 
+
+            return passwordBuilder.ToString();
+        }
         private ApplicationUser CreateUser()
         {
             try

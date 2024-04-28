@@ -2,8 +2,9 @@
 using MimeKit;
 using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
-public class EmailService
+public class EmailService : IEmailSender
 {
     private readonly IConfiguration _configuration;
 
@@ -12,27 +13,25 @@ public class EmailService
         _configuration = configuration;
     }
 
-    public async Task SendEmailAsync(string email, string subject, string message)
+    public async Task SendEmailAsync(string email, string subject, string htmlMessage)
     {
         var emailMessage = new MimeMessage();
 
-        emailMessage.From.Add(new MailboxAddress(_configuration["EmailSettings:SenderName"], _configuration["EmailSettings:SenderEmail"])); // Sender's email address and name from configuration
-        emailMessage.To.Add(new MailboxAddress("", email)); // Recipient's email address
-        emailMessage.Subject = subject; // Email subject
+        emailMessage.From.Add(new MailboxAddress(_configuration["EmailSettings:SenderName"], _configuration["EmailSettings:SenderEmail"]));
+        emailMessage.To.Add(new MailboxAddress("", email));
+        emailMessage.Subject = subject;
 
-        // Create the body part of the email
         var bodyBuilder = new BodyBuilder();
-        bodyBuilder.HtmlBody = message; // HTML message body
+        bodyBuilder.HtmlBody = htmlMessage;
 
-        emailMessage.Body = bodyBuilder.ToMessageBody(); // Set the message body
+        emailMessage.Body = bodyBuilder.ToMessageBody();
 
-        // Connect to the SMTP server and send the email
         using (var client = new SmtpClient())
         {
-            await client.ConnectAsync(_configuration["EmailSettings:Host"], int.Parse(_configuration["EmailSettings:Port"]), false); // SMTP server address and port from configuration
-            await client.AuthenticateAsync(_configuration["EmailSettings:UserName"], _configuration["EmailSettings:Password"]); // Your email credentials from configuration
-            await client.SendAsync(emailMessage); // Send the email
-            await client.DisconnectAsync(true); // Disconnect from the SMTP server
+            await client.ConnectAsync(_configuration["EmailSettings:Host"], int.Parse(_configuration["EmailSettings:Port"]), false);
+            await client.AuthenticateAsync(_configuration["EmailSettings:UserName"], _configuration["EmailSettings:Password"]);
+            await client.SendAsync(emailMessage);
+            await client.DisconnectAsync(true);
         }
     }
 }

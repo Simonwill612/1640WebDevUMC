@@ -10,12 +10,13 @@ namespace _1640WebDevUMC.Models
 {
     public class ApplicationUser : IdentityUser
     {   [ForeignKey("Faculty")]
-        public string? FacultyID { get; set; }
+        public string? FacultyName { get; set; }
         public virtual Faculty Faculty { get; set; }
 
         public DateTime CreatedTime { get; set; }
 
 
+        public int NumberOfContributions { get; set; }
 
 
         public virtual ICollection<Notification> Notifications { get; set; }

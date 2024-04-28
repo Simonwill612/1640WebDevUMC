@@ -1,17 +1,11 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-#nullable disable
-
-using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using _1640WebDevUMC.Models;
-using Microsoft.AspNetCore.Authorization;
+﻿using _1640WebDevUMC.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
+using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace _1640WebDevUMC.Areas.Identity.Pages.Account
 {
@@ -24,12 +18,9 @@ namespace _1640WebDevUMC.Areas.Identity.Pages.Account
             _userManager = userManager;
         }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         [TempData]
         public string StatusMessage { get; set; }
+
         public async Task<IActionResult> OnGetAsync(string userId, string code)
         {
             if (userId == null || code == null)
@@ -46,6 +37,13 @@ namespace _1640WebDevUMC.Areas.Identity.Pages.Account
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
             var result = await _userManager.ConfirmEmailAsync(user, code);
             StatusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
+
+            // Determine the user's role
+            var roles = await _userManager.GetRolesAsync(user);
+            string role = roles.FirstOrDefault();
+
+            // Now you can use the 'role' variable to handle different roles
+
             return Page();
         }
     }

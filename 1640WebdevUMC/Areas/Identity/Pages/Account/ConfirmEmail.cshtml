@@ -6,7 +6,26 @@
 
 <h1>@ViewData["Title"]</h1>
 <partial name="_StatusMessage" model="Model.StatusMessage" />
+@* 
+@{
+    string returnUrl = ""; // URL mặc định
 
-    <span>
-    <a class="btn btn-primary" href="/Identity/Account/Login">Back to Login</a>
-    </span>
+    if (User.IsInRole("Admin"))
+    {
+        returnUrl = "/AdminDashboard"; // Chuyển hướng đến trang Dashboard của Admin nếu là Admin
+    }
+    else if (User.IsInRole("Marketing Coordinator"))
+    {
+        returnUrl = "/MarketingCoordinatorDashboard"; // Chuyển hướng đến trang Dashboard của Coordinator nếu là Coordinator
+    }
+    else
+    {
+        returnUrl = "/DefaultDashboard"; // Chuyển hướng đến trang Dashboard mặc định cho các vai trò khác
+    }
+} *@
+
+<span>
+    <p>
+        Your Email has been confirmed. Please <a asp-page="./Login">click here to log in</a>.
+    </p>
+</span>

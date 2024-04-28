@@ -1,0 +1,26 @@
+﻿@media only screen and (max-width: 600px) {
+    .chart-column {
+        flex-direction: column; /* Chuyển sang hiển thị dạng cột */
+        align-items: center; /* Căn giữa các biểu đồ */
+    }
+
+    .barchar {
+        height: 300px; /* Điều chỉnh chiều cao của các biểu đồ */
+        max-width: 90%; /* Sử dụng max-width thay vì width */
+        margin-bottom: 20px; /* Tạo khoảng cách giữa các biểu đồ */
+    }
+}
+
+
+
+.barchar {
+    height: 550px;
+    width: 550px;
+}
+
+
+.chart-column {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 30px;
+}

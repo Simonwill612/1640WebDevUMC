@@ -17,7 +17,7 @@ namespace _1640WebDevUMC.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.3")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -85,6 +85,38 @@ namespace _1640WebDevUMC.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "0a29fc34-cf49-477d-8e45-0199d8a8ca14",
+                            Name = "Marketing Coordinator",
+                            NormalizedName = "MARKETING COORDINATOR"
+                        },
+                        new
+                        {
+                            Id = "0bd06470-6120-4334-86c5-2d1fcd75f514",
+                            Name = "Guest",
+                            NormalizedName = "GUEST"
+                        },
+                        new
+                        {
+                            Id = "c0c2362f-3809-4fc2-b3b8-4bf29d3d41f2",
+                            Name = "Student",
+                            NormalizedName = "STUDENT"
+                        },
+                        new
+                        {
+                            Id = "cb316555-3aec-4234-aea9-1b4e22add4fb",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "ec5e815d-2ae2-4a7d-a687-fc7502e05560",
+                            Name = "Marketing Managerment",
+                            NormalizedName = "MARKETING MANAGERMENT"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -177,6 +209,98 @@ namespace _1640WebDevUMC.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "216ca0d2-6672-4cc9-8760-752f58c9d318",
+                            RoleId = "0a29fc34-cf49-477d-8e45-0199d8a8ca14"
+                        },
+                        new
+                        {
+                            UserId = "47d2b6a5-9b9c-4703-9d06-7505ac14d08f",
+                            RoleId = "0a29fc34-cf49-477d-8e45-0199d8a8ca14"
+                        },
+                        new
+                        {
+                            UserId = "e56ba4dd-0143-4221-84f3-c34e34e0e14f",
+                            RoleId = "0bd06470-6120-4334-86c5-2d1fcd75f514"
+                        },
+                        new
+                        {
+                            UserId = "c2512fdf-cab0-423e-87a4-2d33ab8a5a74",
+                            RoleId = "0bd06470-6120-4334-86c5-2d1fcd75f514"
+                        },
+                        new
+                        {
+                            UserId = "90316e26-012d-4c0c-939c-2dee25cf8183",
+                            RoleId = "c0c2362f-3809-4fc2-b3b8-4bf29d3d41f2"
+                        },
+                        new
+                        {
+                            UserId = "e33f9319-c5b6-4e98-893e-565327621838",
+                            RoleId = "c0c2362f-3809-4fc2-b3b8-4bf29d3d41f2"
+                        },
+                        new
+                        {
+                            UserId = "a94809be-838f-4f8a-bccc-003f5f6025ec",
+                            RoleId = "cb316555-3aec-4234-aea9-1b4e22add4fb"
+                        },
+                        new
+                        {
+                            UserId = "f5719d35-67c3-4458-8b3f-dc5c410bee91",
+                            RoleId = "cb316555-3aec-4234-aea9-1b4e22add4fb"
+                        },
+                        new
+                        {
+                            UserId = "03bc6e64-e6bc-4bfb-93ec-d8380795c88d",
+                            RoleId = "ec5e815d-2ae2-4a7d-a687-fc7502e05560"
+                        },
+                        new
+                        {
+                            UserId = "92de70df-e818-41d9-9d24-4782eb838fe8",
+                            RoleId = "ec5e815d-2ae2-4a7d-a687-fc7502e05560"
+                        },
+                        new
+                        {
+                            UserId = "d67405f3-aecc-4873-a19e-ced3fcbeac1d",
+                            RoleId = "c0c2362f-3809-4fc2-b3b8-4bf29d3d41f2"
+                        },
+                        new
+                        {
+                            UserId = "e1c5de51-1cf3-41fb-809f-734ca787c863",
+                            RoleId = "c0c2362f-3809-4fc2-b3b8-4bf29d3d41f2"
+                        },
+                        new
+                        {
+                            UserId = "2f3c0a4c-c42e-44e3-b08f-fd446ada9e4b",
+                            RoleId = "c0c2362f-3809-4fc2-b3b8-4bf29d3d41f2"
+                        },
+                        new
+                        {
+                            UserId = "54bba5fb-57f9-49f5-9d92-5a06eedb8fc4",
+                            RoleId = "c0c2362f-3809-4fc2-b3b8-4bf29d3d41f2"
+                        },
+                        new
+                        {
+                            UserId = "b7244936-fb02-432a-8bc6-e27d4a8a9ab0",
+                            RoleId = "c0c2362f-3809-4fc2-b3b8-4bf29d3d41f2"
+                        },
+                        new
+                        {
+                            UserId = "e0323333-b90c-48ab-b4ca-17cbf63231d5",
+                            RoleId = "c0c2362f-3809-4fc2-b3b8-4bf29d3d41f2"
+                        },
+                        new
+                        {
+                            UserId = "3ee3094c-e0ce-44d8-8746-e28245b63d7b",
+                            RoleId = "c0c2362f-3809-4fc2-b3b8-4bf29d3d41f2"
+                        },
+                        new
+                        {
+                            UserId = "8b3b94cf-0a9d-4e1b-a3fd-263a6474ada2",
+                            RoleId = "c0c2362f-3809-4fc2-b3b8-4bf29d3d41f2"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -221,6 +345,80 @@ namespace _1640WebDevUMC.Migrations
                     b.HasIndex("FacultyID");
 
                     b.ToTable("AcademicYears");
+
+                    b.HasData(
+                        new
+                        {
+                            AcademicYearID = "BUSI1632",
+                            ClosureDate = new DateTime(2024, 5, 1, 0, 35, 0, 0, DateTimeKind.Unspecified),
+                            FacultyID = "BUSI1632",
+                            FinalClosureDate = new DateTime(2024, 5, 15, 0, 35, 0, 0, DateTimeKind.Unspecified),
+                            UploadDate = new DateTime(2024, 4, 24, 0, 35, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            AcademicYearID = "BUSI1633",
+                            ClosureDate = new DateTime(2024, 5, 2, 0, 35, 0, 0, DateTimeKind.Unspecified),
+                            FacultyID = "BUSI1633",
+                            FinalClosureDate = new DateTime(2024, 5, 16, 0, 35, 0, 0, DateTimeKind.Unspecified),
+                            UploadDate = new DateTime(2024, 4, 25, 0, 35, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            AcademicYearID = "BUSI1702",
+                            ClosureDate = new DateTime(2024, 5, 4, 0, 36, 0, 0, DateTimeKind.Unspecified),
+                            FacultyID = "BUSI1702",
+                            FinalClosureDate = new DateTime(2024, 5, 18, 0, 36, 0, 0, DateTimeKind.Unspecified),
+                            UploadDate = new DateTime(2024, 4, 27, 0, 36, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            AcademicYearID = "COMP1640",
+                            ClosureDate = new DateTime(2024, 5, 22, 0, 37, 0, 0, DateTimeKind.Unspecified),
+                            FacultyID = "COMP1640",
+                            FinalClosureDate = new DateTime(2024, 6, 5, 0, 37, 0, 0, DateTimeKind.Unspecified),
+                            UploadDate = new DateTime(2024, 5, 15, 0, 37, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            AcademicYearID = "COMP1770",
+                            ClosureDate = new DateTime(2024, 5, 18, 0, 37, 0, 0, DateTimeKind.Unspecified),
+                            FacultyID = "COMP1770",
+                            FinalClosureDate = new DateTime(2024, 6, 1, 0, 37, 0, 0, DateTimeKind.Unspecified),
+                            UploadDate = new DateTime(2024, 5, 11, 0, 37, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            AcademicYearID = "COMP1787",
+                            ClosureDate = new DateTime(2024, 5, 11, 0, 37, 0, 0, DateTimeKind.Unspecified),
+                            FacultyID = "COMP1787",
+                            FinalClosureDate = new DateTime(2024, 5, 25, 0, 37, 0, 0, DateTimeKind.Unspecified),
+                            UploadDate = new DateTime(2024, 5, 4, 0, 37, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            AcademicYearID = "DESI1219",
+                            ClosureDate = new DateTime(2024, 5, 5, 0, 36, 0, 0, DateTimeKind.Unspecified),
+                            FacultyID = "DESI1219",
+                            FinalClosureDate = new DateTime(2024, 5, 19, 0, 36, 0, 0, DateTimeKind.Unspecified),
+                            UploadDate = new DateTime(2024, 4, 28, 0, 36, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            AcademicYearID = "DESI1237",
+                            ClosureDate = new DateTime(2024, 5, 8, 0, 36, 0, 0, DateTimeKind.Unspecified),
+                            FacultyID = "DESI1237",
+                            FinalClosureDate = new DateTime(2024, 5, 22, 0, 37, 0, 0, DateTimeKind.Unspecified),
+                            UploadDate = new DateTime(2024, 5, 1, 0, 36, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            AcademicYearID = "DESI1240",
+                            ClosureDate = new DateTime(2024, 5, 6, 0, 36, 0, 0, DateTimeKind.Unspecified),
+                            FacultyID = "DESI1240",
+                            FinalClosureDate = new DateTime(2024, 5, 20, 0, 36, 0, 0, DateTimeKind.Unspecified),
+                            UploadDate = new DateTime(2024, 4, 29, 0, 36, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("_1640WebDevUMC.Models.ApplicationUser", b =>
@@ -245,7 +443,7 @@ namespace _1640WebDevUMC.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("FacultyID")
+                    b.Property<string>("FacultyName")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -261,6 +459,9 @@ namespace _1640WebDevUMC.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<int>("NumberOfContributions")
+                        .HasColumnType("int");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -283,7 +484,7 @@ namespace _1640WebDevUMC.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FacultyID");
+                    b.HasIndex("FacultyName");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -294,6 +495,332 @@ namespace _1640WebDevUMC.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "a94809be-838f-4f8a-bccc-003f5f6025ec",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "d7e504e8-0099-4861-9194-c58c338f539c",
+                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "Admin@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@GMAIL.COM",
+                            NormalizedUserName = "ADMIN@GMAIL.COM",
+                            NumberOfContributions = 0,
+                            PasswordHash = "AQAAAAIAAYagAAAAEPPDS07tfI8yMRn0KWAt1BEIhlaXdIjBsUm+B8eeQcge5DDWNBtVpODMtLxP09ZB8g==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "YQIY43F2NSBTAZ2ZAHBAXJ6H5KBHEPZZ",
+                            TwoFactorEnabled = false,
+                            UserName = "Admin@gmail.com"
+                        },
+                        new
+                        {
+                            Id = "03bc6e64-e6bc-4bfb-93ec-d8380795c88d",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "266f40e1-1c1e-4172-9804-d715cf77848d",
+                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "MarketingManagerment@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "MARKETINGMANAGERMENT@GMAIL.COM",
+                            NormalizedUserName = "MARKETINGMANAGERMENT@GMAIL.COM",
+                            NumberOfContributions = 0,
+                            PasswordHash = "AQAAAAIAAYagAAAAENTiXM2ltFsSFDX0sjUqbC/wWNB1ODDl/MvgaelowVco1YlgccPz/nd41Gdphyb1Kg==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "VNOO7SFU6U733OQYSFORZPA3CCYCTQZS",
+                            TwoFactorEnabled = false,
+                            UserName = "MarketingManagerment@gmail.com"
+                        },
+                        new
+                        {
+                            Id = "92de70df-e818-41d9-9d24-4782eb838fe8",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "749850b3-0b12-4d39-9682-7469bf66658d",
+                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "MarketingManagerment1@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "MARKETINGMANAGERMENT1@GMAIL.COM",
+                            NormalizedUserName = "MARKETINGMANAGERMENT1@GMAIL.COM",
+                            NumberOfContributions = 0,
+                            PasswordHash = "AQAAAAIAAYagAAAAEHzq4s10lDXIFitL95HxIswckADNGO0SfULZIq04hzvQDdst0KvHrPt6Gfn8liwF7A==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "7P4MNUPRM53XPCKTRIUXVDMXNYEXZHLG",
+                            TwoFactorEnabled = false,
+                            UserName = "MarketingManagerment1@gmail.com"
+                        },
+                        new
+                        {
+                            Id = "216ca0d2-6672-4cc9-8760-752f58c9d318",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "77f6fc2b-fc5b-42cf-b773-ed710778d8f6",
+                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "MarketingCoodinator@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "MARKETINGCOODINATOR@GMAIL.COM",
+                            NormalizedUserName = "MARKETINGCOODINATOR@GMAIL.COM",
+                            NumberOfContributions = 0,
+                            PasswordHash = "AQAAAAIAAYagAAAAEPy2FFy18VUAIyausYLfWaeEC+6ELFbcdPO4ka2uLvzMs0vXElcDEY/GjBsa2LxY6A==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "X6LBPU6MHZ67CDKRT3SGQABIYKKYETTA",
+                            TwoFactorEnabled = false,
+                            UserName = "MarketingCoodinator@gmail.com"
+                        },
+                        new
+                        {
+                            Id = "47d2b6a5-9b9c-4703-9d06-7505ac14d08f",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "a8ea837c-34e3-4c06-95b5-0b8b0cf75ee0",
+                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "MarketingCoodinator1@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "MARKETINGCOODINATOR1@GMAIL.COM",
+                            NormalizedUserName = "MARKETINGCOODINATOR1@GMAIL.COM",
+                            NumberOfContributions = 0,
+                            PasswordHash = "AQAAAAIAAYagAAAAEG+b/+1sW/W6N2fhLzqSdHA9Ar00EQkhEcCbR66pGJG1ac8R3ladiMMEflGI86AK8g==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "OEV77TI2UFUTNBO74U33KYEPMBIJPJYX",
+                            TwoFactorEnabled = false,
+                            UserName = "MarketingCoodinator1@gmail.com"
+                        },
+                        new
+                        {
+                            Id = "e56ba4dd-0143-4221-84f3-c34e34e0e14f",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "dd8d2571-9ae9-44ea-9af5-1d038dd4cb6a",
+                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "Guest@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "GUEST@GMAIL.COM",
+                            NormalizedUserName = "GUEST@GMAIL.COM",
+                            NumberOfContributions = 0,
+                            PasswordHash = "AQAAAAIAAYagAAAAEO7FHWTjZ+Mnk1IXD2EDF8/cRY+OK9NAX+V3DafLtsEHN+Put1O+/Su81iE94jN3Ig==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "724ZAKU2VBDDWZEQLCGCJQ3WJG3P6LLE",
+                            TwoFactorEnabled = false,
+                            UserName = "Guest@gmail.com"
+                        },
+                        new
+                        {
+                            Id = "c2512fdf-cab0-423e-87a4-2d33ab8a5a74",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "7d5bbb78-7d32-4867-9296-bbbe201bd491",
+                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "Guest1@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "GUEST1@GMAIL.COM",
+                            NormalizedUserName = "GUEST1@GMAIL.COM",
+                            NumberOfContributions = 0,
+                            PasswordHash = "AQAAAAIAAYagAAAAEOtce99JMkRpyi6jWF7KFfhmbQxvjzMDX1Eiu/mxx7gTw4P5SJJn+9A5XAhoQdrnkw==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "OZUAZZN2PSOSV3UO5CC6YDFB433CBFDF",
+                            TwoFactorEnabled = false,
+                            UserName = "Guest1@gmail.com"
+                        },
+                        new
+                        {
+                            Id = "90316e26-012d-4c0c-939c-2dee25cf8183",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "ec30a8dd-3a71-4ff0-bbab-f9409cf36d48",
+                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "Student1@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "STUDENT1@GMAIL.COM",
+                            NormalizedUserName = "STUDENT1@GMAIL.COM",
+                            NumberOfContributions = 0,
+                            PasswordHash = "AQAAAAIAAYagAAAAEKDejowos2MamEJWU+9ieQdEmHvzZMfezMkE1TfEUknawtfZ9WrWI7A7PQ/XLI1+Tg==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "5KILRK7QTV6GWCSXGNTNRCSQAHD2MCFV",
+                            TwoFactorEnabled = false,
+                            UserName = "Student1@gmail.com"
+                        },
+                        new
+                        {
+                            Id = "e33f9319-c5b6-4e98-893e-565327621838",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "6366b2d1-e424-4a06-964a-333eeb8fcf99",
+                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "Student@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "STUDENT@GMAIL.COM",
+                            NormalizedUserName = "STUDENT@GMAIL.COM",
+                            NumberOfContributions = 0,
+                            PasswordHash = "AQAAAAIAAYagAAAAEAKOaX32P4nURuTPOG+R1de+qQo5Spk5ODUs75m1SOjjxo2JOnJSfcEcVEK10SAUkQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "5RWONCWIC23E6Q53ZHCHZLPUUI456NUB",
+                            TwoFactorEnabled = false,
+                            UserName = "Student@gmail.com"
+                        },
+                        new
+                        {
+                            Id = "f5719d35-67c3-4458-8b3f-dc5c410bee91",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "f3d35431-eef4-49fa-a6be-bf39886c5f33",
+                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "Admin1@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN1@GMAIL.COM",
+                            NormalizedUserName = "ADMIN1@GMAIL.COM",
+                            NumberOfContributions = 0,
+                            PasswordHash = "AQAAAAIAAYagAAAAEM3HvIpr8pPqbVL/iJGPpZ3is5dw5O2C3TAra0IOzGVST/UR6Qn27Ai7DJSOTZKP8w==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "BQ6KJD5FXTGZPPDW7IOMSAJVIWVWDOJI",
+                            TwoFactorEnabled = false,
+                            UserName = "Admin1@gmail.com"
+                        },
+                        new
+                        {
+                            Id = "d67405f3-aecc-4873-a19e-ced3fcbeac1d",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "e258c7e1-5d38-4a40-962b-a25aefd3a5c2",
+                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "student2@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "STUDENT2@GMAIL.COM",
+                            NormalizedUserName = "STUDENT2@GMAIL.COM",
+                            NumberOfContributions = 0,
+                            PasswordHash = "AQAAAAIAAYagAAAAEObW6aLAhR0p4ngWx+NiXiAoWSIpXUUP99JTB1LQQNmjXxAFoAi6/xyhI3RkqEvDvw==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "SLZUSVP34PBUKPVY63UFZX2RB7JDFMZN",
+                            TwoFactorEnabled = false,
+                            UserName = "student2@gmail.com"
+                        },
+                        new
+                        {
+                            Id = "e1c5de51-1cf3-41fb-809f-734ca787c863",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "ca6e85b9-13d8-45c6-b93e-66e725564fdc",
+                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "student3@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "STUDENT3@GMAIL.COM",
+                            NormalizedUserName = "STUDENT3@GMAIL.COM",
+                            NumberOfContributions = 0,
+                            PasswordHash = "AQAAAAIAAYagAAAAECfqYcOiXuHmNJR4H+FUa7VJ5NEotGfsMIozDZViePH1E3HMVx4Be3OCXOWLWdslkA==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "UJ5GTX2CQD6IDK5XGDSUIVAGXF6UWYE2",
+                            TwoFactorEnabled = false,
+                            UserName = "student3@gmail.com"
+                        },
+                        new
+                        {
+                            Id = "2f3c0a4c-c42e-44e3-b08f-fd446ada9e4b",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "89e42fa8-e776-4138-bb59-ab5e114690eb",
+                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "student4@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "STUDENT4@GMAIL.COM",
+                            NormalizedUserName = "STUDENT4@GMAIL.COM",
+                            NumberOfContributions = 0,
+                            PasswordHash = "AQAAAAIAAYagAAAAEF/3/wUBT9NOgzMP7Z9XY6oSDH7okOb8W1LQwc11/HC+EPzZ2iqty2mbmQiNver6vQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "QECAUXQTD26FV5XKZAGN6YO4OQRPB6XR",
+                            TwoFactorEnabled = false,
+                            UserName = "student4@gmail.com"
+                        },
+                        new
+                        {
+                            Id = "54bba5fb-57f9-49f5-9d92-5a06eedb8fc4",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "224b0c6e-cd81-4ab2-ae3f-fdcbfddd258e",
+                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "student5@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "STUDENT5@GMAIL.COM",
+                            NormalizedUserName = "STUDENT5@GMAIL.COM",
+                            NumberOfContributions = 0,
+                            PasswordHash = "AQAAAAIAAYagAAAAEN2DkDMlhW2AWxuSl+DPXiifpRpBbEQx7GYEwrjsCuQvZL+rIYR3I9kPcD4jf1gumg==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "T27XLM3SSZNLKJEJQZOBYE5EY5PB2QZD",
+                            TwoFactorEnabled = false,
+                            UserName = "student5@gmail.com"
+                        },
+                        new
+                        {
+                            Id = "b7244936-fb02-432a-8bc6-e27d4a8a9ab0",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "c6b3372f-eb1d-4e2d-bcd7-1852eff09a2d",
+                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "student6@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "STUDENT6@GMAIL.COM",
+                            NormalizedUserName = "STUDENT6@GMAIL.COM",
+                            NumberOfContributions = 0,
+                            PasswordHash = "AQAAAAIAAYagAAAAENLVgxNB7Du0qI4+4Wbd/d9vNbxRCWRlhwM6jzMnJnmnvn7/rfwMBtEG/4nSjK7PGA==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "CWS5AFJYTDC4C3EN3ESLHSB7BETJALKF",
+                            TwoFactorEnabled = false,
+                            UserName = "student6@gmail.com"
+                        },
+                        new
+                        {
+                            Id = "e0323333-b90c-48ab-b4ca-17cbf63231d5",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "a7954e4d-e6dd-49c8-80dd-5903b80fab9f",
+                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "student7@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "STUDENT7@GMAIL.COM",
+                            NormalizedUserName = "STUDENT7@GMAIL.COM",
+                            NumberOfContributions = 0,
+                            PasswordHash = "AQAAAAIAAYagAAAAEIlYMV/4VsL1MMlEWtVvr9T0IIAezit7N9NuWcnsGQtd/kXfYx6dFYZLLtqzAh27yg==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "O5YNXENF2PICVCPCS2IBTAZU7JZZPUXS",
+                            TwoFactorEnabled = false,
+                            UserName = "student7@gmail.com"
+                        },
+                        new
+                        {
+                            Id = "3ee3094c-e0ce-44d8-8746-e28245b63d7b",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "cabf1014-7e04-4a49-bac7-014e235628c6",
+                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "student8@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "STUDENT8@GMAIL.COM",
+                            NormalizedUserName = "STUDENT8@GMAIL.COM",
+                            NumberOfContributions = 0,
+                            PasswordHash = "AQAAAAIAAYagAAAAEM9Ijsnz7H+/DJbWWWzVmFaZLRf6VoY970Gb4cxfTgbZ+YqntRyPdURiZGz7oSYQZw==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "3VF7XMHZ2WO6NCFQCCTWOWXCVT7U33NV",
+                            TwoFactorEnabled = false,
+                            UserName = "student8@gmail.com"
+                        },
+                        new
+                        {
+                            Id = "8b3b94cf-0a9d-4e1b-a3fd-263a6474ada2",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "dc2eb935-ed26-4ac0-825c-76c5e4cde5fb",
+                            CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "student9@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "STUDENT9@GMAIL.COM",
+                            NormalizedUserName = "STUDENT9@GMAIL.COM",
+                            NumberOfContributions = 0,
+                            PasswordHash = "AQAAAAIAAYagAAAAEOu+jaX31jxxTTwAZHglNHQrpURqatIjB8jpO+AH0g1OftXGFwanZwrj2vmCAdbBBQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "RWAIPM2JLLYWSSQNKCZ6OKRKRMLVQFIJ",
+                            TwoFactorEnabled = false,
+                            UserName = "student9@gmail.com"
+                        });
                 });
 
             modelBuilder.Entity("_1640WebDevUMC.Models.Contribution", b =>
@@ -324,6 +851,9 @@ namespace _1640WebDevUMC.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("UploadTime")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("ContributionID");
 
                     b.HasIndex("AcademicYearID");
@@ -331,37 +861,117 @@ namespace _1640WebDevUMC.Migrations
                     b.HasIndex("Email");
 
                     b.ToTable("Contributions");
-                });
 
-            modelBuilder.Entity("_1640WebDevUMC.Models.DownloadHistory", b =>
-                {
-                    b.Property<int>("DownloadID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DownloadID"));
-
-                    b.Property<string>("ContributionID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("DownloadDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("MarketingManagerID")
-                        .HasColumnType("int");
-
-                    b.HasKey("DownloadID");
-
-                    b.HasIndex("ContributionID");
-
-                    b.ToTable("DownloadHistories");
+                    b.HasData(
+                        new
+                        {
+                            ContributionID = "Design Research Project",
+                            AcademicYearID = "DESI1219",
+                            Content = "Create plans and methods to collect and analyze information to shape and develop new products, services or experiences.",
+                            Email = "216ca0d2-6672-4cc9-8760-752f58c9d318",
+                            IsPublic = false,
+                            StudentEmail = "",
+                            Title = " Design Research Project ",
+                            UploadTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            ContributionID = "Enterprise Web Software Development",
+                            AcademicYearID = "COMP1640",
+                            Content = "Building a secure web-enabled role-based system to collect innovative ideas from staff in a large University.",
+                            Email = "216ca0d2-6672-4cc9-8760-752f58c9d318",
+                            IsPublic = false,
+                            StudentEmail = "",
+                            Title = "Enterprise Web Software Development",
+                            UploadTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            ContributionID = "Interdisciplinary Design",
+                            AcademicYearID = "DESI1237",
+                            Content = "combines methods, knowledge and resources from many different fields to create innovative solutions to complex challenges.",
+                            Email = "03bc6e64-e6bc-4bfb-93ec-d8380795c88d",
+                            IsPublic = false,
+                            StudentEmail = "",
+                            Title = "Interdisciplinary Design",
+                            UploadTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            ContributionID = "Negotiations",
+                            AcademicYearID = "BUSI1632",
+                            Content = "The process of negotiating between parties to reach an agreement or resolve a problem in a harmonious manner that benefits all parties involved.",
+                            Email = "216ca0d2-6672-4cc9-8760-752f58c9d318",
+                            IsPublic = false,
+                            StudentEmail = "",
+                            Title = "Negotiations",
+                            UploadTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            ContributionID = "Organisational Decision Making",
+                            AcademicYearID = "BUSI1702",
+                            Content = "The process of choosing between options to achieve specific organizational goals, based on information, solutions, and internal and external factors.",
+                            Email = "03bc6e64-e6bc-4bfb-93ec-d8380795c88d",
+                            IsPublic = false,
+                            StudentEmail = "",
+                            Title = "Organisational Decision Making",
+                            UploadTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            ContributionID = "Professional Practice & Portfolio ",
+                            AcademicYearID = "DESI1240",
+                            Content = "Build and manage a collection of projects, skills and personal achievements to demonstrate competence and experience in the area of expertise.",
+                            Email = "03bc6e64-e6bc-4bfb-93ec-d8380795c88d",
+                            IsPublic = false,
+                            StudentEmail = "",
+                            Title = "Professional Practice & Portfolio ",
+                            UploadTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            ContributionID = "Professional Project Management ",
+                            AcademicYearID = "COMP1770",
+                            Content = "Organize and direct resources to achieve specific project goals.",
+                            Email = "216ca0d2-6672-4cc9-8760-752f58c9d318",
+                            IsPublic = false,
+                            StudentEmail = "",
+                            Title = "Professional Project Management ",
+                            UploadTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            ContributionID = "Requirements Management",
+                            AcademicYearID = "COMP1787",
+                            Content = "Identify, monitor and control project requirements to ensure that the product or service developed meets those requirements.",
+                            Email = "216ca0d2-6672-4cc9-8760-752f58c9d318",
+                            IsPublic = false,
+                            StudentEmail = "",
+                            Title = "Requirements Management",
+                            UploadTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            ContributionID = "Strategy for Managers",
+                            AcademicYearID = "BUSI1633",
+                            Content = "Long-term planning to shape and achieve organizational goals through analysis of the organization's environment, resources, and capabilities.",
+                            Email = "216ca0d2-6672-4cc9-8760-752f58c9d318",
+                            IsPublic = false,
+                            StudentEmail = "",
+                            Title = "Strategy for Managers",
+                            UploadTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("_1640WebDevUMC.Models.Faculty", b =>
                 {
                     b.Property<string>("FacultyID")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CodeSubject")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FacultyName")
                         .IsRequired()
@@ -371,6 +981,62 @@ namespace _1640WebDevUMC.Migrations
                     b.HasKey("FacultyID");
 
                     b.ToTable("Faculties");
+
+                    b.HasData(
+                        new
+                        {
+                            FacultyID = "BUSI1632",
+                            CodeSubject = "BUSI1632",
+                            FacultyName = "Business"
+                        },
+                        new
+                        {
+                            FacultyID = "BUSI1633",
+                            CodeSubject = "BUSI1633",
+                            FacultyName = "Business"
+                        },
+                        new
+                        {
+                            FacultyID = "BUSI1702",
+                            CodeSubject = "BUSI1702",
+                            FacultyName = "Business"
+                        },
+                        new
+                        {
+                            FacultyID = "DESI1219",
+                            CodeSubject = "DESI1219",
+                            FacultyName = "Graphic Design"
+                        },
+                        new
+                        {
+                            FacultyID = "DESI1240",
+                            CodeSubject = "DESI1240",
+                            FacultyName = "Graphic Design"
+                        },
+                        new
+                        {
+                            FacultyID = "DESI1237",
+                            CodeSubject = "DESI1237",
+                            FacultyName = "Graphic Design"
+                        },
+                        new
+                        {
+                            FacultyID = "COMP1787",
+                            CodeSubject = "COMP1787",
+                            FacultyName = "IT"
+                        },
+                        new
+                        {
+                            FacultyID = "COMP1770",
+                            CodeSubject = "COMP1770",
+                            FacultyName = "IT"
+                        },
+                        new
+                        {
+                            FacultyID = "COMP1640",
+                            CodeSubject = "COMP1640",
+                            FacultyName = "IT"
+                        });
                 });
 
             modelBuilder.Entity("_1640WebDevUMC.Models.File", b =>
@@ -412,47 +1078,6 @@ namespace _1640WebDevUMC.Migrations
                     b.HasIndex("ContributionID");
 
                     b.ToTable("Files");
-                });
-
-            modelBuilder.Entity("_1640WebDevUMC.Models.Image", b =>
-                {
-                    b.Property<string>("ImageID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<byte[]>("ImageData")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("ImageName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ImageID");
-
-                    b.ToTable("Images");
-                });
-
-            modelBuilder.Entity("_1640WebDevUMC.Models.Log", b =>
-                {
-                    b.Property<int>("LogID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LogID"));
-
-                    b.Property<string>("Action")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
-                    b.HasKey("LogID");
-
-                    b.ToTable("Logs");
                 });
 
             modelBuilder.Entity("_1640WebDevUMC.Models.Notification", b =>
@@ -583,7 +1208,7 @@ namespace _1640WebDevUMC.Migrations
                 {
                     b.HasOne("_1640WebDevUMC.Models.Faculty", "Faculty")
                         .WithMany("Users")
-                        .HasForeignKey("FacultyID");
+                        .HasForeignKey("FacultyName");
 
                     b.Navigation("Faculty");
                 });
@@ -605,17 +1230,6 @@ namespace _1640WebDevUMC.Migrations
                     b.Navigation("AcademicYear");
 
                     b.Navigation("ApplicationUser");
-                });
-
-            modelBuilder.Entity("_1640WebDevUMC.Models.DownloadHistory", b =>
-                {
-                    b.HasOne("_1640WebDevUMC.Models.Contribution", "Contribution")
-                        .WithMany()
-                        .HasForeignKey("ContributionID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Contribution");
                 });
 
             modelBuilder.Entity("_1640WebDevUMC.Models.File", b =>

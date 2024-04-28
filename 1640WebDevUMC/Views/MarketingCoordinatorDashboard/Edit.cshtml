@@ -1,0 +1,56 @@
+﻿@model _1640WebDevUMC.Models.UserViewModel
+<body style="  max-width: 400px;border-radius: 10px; padding: 20px;background-color: #f9f9f9;border-radius: 5px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);margin: auto;margin-top: 100px;">
+    <form asp-action="EditUser" method="post">
+        <input type="hidden" asp-for="Id" />
+
+        <div style="margin-bottom: 15px;">
+            <label asp-for="Email" style="margin-bottom: 5px; font-weight: bold;"></label>
+            <input asp-for="Email" style="width: 100%;padding: 10px;border: 1px solid #ccc;" />
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label asp-for="EmailConfirmed" style="margin-bottom: 5px; font-weight: bold;">Email Confirmed</label>
+            <input asp-for="EmailConfirmed" type="checkbox" />
+        </div>
+
+@*         <div style="margin-bottom: 15px;">
+            <label asp-for="PasswordHash" style="margin-bottom: 5px; font-weight: bold;">Password</label>
+            <input asp-for="PasswordHash" type="password" style="width: 100%;padding: 10px;border: 1px solid #ccc;" />
+        </div>
+ *@
+        <div style="margin-bottom: 15px;">
+            <label style="margin-bottom: 5px; font-weight: bold;"><h4>Roles</h4></label>
+            @foreach (var role in Model.AllRoles)
+            {
+                <div>
+                    <input type="radio" name="Roles" value="@role" @(Model.Roles.Contains(role) ? "checked" : "") />
+                    <label style="margin-bottom: 5px; font-weight: bold;">@role</label>
+                </div>
+            }
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label style="margin-bottom: 5px; font-weight: bold;"><h4>Faculties</h4></label>
+            @foreach (var faculty in Model.AllFaculties.Distinct())
+            {
+                <div style="margin-bottom: 15px;">
+                    <input type="radio" name="Faculties" value="@faculty" @(Model.Faculties.Contains(faculty) ? "checked" : "") />
+                    <label style="margin-bottom: 5px; font-weight: bold;">@faculty</label>
+                </div>
+            }
+        </div>
+        <div style="margin-left: 290px;">
+            <button type="submit" class="btn btn-danger" style="background-color: #0d6efd; border-color: #0d6efd;">Save</button>
+        </div>
+    </form>
+
+  
+
+</body>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

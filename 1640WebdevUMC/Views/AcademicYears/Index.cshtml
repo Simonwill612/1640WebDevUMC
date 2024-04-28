@@ -7,62 +7,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
 
-        h1 {
-            margin-bottom: 20px;
-        }
-
-        .btn-danger {
-            color: #fff;
-            background-color: #dc3545;
-            border-color: #dc3545;
-        }
-
-            .btn-danger:hover {
-                color: #fff;
-                background-color: #c82333;
-                border-color: #bd2130;
-            }
-
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        tr:hover {
-            background-color: #f8f9fa;
-        }
-
-        .action-column {
-            width: 100px;
-        }
-
-        .tag-a{
-            color:white;
-        }
-
-        .tag-a:hover {
-            color: white;
-        }
-    </style>
-</head>
 <body>
 
     <h1 style="margin-left: -46px;" >Management Course</h1>
@@ -107,9 +52,9 @@
                                     @Html.DisplayFor(modelItem => item.Faculty.FacultyName)
                                 </td>
                                 <td>
-                                    <button class="btn btn-danger"><a class="tag-a" asp-action="Edit" asp-route-id="@item.AcademicYearID">Edit</a></button>
-                                    <button class="btn btn-danger"><a class="tag-a" asp-action="Details" asp-route-id="@item.AcademicYearID">Details</a></button>
-                                    <button class="btn btn-danger"><a class="tag-a" asp-action="Delete" asp-route-id="@item.AcademicYearID">Delete</a></button>
+                                    <button class="btn btn-danger"><a class="tag-a" asp-action="Edit" asp-route-id="@item.AcademicYearID" style="color:aliceblue">Edit</a></button>
+                                    <button class="btn btn-danger"><a class="tag-a" asp-action="Details" asp-route-id="@item.AcademicYearID" style="color:aliceblue">Details</a></button>
+                                    <button class="btn btn-danger"><a class="tag-a" asp-action="Delete" asp-route-id="@item.AcademicYearID" style="color:aliceblue">Delete</a></button>
                                 </td>
                             </tr>
                         }

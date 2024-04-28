@@ -1,19 +1,12 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @model IdentityRole
 
-<style>
-    .cards{
-        display: flex;
-        justify-content: center;
-        margin-top: 50px;
-    }
 
-</style>
-
-<div class="cards">
+<body style="background-color: #f9f9f9; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); max-width: 700px;padding: 20px; margin: auto;margin-top:200px;">
+<div style="display: flex; justify-content: center; margin-top: 50px;">
     <div class="col-md-6">
-        <form asp-action="Create" method="post">
-            <h5>Create New Role</h5>
+        <form asp-action="Create" method="post" >
+            <h3 style=" text-align: center;">Create New Role</h3>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-floating">
@@ -21,9 +14,18 @@
                 <label asp-for="Name"></label>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="row">
-                <button type="submit" class="btn btn-primary mt-3">Save</button>
+            <div style="margin-top: 10px; justify-content: center; display: flex;">
+                <span>
+                        <a class="btn btn-primary" style="margin-right: 140px;" href="/AdminDashboard">
+                        Back to List
+                    </a>
+                </span>
+                <button id="registerSubmit" type="submit" class="btn btn-primary">
+                    Create
+                </button>
             </div>
+
         </form>
     </div>
 </div>
+</body>

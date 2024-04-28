@@ -4,60 +4,10 @@
     ViewData["Title"] = "Delete";
 }
 
-<style>
-    .user-details {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        border: 1px solid #ccc;
-        padding: 20px;
-        border-radius: 10px;
-        background-color: #fff;
-        width: 300px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Thêm bóng đổ */
-    }
 
-        .user-details h2 {
-            margin-top: 0;
-            color: #333;
-        }
-
-        .user-details div {
-            margin-bottom: 15px;
-        }
-
-        .user-details h4 {
-            margin: 5px 0;
-            color: #666;
-        }
-
-        .user-details p {
-            margin: 0;
-        }
-
-        .user-details ul {
-            padding-left: 20px;
-            margin: 0;
-        }
-
-        .user-details li {
-            list-style-type: none;
-            margin-bottom: 5px;
-        }
-
-        .user-details a {
-            text-decoration: none;
-            color: #fff;
-        }
-
-            .user-details a:hover {
-                text-decoration: underline;
-            }
-</style>
-
-<div class="user-details">
-    <h2>Delete</h2>
+<body style="max-width: 400px; padding: 20px; margin: auto; background-color: #f9f9f9; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); margin-top:200px;">
+    <div style="text-align: center;">
+        <h3 >Delete</h3>
     <hr />
 
     <div>
@@ -76,19 +26,19 @@
     </div>
 
     <div>
-        <h4>Faculty ID:</h4>
+        <h4>Course:</h4>
         <p>@Html.DisplayFor(model => model.Faculty.FacultyID)</p>
     </div>
 
     <div>
         <form asp-action="Delete">
-            <a class="btn btn-primary" asp-action="Index">Back to List</a>
+                <a class="btn btn-primary" asp-action="Index" style="margin-right: 150px; margin-top:20px;">Back to List</a>
             <input type="hidden" asp-for="AcademicYearID" />
-            <input type="submit" value="Delete" class="btn btn-danger" /> 
-        </form>
+                <input type="submit" value="Delete" class="btn btn-primary" style="margin-top:20px;" />
+            </form>
     </div>
 </div>
-
+</body>
 
     
      

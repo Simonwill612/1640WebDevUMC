@@ -23,14 +23,14 @@ namespace _1640WebDevUMC.Models
 
         public string StudentEmail { get; set; } // This property stores the email of the uploader
 
-        public DateTime UploadTime { get; set; } // Thời gian tải lên
+        public DateTime UploadTime { get; set; } // Upload time
 
-        // Thêm một trường để xác định loại của tệp (image hoặc file)
+        // Add a field to determine the type of file (image or file)
         public FileType FileType { get; set; }
 
         public bool IsPublic { get; set; } // Indicates if the file is public
 
-        // Thêm một trường để lưu trữ các bình luận liên quan đến tệp
+        // Add a field to store comments related to the file
         public virtual ICollection<Comment> Comments { get; set; }
 
         // Constructor để khởi tạo Comments
@@ -53,7 +53,7 @@ namespace _1640WebDevUMC.Models
         }
     }
 
-    // Enum để định nghĩa loại của tệp
+    // Enum to define the type of file
     public enum FileType
     {
         File,

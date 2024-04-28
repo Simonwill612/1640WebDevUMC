@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Student";
     Layout = "~/Views/Shared/Navbar_Layout.cshtml";
-    var currentUserEmail = User.Identity.Name; // Lấy email của người dùng hiện tại
+    var currentUserEmail = User.Identity.Name; // Get the current user's email
 }
 
 <head>
@@ -34,7 +34,7 @@
                             <p><strong>Start Date:</strong> @contribution.AcademicYear.UploadDate</p>
                             <p><strong>Closed Date:</strong> @contribution.AcademicYear.ClosureDate</p>
                             <p><strong>Final Closed Date:</strong> @contribution.AcademicYear.FinalClosureDate</p>
-                            <a asp-action="Details" class="card-action-button" asp-route-id="@contribution.ContributionID">Submit</a>
+                            <a asp-action="Details" class="card-action-button" asp-route-id="@contribution.ContributionID">View Details</a>
                         </div>
                     </div>
                 </div>

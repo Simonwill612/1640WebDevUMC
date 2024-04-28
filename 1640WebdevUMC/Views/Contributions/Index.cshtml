@@ -1,65 +1,13 @@
 ﻿@model IEnumerable<_1640WebDevUMC.Models.Contribution>
 
 @{
-    ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/AdminLayout.cshtml";
+    ViewData["Title"] = "Student";
+    Layout = "~/Views/Shared/MarketingCoordinatorLayout.cshtml";
+    var currentUserEmail = User.Identity.Name; // Get the current user's email
 }
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        padding: 20px;
-    }
 
-    h1 {
-        margin-bottom: 20px;
-    }
 
-    .btn-danger {
-        color: #fff;
-        background-color: #dc3545;
-        border-color: #dc3545;
-    }
-
-        .btn-danger:hover {
-            color: #fff;
-            background-color: #c82333;
-            border-color: #bd2130;
-        }
-
-    .table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 20px;
-    }
-
-    th, td {
-        padding: 8px;
-        text-align: left;
-        border-bottom: 1px solid #dee2e6;
-    }
-
-    th {
-        background-color: #f2f2f2;
-    }
-
-    tr:hover {
-        background-color: #f8f9fa;
-    }
-
-    .action-column {
-        width: 100px;
-    }
-
-    .tag-a {
-        color: white;
-    }
-
-        .tag-a:hover {
-            color: white;
-        }
-</style>
-
-<h1 style="margin-left: -46px;">Management Contribute</h1>
+<h1 style="margin-left: -46px;">Management Contributions</h1>
 <p>
     <a href="/Contributions/Create" class="btn btn-primary" style="margin-left: -44px;">Create new Contributions</a>
 </p>
@@ -76,7 +24,7 @@
                         <th scope="col">Content</th>
                         <th scope="col">ApplicationUser</th>
                         <th scope="col">Course</th>
-                        <th scope="col">Status</th> <!-- Thêm cột Status -->
+                        <th scope="col">Status</th> <!-- Add Status column -->
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
@@ -107,9 +55,9 @@
                                 }
                             </td>
                             <td>
-                                <button class="btn btn-danger">  <a class="tag-a" asp-action="Edit" asp-route-id="@item.ContributionID">Edit</a></button>
-                                <button class="btn btn-danger"><a class="tag-a" asp-action="Details" asp-route-id="@item.ContributionID">Details</a></button>
-                                <button class="btn btn-danger"> <a class="tag-a" asp-action="Delete" asp-route-id="@item.ContributionID">Delete</a></button>
+                                <button class="btn btn-danger">  <a class="tag-a" asp-action="Edit" asp-route-id="@item.ContributionID" style="color:aliceblue">Edit</a></button>
+                                <button class="btn btn-danger"><a class="tag-a" asp-action="Details" asp-route-id="@item.ContributionID" style="color:aliceblue">Details</a></button>
+                                <button class="btn btn-danger"> <a class="tag-a" asp-action="Delete" asp-route-id="@item.ContributionID" style="color:aliceblue">Delete</a></button>
                             </td>
                         </tr>
                     }

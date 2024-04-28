@@ -6,9 +6,12 @@ using _1640WebDevUMC.Models;
 using System.IO.Compression;
 using System.Net;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace _1640WebDevUMC.Controllers
 {
+    [Authorize(Roles = "Marketing Coordinator,Marketing Manager")]
+
     public class ContributionsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -32,7 +35,35 @@ namespace _1640WebDevUMC.Controllers
                 .ToListAsync();
             return View(contributions);
         }
+        public async Task<IActionResult> GetFileCountByUpdateTime()
+        {
+            var fileCountByUpdateTime = await _context.Files
+                .GroupBy(f => f.UploadTime.Date)
+                .Select(g => new { Date = g.Key, Count = g.Count() })
+                .ToListAsync();
+            return Json(fileCountByUpdateTime);
+        }
+        public async Task<IActionResult> GetCommentCount()
+        {
+            var commentCount = await _context.Comments.CountAsync();
+            return Json(commentCount);
+        }
 
+        public async Task<IActionResult> GetUserCount()
+        {
+            var userCount = await _context.Users.CountAsync();
+            return Json(userCount);
+        }
+
+        public async Task<IActionResult> GetIsPublicSummary()
+        {
+            var isPublicSummary = await _context.Contributions
+                .GroupBy(c => c.IsPublic)
+                .Select(g => new { IsPublic = g.Key, Count = g.Count() })
+                .ToListAsync();
+
+            return Json(isPublicSummary);
+        }
         // Other actions...
 
         // Helper method to check if a contribution is public
@@ -52,40 +83,41 @@ namespace _1640WebDevUMC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SetPublic(List<string> fileIds)
+        public async Task<IActionResult> SetPublic(string fileId, bool makePublic, string contributionId)
         {
-            if (fileIds == null || fileIds.Count == 0)
+            if (fileId == null || contributionId == null)
             {
-                // Handle case where no files are selected
-                return RedirectToAction("Details", "Contributions"); // Redirect to appropriate action
+                // Handle when data is invalid
+                return RedirectToAction("Details", "Contributions", new { id = contributionId });
             }
 
-            foreach (var fileId in fileIds)
+            var file = await _context.Files.FindAsync(fileId);
+            if (file != null)
             {
-                var file = await _context.Files.FindAsync(fileId);
-                if (file != null)
-                {
-                    // Set the file as public
-                    file.IsPublic = true;
+                // Update the public/private status of the file
+                file.IsPublic = makePublic;
 
-                    // Set comments as public as well if needed
-                    if (file.Comments != null)
+                // Update public/private status of comments if necessary
+                if (file.Comments != null)
+                {
+                    foreach (var comment in file.Comments)
                     {
-                        foreach (var comment in file.Comments)
-                        {
-                            comment.IsPublic = true;
-                        }
+                        comment.IsPublic = makePublic;
                     }
                 }
+
+                // Save changes to the database
+                await _context.SaveChangesAsync();
             }
 
-            // Save changes to the database
-            await _context.SaveChangesAsync();
-
-            // Redirect back to the index page or any other appropriate page
-            return RedirectToAction("Index", "Contributions");
+            // Redirect to the contribution detail page
+            return RedirectToAction("Details", "Contributions", new { id = contributionId });
         }
 
+
+
+
+        // GET: Contributions/Details/5
         // GET: Contributions/Details/5
         public async Task<IActionResult> Details(string id)
         {
@@ -97,14 +129,20 @@ namespace _1640WebDevUMC.Controllers
             var contribution = await _context.Contributions
                 .Include(c => c.AcademicYear)
                 .Include(c => c.ApplicationUser)
-                .Include(c => c.Comments) // Include comments
-                .Include(c => c.Files) // Include files
+                .Include(c => c.Comments)
+                .Include(c => c.Files)
                 .FirstOrDefaultAsync(m => m.ContributionID == id);
 
             if (contribution == null)
             {
                 return NotFound();
             }
+
+            // Check to see if there are any comments without email or "N/A" email
+            var hasNonNAComments = contribution.Comments.Any(c => !string.IsNullOrEmpty(c.Email) && c.Email != "N/A");
+
+            // Only pass this variable to the view if there is at least one comment without an email or the email is not "N/A"
+            ViewData["HasNonNAComments"] = hasNonNAComments;
 
             return View(contribution);
         }
@@ -134,6 +172,8 @@ namespace _1640WebDevUMC.Controllers
             ViewData["IsPublicOptions"] = new SelectList(new[] { new { Value = true, Text = "Yes" }, new { Value = false, Text = "No" } }, "Value", "Text", contribution.IsPublic);
             return View(contribution);
         }
+
+
 
 
         // GET: Contributions/Edit/5
@@ -192,7 +232,6 @@ namespace _1640WebDevUMC.Controllers
         }
 
 
-        // GET: Contributions/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -204,12 +243,27 @@ namespace _1640WebDevUMC.Controllers
                 .Include(c => c.AcademicYear)
                 .Include(c => c.ApplicationUser)
                 .FirstOrDefaultAsync(m => m.ContributionID == id);
+
             if (contribution == null)
             {
                 return NotFound();
             }
 
-            return View(contribution);
+            // Delete all files related to the article
+            _context.Files.RemoveRange(contribution.Files);
+
+            // Delete all comments related to the article
+            foreach (var file in contribution.Files)
+            {
+                _context.Comments.RemoveRange(file.Comments);
+            }
+
+            // Delete posts from database
+            _context.Contributions.Remove(contribution);
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
 
         // POST: Contributions/Delete/5
@@ -249,10 +303,10 @@ namespace _1640WebDevUMC.Controllers
                 return NotFound();
             }
 
-            // Đường dẫn đến file trong wwwroot
+            // Path to file in wwwroot
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", file.FilePath.TrimStart('/'));
 
-            // Đọc nội dung của file
+            // Read the content of the file
             var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
 
             return File(fileBytes, "application/octet-stream", file.FileName);
@@ -265,13 +319,13 @@ namespace _1640WebDevUMC.Controllers
                 return NotFound();
             }
 
-            // Tạo danh sách các đường dẫn của các file
+            // Create a list of paths of files
             var filePaths = files.Select(f => f.FilePath).ToList();
 
-            // Tạo tên file zip
+            // Create zip file name
             var zipFileName = $"contribution_{id}_files.zip";
 
-            // Tạo đường dẫn tạm thời cho file zip
+            // Create a temporary path for the zip file
             var tempZipFilePath = Path.GetTempFileName();
 
             using (var zipArchive = new ZipArchive(new FileStream(tempZipFilePath, FileMode.Create), ZipArchiveMode.Create))
@@ -289,57 +343,52 @@ namespace _1640WebDevUMC.Controllers
                 }
             }
 
-            // Đọc file zip tạm thời
+            // Read temporary zip file
             var fileBytes = await System.IO.File.ReadAllBytesAsync(tempZipFilePath);
 
-            // Xóa file zip tạm thời
+            // Delete temporary zip file
             System.IO.File.Delete(tempZipFilePath);
 
-            // Trả về file zip để tải về
+            // Returns the zip file to download
             return File(fileBytes, "application/zip", zipFileName);
         }
-
 
         [HttpPost]
         public async Task<IActionResult> AddComment(string contributionId, string fileId, string content)
         {
-            // Check if fileId is provided
-            if (string.IsNullOrEmpty(fileId))
+            if (string.IsNullOrEmpty(fileId) || string.IsNullOrEmpty(contributionId))
             {
-                // Handle the case where fileId is not provided
-                return BadRequest("File ID is required for adding a comment.");
+                return BadRequest("File ID and Contribution ID are required for adding a comment.");
             }
 
-            // Tìm contribution bằng ID
             var contribution = await _context.Contributions.FindAsync(contributionId);
             if (contribution == null)
             {
                 return NotFound();
             }
 
-            // Lấy email của người dùng từ contribution
-            var userEmail = contribution.Email;
+            var file = await _context.Files.FindAsync(fileId);
+            if (file == null || file.ContributionID != contributionId)
+            {
+                return BadRequest("Invalid file ID or contribution ID.");
+            }
 
-            // Tạo mới một comment
             var comment = new Comment
             {
                 CommentID = $"{contributionId}_{Guid.NewGuid().ToString()}",
                 Content = content,
                 CommentDate = DateTime.Now,
                 FileID = fileId,
-                Email = userEmail,
-                ContributionID = contributionId
+                Email = contribution.Email, // Use contribution email
+                ContributionID = contributionId,
+                IsPublic = file.IsPublic
             };
-            ViewData["Email"] = new SelectList(_context.Users, "Id", "Email");
 
-            // Thêm comment vào database
             _context.Comments.Add(comment);
             await _context.SaveChangesAsync();
 
-            // Redirect về trang index hoặc trang chi tiết contribution tùy theo logic của bạn
             return RedirectToAction("Details", "Contributions", new { id = contributionId });
         }
-
         // POST: Contributions/DeleteComment
         [HttpPost]
         [ValidateAntiForgeryToken]

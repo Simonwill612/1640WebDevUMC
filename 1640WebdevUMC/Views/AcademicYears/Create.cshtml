@@ -4,135 +4,45 @@
     ViewData["Title"] = "Create";
 }
 
-<style>
-    .emailconfirm {
-        display: flex;
-        gap: 30px;
-    }
-    /* Định dạng chung cho form */
-    form {
-        max-width: 400px;
-        border-radius: 10px;
-        padding: 20px;
-        background-color: #f9f9f9;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        margin: auto;
-        margin-top: 100px;
-    }
-
-        /* Định dạng cho các nhãn và ô input */
-        form div {
-            margin-bottom: 15px;
-        }
 
 
-        form label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        form input[type="text"],
-        form input[type="password"],
-        form select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        /* Định dạng cho các nút */
-
-        /* Định dạng cho nút quay lại */
-        form div a {
-            display: inline-block;
-            background-color: #f44336;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 4px;
-        }
-
-            form div a:hover {
-                background-color: #d32f2f;
-            }
-
-    /* Định dạng cho các thông báo lỗi */
-    span.field-validation-error {
-        color: #d9534f;
-    }
-
-    /* Định dạng cho các select box */
-    form select {
-        height: auto;
-    }
-
-    /* Định dạng cho các div chứa nút và select */
-    form div:nth-last-child(-n+2) {
-        text-align: right;
-    }
-
-    /* Định dạng cho thẻ h2 */
-    h2 {
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    /* Định dạng cho thẻ div chứa nút quay lại */
-    div a {
-        display: block;
-        text-align: center;
-        margin-top: 20px;
-    }
-
-    .button-flex {
-        display: flex;
-        justify-content: space-between;
-    }
-    h3{
-        text-align: center;
-    }
-</style>
-
-
+<body style=" max-width: 400px; border-radius: 10px; padding: 20px; background-color: #f9f9f9; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); margin: auto; margin-top: 100px;">
 <form asp-action="Create">
-    <h3>Create Academic</h3>
+    <h3 style="text-align: center;">Create Academic</h3>
     <hr />
 
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div asp-validation-summary="ModelOnly" class="text-danger" style=" margin-bottom: 15px;font-weight: bold;"></div>
     <div class="form-group">
-        <label asp-for="AcademicYearID" class="control-label"></label>
+        <label asp-for="AcademicYearID" class="control-label" style="margin-bottom: 5px;font-weight: bold;">Years</label>
         <input asp-for="AcademicYearID" class="form-control" />
         <span asp-validation-for="AcademicYearID" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="UploadDate" class="control-label"></label>
+            <label asp-for="UploadDate" class="control-label" style="margin-bottom: 5px;font-weight: bold;">Upload Date</label>
         <input asp-for="UploadDate" class="form-control" />
         <span asp-validation-for="UploadDate" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="ClosureDate" class="control-label"></label>
+            <label asp-for="ClosureDate" class="control-label" style="margin-bottom: 5px;font-weight: bold;">Closure Date</label>
         <input asp-for="ClosureDate" class="form-control" />
         <span asp-validation-for="ClosureDate" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="FinalClosureDate" class="control-label"></label>
+            <label asp-for="FinalClosureDate" class="control-label" style="margin-bottom: 5px;font-weight: bold;">Final Closure Date</label>
         <input asp-for="FinalClosureDate" class="form-control" />
         <span asp-validation-for="FinalClosureDate" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="FacultyID" class="control-label"></label>
+            <label asp-for="FacultyID" class="control-label" style="margin-bottom: 5px;font-weight: bold;">Course</label>
         <select asp-for="FacultyID" class="form-control" asp-items="ViewBag.FacultyID"></select>
     </div>
     <div class="button-flex">
-        <a class="btn btn-primary" asp-action="Index">Back to List</a>
+            <a class="btn btn-primary" asp-action="Index" style="margin-right: 154px;margin-top: 20px;">Back to List</a>
 
-        <input type="submit" value="Create" class="btn btn-danger" />
+            <input type="submit" value="Create" style="margin-top: 20px; background-color: #0b5ed7;border-color: #0a58ca;" class="btn btn-danger" />
     </div>
 </form>
-
+</body>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

@@ -1,11 +1,13 @@
 ﻿using _1640WebDevUMC.Data;
 using _1640WebDevUMC.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+[Authorize(Roles = "Admin")]
 public class AdminDashboardController : Controller
 {
     private readonly UserManager<ApplicationUser> _userManager;
@@ -30,7 +32,7 @@ public class AdminDashboardController : Controller
         {
             var roles = await _userManager.GetRolesAsync(user);
 
-            // Kiểm tra nếu người dùng không thuộc vai trò "Guest" hoặc "Admin"
+            // Check if the user does not belong to the "Guest" or "Admin" role
             if (!roles.Contains("Guest") && !roles.Contains("Admin"))
             {
                 var faculties = _context.Faculties.Where(f => f.Users.Any(u => u.Id == user.Id)).Select(f => f.FacultyName).ToList(); // Get the faculty names
@@ -75,159 +77,155 @@ public class AdminDashboardController : Controller
 
     // GET: /Account/Edit
     // GET: /Account/Edit
-    public async Task<IActionResult> Edit(string id)
-    {
-        var user = await _userManager.FindByIdAsync(id);
-        if (user == null)
-        {
-            return NotFound();
-        }
-
-        var userRoles = await _userManager.GetRolesAsync(user);
-
-        // Lấy danh sách tất cả các vai trò
-        var allRoles = _roleManager.Roles
-            .Where(role => role.Name != "Guest") // Loại bỏ vai trò "Guest"
-            .Select(r => r.Name)
-            .ToList();
-
-        var faculties = _context.Faculties.Where(f => f.Users.Any(u => u.Id == user.Id)).Select(f => f.FacultyName).ToList(); // Get the faculty names
-        var allFaculties = _context.Faculties.Select(f => f.FacultyName).Distinct().ToList(); // Get all distinct faculties
-
-        var model = new UserViewModel
-        {
-            Id = user.Id,
-            Email = user.Email,
-            EmailConfirmed = user.EmailConfirmed,
-            PasswordHash = user.PasswordHash,
-            Roles = userRoles,
-            AllRoles = allRoles, // Set all roles without "Guest"
-            Faculties = faculties, // Set faculties
-            AllFaculties = allFaculties // Set all distinct faculties
-        };
-
-        return View(model);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> EditUser(UserViewModel model)
-    {
-        var user = await _userManager.FindByIdAsync(model.Id);
-        if (user == null)
-        {
-            return NotFound();
-        }
-
-        // Update the user properties
-        user.Email = model.Email;
-        user.EmailConfirmed = model.EmailConfirmed;
-
-        // Update the user password
-        if (!string.IsNullOrEmpty(model.PasswordHash))
-        {
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var result = await _userManager.ResetPasswordAsync(user, token, model.PasswordHash);
-
-            if (!result.Succeeded)
+       public async Task<IActionResult> Edit(string id)
             {
-                AddErrors(result);
-                return View(model);
-            }
-        }
-
-        // Get the current user roles
-        var currentRoles = await _userManager.GetRolesAsync(user);
-
-        // Determine roles to be added (roles in the model that are not in the current roles)
-        var rolesToAdd = model.Roles.Except(currentRoles);
-
-        // Determine roles to be removed (roles in the current roles that are not in the model)
-        var rolesToRemove = currentRoles.Except(model.Roles);
-
-        // Add new roles
-        foreach (var role in rolesToAdd)
-        {
-            var addResult = await _userManager.AddToRoleAsync(user, role);
-            if (!addResult.Succeeded)
-            {
-                AddErrors(addResult);
-                return View(model);
-            }
-        }
-
-        // Remove roles not in the model
-        foreach (var role in rolesToRemove)
-        {
-            var removeResult = await _userManager.RemoveFromRoleAsync(user, role);
-            if (!removeResult.Succeeded)
-            {
-                AddErrors(removeResult);
-                return View(model);
-            }
-        }
-
-        // Get the current user faculties
-        var currentFaculties = _context.Faculties.Where(f => f.Users.Any(u => u.Id == user.Id)).Select(f => f.FacultyName).ToList();
-
-        // Determine faculties to be added (faculties in the model that are not in the current faculties)
-        var facultiesToAdd = model.Faculties.Except(currentFaculties);
-
-        // Determine faculties to be removed (faculties in the current faculties that are not in the model)
-        var facultiesToRemove = currentFaculties.Except(model.Faculties);
-
-        // Add new faculties
-        foreach (var faculty in facultiesToAdd)
-        {
-            var facultyInDb = _context.Faculties.FirstOrDefault(f => f.FacultyName == faculty);
-
-            if (facultyInDb != null)
-            {
-                if (facultyInDb.Users == null)
+                var user = await _userManager.FindByIdAsync(id);
+                if (user == null)
                 {
-                    facultyInDb.Users = new List<ApplicationUser>();
+                    return NotFound();
                 }
-                facultyInDb.Users.Add(user);
+
+                var userRoles = await _userManager.GetRolesAsync(user);
+
+            // Get a list of all roles
+            var allRoles = _roleManager.Roles
+                    .Where(role => role.Name != "Guest") // Only take the role "Guest"
+                    .Select(r => r.Name)
+                    .ToList();
+
+                var faculties = _context.Faculties.Where(f => f.Users.Any(u => u.Id == user.Id)).Select(f => f.FacultyName).ToList(); // Get the faculty names
+                var allFaculties = _context.Faculties.Select(f => f.FacultyName).Distinct().ToList(); // Get all distinct faculties
+
+                var model = new UserViewModel
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    EmailConfirmed = user.EmailConfirmed,
+                    PasswordHash = user.PasswordHash,
+                    Roles = userRoles,
+                    AllRoles = allRoles, // Set all roles to "Guest"
+                    Faculties = faculties, // Set faculties
+                    AllFaculties = allFaculties, // Set all distinct faculties
+                    NumberOfContributions = user.NumberOfContributions // Set NumberOfContributions
+                };
+
+                return View(model);
             }
 
-        }
-
-        // Remove faculties not in the model
-        foreach (var faculty in facultiesToRemove)
-        {
-            var facultyInDb = _context.Faculties.FirstOrDefault(f => f.FacultyName == faculty);
-            if (facultyInDb != null)
+            [HttpPost]
+            public async Task<IActionResult> EditUser(UserViewModel model)
             {
-                facultyInDb.Users.Remove(user);
+                var user = await _userManager.FindByIdAsync(model.Id);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                // Update the user properties
+                user.Email = model.Email;
+                user.EmailConfirmed = model.EmailConfirmed;
+                user.NumberOfContributions = model.NumberOfContributions; // Update NumberOfContributions
+
+                // Update the user password
+                if (!string.IsNullOrEmpty(model.PasswordHash))
+                {
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    var result = await _userManager.ResetPasswordAsync(user, token, model.PasswordHash);
+
+                    if (!result.Succeeded)
+                    {
+                        AddErrors(result);
+                        return View(model);
+                    }
+                }
+
+                // Get the current user roles
+                var currentRoles = await _userManager.GetRolesAsync(user);
+
+                // Determine roles to be added (roles in the model that are not in the current roles)
+                var rolesToAdd = model.Roles.Except(currentRoles);
+
+                // Determine roles to be removed (roles in the current roles that are not in the model)
+                var rolesToRemove = currentRoles.Except(model.Roles);
+
+                // Add new roles
+                foreach (var role in rolesToAdd)
+                {
+                    var addResult = await _userManager.AddToRoleAsync(user, role);
+                    if (!addResult.Succeeded)
+                    {
+                        AddErrors(addResult);
+                        return View(model);
+                    }
+                }
+
+                // Remove roles not in the model
+                foreach (var role in rolesToRemove)
+                {
+                    var removeResult = await _userManager.RemoveFromRoleAsync(user, role);
+                    if (!removeResult.Succeeded)
+                    {
+                        AddErrors(removeResult);
+                        return View(model);
+                    }
+                }
+
+                // Get the current user faculties
+                var currentFaculties = _context.Faculties.Where(f => f.Users.Any(u => u.Id == user.Id)).Select(f => f.FacultyName).ToList();
+
+                // Determine faculties to be added (faculties in the model that are not in the current faculties)
+                var facultiesToAdd = model.Faculties.Except(currentFaculties);
+
+                // Determine faculties to be removed (faculties in the current faculties that are not in the model)
+                var facultiesToRemove = currentFaculties.Except(model.Faculties);
+
+                // Add new faculties
+                foreach (var faculty in facultiesToAdd)
+                {
+                    var facultyInDb = _context.Faculties.FirstOrDefault(f => f.FacultyName == faculty);
+
+                    if (facultyInDb != null)
+                    {
+                        if (facultyInDb.Users == null)
+                        {
+                            facultyInDb.Users = new List<ApplicationUser>();
+                        }
+                        facultyInDb.Users.Add(user);
+                    }
+
+                }
+
+                // Remove faculties not in the model
+                foreach (var faculty in facultiesToRemove)
+                {
+                    var facultyInDb = _context.Faculties.FirstOrDefault(f => f.FacultyName == faculty);
+                    if (facultyInDb != null)
+                    {
+                        facultyInDb.Users.Remove(user);
+                    }
+                }
+
+                // Save changes
+                var updateResult = await _userManager.UpdateAsync(user);
+                if (!updateResult.Succeeded)
+                {
+                    AddErrors(updateResult);
+                    return View(model);
+                }
+
+                await _context.SaveChangesAsync(); // Save changes in the database
+
+                return RedirectToAction("Index");
             }
-        }
 
-        // Save changes
-        var updateResult = await _userManager.UpdateAsync(user);
-        if (!updateResult.Succeeded)
-        {
-            AddErrors(updateResult);
-            return View(model);
-        }
+            private void AddErrors(IdentityResult result)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
 
-        await _context.SaveChangesAsync(); // Save changes in the database
-
-        return RedirectToAction("Index");
-    }
-
-    private void AddErrors(IdentityResult result)
-    {
-        foreach (var error in result.Errors)
-        {
-            ModelState.AddModelError(string.Empty, error.Description);
-        }
-    }
-
-
-
-
-
-
-    // POST: /Account/Delete
     // GET: /Account/Delete
     public async Task<IActionResult> Delete(string id)
     {
@@ -237,20 +235,26 @@ public class AdminDashboardController : Controller
             return NotFound();
         }
 
-        var userDetails = new UserViewModel
+        var userViewModel = new UserViewModel
         {
             Id = user.Id,
             Email = user.Email,
             EmailConfirmed = user.EmailConfirmed,
             PasswordHash = user.PasswordHash,
-            Roles = await _userManager.GetRolesAsync(user)
+            Roles = await _userManager.GetRolesAsync(user),
+            Faculties = _context.Faculties
+                .Where(f => f.Users.Any(u => u.Id == user.Id))
+                .Select(f => f.FacultyName)
+                .ToList()
         };
 
-        return View(userDetails);
+        return View(userViewModel);
     }
+
 
     // POST: /Account/DeleteConfirmed
     [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(string id)
     {
         var user = await _userManager.FindByIdAsync(id);
@@ -259,24 +263,15 @@ public class AdminDashboardController : Controller
             return NotFound();
         }
 
-        var currentUser = await _userManager.GetUserAsync(User);
-        if (currentUser == null)
-        {
-            return BadRequest("No current user found");
-        }
-
-        if (currentUser.Id == user.Id)
-        {
-            return BadRequest("Cannot delete the currently logged in admin account");
-        }
-
         var result = await _userManager.DeleteAsync(user);
         if (!result.Succeeded)
         {
-            return BadRequest("Failed to delete user");
+            AddErrors(result);
+            return RedirectToAction("Index");
         }
 
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction("Index");
     }
+
 
 }

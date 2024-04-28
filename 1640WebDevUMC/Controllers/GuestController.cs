@@ -1,14 +1,16 @@
 ﻿using _1640WebDevUMC.Data;
 using _1640WebDevUMC.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace _1640WebDevUMC.Controllers
 {
+    [Authorize(Roles = "Guest")]
     public class GuestController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -45,6 +47,7 @@ namespace _1640WebDevUMC.Controllers
 
             return View(contributions);
         }
+
         public async Task<IActionResult> Details(string id)
         {
             if (id == null)
@@ -53,8 +56,10 @@ namespace _1640WebDevUMC.Controllers
             }
 
             var contribution = await _context.Contributions
+                .Include(c => c.ApplicationUser)
                 .Include(c => c.Files)
-                .Include(c => c.Comments)
+                    .ThenInclude(f => f.Comments)
+                        .ThenInclude(c => c.ApplicationUser)
                 .FirstOrDefaultAsync(c => c.ContributionID == id);
 
             if (contribution == null)
@@ -62,22 +67,71 @@ namespace _1640WebDevUMC.Controllers
                 return NotFound();
             }
 
-            // Lấy thông tin người dùng hiện tại
+            // Get current user information
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
                 return NotFound();
             }
 
-            // Lấy files liên quan đến contribution cho người dùng hiện tại
-            contribution.Files = await _context.Files
-                .Where(f => f.ContributionID == contribution.ContributionID && f.StudentEmail == currentUser.Email)
-                .ToListAsync();
+            if (contribution.IsPublic)
+            {
+                // If the post is public, display all public files and comments of each file
+                // Includes both unlisted and public comments
+                foreach (var file in contribution.Files)
+                {
+                    if (file.IsPublic)
+                    {
+                        // Get all comments of the file
+                        var allComments = file.Comments.ToList();
+                        // If the post is public, include both unlisted and public comments of the file
+                        file.Comments = allComments.Where(c => c.FileID == file.FileID && (!c.IsPublic || c.IsPublic && contribution.IsPublic)).ToList();
+                    }
+                }
+            }
+            else
+            {
+                // If the post is private, only show the current user's unlisted files and comments
+                contribution.Files = contribution.Files.Where(f => !f.IsPublic && f.StudentEmail == currentUser.Email).ToList();
+                foreach (var file in contribution.Files)
+                {
+                    file.Comments = file.Comments.Where(c => !c.IsPublic && c.FileID == file.FileID && c.Email == currentUser.Email).ToList();
+                }
+            }
 
             return View(contribution);
         }
 
-        // Phương thức để tải xuống một file
+        // GET: /Account/Edit
+        // GET: /Account/Edit
+        // GET: /Account/Edit
+
+
+        public async Task<IActionResult> UpdateContributions(string id, int newContributions)
+        {
+            // Find the user
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            // Update NumberOfContributions
+            user.NumberOfContributions = newContributions;
+
+            // Save changes
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                // Handle errors...
+            }
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
+        }
+
+
         public async Task<IActionResult> DownloadFile(string id)
         {
             if (id == null)
@@ -91,10 +145,7 @@ namespace _1640WebDevUMC.Controllers
                 return NotFound();
             }
 
-            // Đường dẫn đến file trong wwwroot
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", file.FilePath.TrimStart('/'));
-
-            // Đọc nội dung của file
             var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
 
             return File(fileBytes, "application/octet-stream", file.FileName);

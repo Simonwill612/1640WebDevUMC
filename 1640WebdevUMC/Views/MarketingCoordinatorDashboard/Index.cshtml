@@ -1,74 +1,111 @@
-﻿@model IEnumerable<_1640WebDevUMC.Models.Contribution>
-
-@{
-    ViewData["Title"] = "Student";
-    Layout = "~/Views/Shared/Navbar_Layout.cshtml";
-    var currentUserEmail = User.Identity.Name; // Lấy email của người dùng hiện tại
+﻿@{
+    Layout = "~/Views/Shared/MarketingCoordinatorLayout.cshtml";
 }
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <link href="./css/responsive.css" rel="stylesheet">
-</head>
-
-<body>
     <style>
-
-
-    </style>
-    <div class="text-center">
-        <h1 class="display-4">Welcome</h1>
-        <p> <a href="https://www.gre.ac.uk/">University of Greenwich</a></p>
-    </div>
-    <div class="mt-5">
-        <h1>Contributions</h1>
-    </div>
-    <div class="rows">
-        @foreach (var contribution in Model)
-        {
-            <div class="card-wrapper">
-                <div class="card">
-                    <img src="https://cms.greenwich.edu.vn/pluginfile.php/1/theme_adaptable/frontpagerendererdefaultimage/1698976651/edu-survey-landing-image.jpg" class="card-media" />
-                    <div class="card-details">
-                        <h2 class="card-head">@contribution.Title</h2>
-                        <p>@contribution.Content</p>
-                        <p><strong>Faculty ID:</strong> @contribution.AcademicYear.FacultyID</p>
-                        <p><strong>Faculty Name:</strong> @contribution.AcademicYear.Faculty.FacultyName</p>
-                        <p><strong>Email:</strong> @contribution.ApplicationUser.Email</p>
-                        <p><strong>Start Date:</strong> @contribution.AcademicYear.UploadDate</p>
-                        <p><strong>Closed Date:</strong> @contribution.AcademicYear.ClosureDate</p>
-                        <p><strong>Final Closed Date:</strong> @contribution.AcademicYear.FinalClosureDate</p>
-                        <a asp-action="Details" class="card-action-button" asp-route-id="@contribution.ContributionID">Submit</a>
-                    </div>
-                </div>
-            </div>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
         }
-    </div>
 
-    <div class="container-fluid p-0 mb-5">
-        <div class="owl-carousel header-carousel position-relative">
-            <div class="owl-carousel-item position-relative">
-                <img class="img-fluid" src="~/img/bg-1.jpg" alt="">
-                <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center" style="background: rgba(24, 29, 56, .7);">
-                    <div class="container">
-                        <div class="row justify-content-start">
-                            <div class="col-sm-10 col-lg-8">
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .btn-danger {
+            color: #fff;
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+            .btn-danger:hover {
+                color: #fff;
+                background-color: #c82333;
+                border-color: #bd2130;
+            }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .action-column {
+            width: 100px;
+        }
+
+        .tag-a {
+            color: white;
+        }
+
+            .tag-a:hover {
+                color: white;
+            }
+    </style>
+</head>
+<body>
+    <h1 style="margin-left: -30px;">Guest Management</h1>
+    <p>
+        <a href="/Identity/Account/Register" class="btn btn-primary" style="margin-left: -30px;">Create new account</a>
+    </p>
+    <div class="container-fluid pt-4 px-4">
+        <div class="bg-light text-center rounded p-4" style="margin-left: -55px;">
+            <div class="d-flex align-items-center justify-content-between mb-4">
             </div>
-            <div class="owl-carousel-item position-relative">
-                <img class="img-fluid" src="~/img/bg-2.jpg" alt="">
-                <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center" style="background: rgba(24, 29, 56, .7);">
-                    <div class="container">
-                        <div class="row justify-content-start">
-                            <div class="col-sm-10 col-lg-8">
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="table-responsive">
+                <table class="table text-start align-middle table-bordered table-hover mb-0">
+                    <thead>
+                        <tr class="text-dark">
+                            <th scope="col">ID</th>
+                            <th scope="col">EMAIL</th>
+                            <th scope="col">EMAIL CONFIRMED</th>
+                            <th scope="col">PASSWORD</th>
+                            <th scope="col">ROLE</th>
+                            <th scope="col">FACULTY</th> <!-- New column for Faculty -->
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            @if (!user.Roles.Contains(""))
+                            {
+                                <tr>
+                                    <td>@user.Id</td>
+                                    <td>@user.Email</td>
+                                    <td>@user.EmailConfirmed</td>
+                                    <td>*********</td>
+                                    <td>@string.Join(", ", user.Roles)</td>
+                                    <td>@string.Join(", ", user.Faculties)</td>
+                                    <td style="display: flex; gap: 5px;">
+                                        <button class="btn btn-danger"><a class="tag-a" asp-action="Edit" asp-route-id="@user.Id">Edit</a></button>
+                                        <button class="btn btn-danger"><a class="tag-a" asp-action="Details" asp-route-id="@user.Id">Details</a></button>
+                                        <button class="btn btn-danger"><a class="tag-a" asp-action="Delete" asp-route-id="@user.Id">Delete</a></button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </body>
+
 </html>

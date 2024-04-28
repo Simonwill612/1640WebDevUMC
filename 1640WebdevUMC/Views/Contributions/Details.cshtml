@@ -26,36 +26,13 @@
         background: #d1d1d1;
     }
 </style>
+
 <h1>Details</h1>
 
 <div>
     <h4>Contribution</h4>
     <hr />
     <dl class="row">
-@*         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Content)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Content)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ApplicationUser)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ApplicationUser.Email)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.AcademicYear)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.AcademicYear.AcademicYearID)
-        </dd> *@
         <dt class="col-sm-2">
             Files
         </dt>
@@ -67,7 +44,7 @@
                         <th>PDF File</th>
                         <th>Image File</th>
                         <th>Comments</th>
-                        <th>Public File</th>
+                        <th>Public/Private</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -79,7 +56,7 @@
                                 @foreach (var file in fileGroup.Where(f => System.IO.Path.GetExtension(f.FilePath) == ".pdf"))
                                 {
                                     <a href='@Url.Content(file.FilePath)'>@(System.IO.Path.GetFileName(file.FilePath))</a>
-                                    <a asp-action="DownloadFile" asp-route-id="@file.FileID">Download</a>
+                                    <a asp-action="DownloadFile" asp-route-id="@file.FileID" class="btn btn-danger">Download</a>
                                 }
                                 @if (!fileGroup.Any(f => System.IO.Path.GetExtension(f.FilePath) == ".pdf"))
                                 {
@@ -90,7 +67,7 @@
                                 @foreach (var file in fileGroup.Where(f => System.IO.Path.GetExtension(f.FilePath) == ".png"))
                                 {
                                     <a href='@Url.Content(file.FilePath)'>@(System.IO.Path.GetFileName(file.FilePath))</a>
-                                    <a asp-action="DownloadFile" asp-route-id="@file.FileID">Download</a>
+                                    <a asp-action="DownloadFile" asp-route-id="@file.FileID" class="btn btn-danger">Download</a>
                                 }
                                 @if (!fileGroup.Any(f => System.IO.Path.GetExtension(f.FilePath) == ".png"))
                                 {
@@ -104,17 +81,20 @@
                                     {
                                         foreach (var comment in file.Comments)
                                         {
-                                            <div class="card my-3">
-                                                <div class="card-body">
-                                                    <p><strong>Email:</strong> @comment.ApplicationUser.Email</p>
-                                                    <p><strong>Content:</strong> @comment.Content</p>
-                                                    <p><strong>Comment Date:</strong> @comment.CommentDate</p>
-                                                    <form asp-action="DeleteComment" method="post">
-                                                        <input type="hidden" name="commentId" value="@comment.CommentID" />
-                                                        <button type="submit" class="btn btn-danger">Delete comment</button>
-                                                    </form>
+                                            if (comment.ApplicationUser != null && comment.ApplicationUser.Email != "N/A")
+                                            {
+                                                <div class="card my-3">
+                                                    <div class="card-body">
+                                                        <p><strong>Email:</strong> @comment.ApplicationUser.Email</p>
+                                                        <p><strong>Content:</strong> @comment.Content</p>
+                                                        <p><strong>Comment Date:</strong> @comment.CommentDate</p>
+                                                        <form asp-action="DeleteComment" method="post">
+                                                            <input type="hidden" name="commentId" value="@comment.CommentID" />
+                                                            <button type="submit" class="btn btn-danger">Delete comment</button>
+                                                        </form>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            }
                                         }
                                     }
                                 }
@@ -124,42 +104,45 @@
                                 }
 
                                 <!-- Add Comment Form -->
-                                @if (Model.Files.SelectMany(f => f.Comments).Count() == 0)
+                                @if (User.Identity.IsAuthenticated && (fileGroup.Any(f => System.IO.Path.GetExtension(f.FilePath) == ".pdf" || System.IO.Path.GetExtension(f.FilePath) == ".png")))
                                 {
                                     <form asp-action="AddComment" method="post">
                                         <input type="hidden" name="contributionId" value="@Model.ContributionID" />
-
-                                        @* Loop through files to include fileId for each file *@
-                                        @foreach (var group in Model.Files.GroupBy(f => f.StudentEmail))
+                                        @foreach (var file in fileGroup.Where(f => System.IO.Path.GetExtension(f.FilePath) == ".pdf" || System.IO.Path.GetExtension(f.FilePath) == ".png"))
                                         {
-                                            foreach (var file in group)
-                                            {
-                                                <input type="hidden" name="fileId" value="@file.FileID" />
-                                            }
+                                            <input type="hidden" name="fileId" value="@file.FileID" />
+                                            <div class="form-group">
+                                                <label for="commentContent_@(file.FileID)">Add Comment for @(file.FileName):</label>
+                                                <textarea class="form-control" id="commentContent_@(file.FileID)" name="content" rows="3"></textarea>
+                                            </div>
                                         }
-
-                                        <div class="form-group">
-                                            <label for="commentContent">Add Comment:</label>
-                                            <textarea class="form-control" id="commentContent" name="content" rows="3"></textarea>
-                                        </div>
                                         <button type="submit" class="btn btn-primary">Submit</button>
                                     </form>
                                 }
-
                             </td>
                             <td>
-                                <form asp-controller="Contributions" asp-action="SetPublic" method="post">
-                                    @foreach (var file in fileGroup)
+                                <!-- Displays the public/private status of the file -->
+                                @foreach (var file in fileGroup)
+                                {
+                                    @if (file.Comments != null && file.Comments.Any(c => c.ApplicationUser != null && c.ApplicationUser.Email != "N/A"))
                                     {
-                                        <div>
-                                            <label>
-                                                <input type="checkbox" name="fileIds" value="@file.FileID" />
-                                                @file.FileName
-                                            </label>
-                                        </div>
+                                        <form asp-action="SetPublic" method="post">
+                                            <input type="hidden" name="fileId" value="@file.FileID" />
+                                            <input type="hidden" name="makePublic" value="@(file.IsPublic ? "false" : "true")" />
+                                            <input type="hidden" name="contributionId" value="@Model.ContributionID" />
+                                            <button type="submit" class="btn btn-info">
+                                                @if (file.IsPublic)
+                                                {
+                                                    <span>Set Private</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>Set Public</span>
+                                                }
+                                            </button>
+                                        </form>
                                     }
-                                    <button type="submit" class="btn btn-primary">Set Public</button>
-                                </form>
+                                }
                             </td>
                         </tr>
                     }
@@ -168,6 +151,7 @@
         </dd>
     </dl>
 </div>
+
 <div>
     <a class="btn btn-dark" asp-action="Edit" asp-route-id="@Model?.ContributionID">Edit</a>
     <a class="btn btn-primary" asp-action="Index">Back to List</a>
@@ -175,3 +159,5 @@
         Download
     </a>
 </div>
+
+

@@ -201,14 +201,15 @@
                 .signup a:hover {
                     text-decoration: underline;
                 }
-        .button-flex{
-            display:flex;
-            gap:30px;
+
+        .button-flex {
+            display: flex;
+            gap: 30px;
         }
     </style>
 </head>
 <body>
-<h1>@ViewData["Title"]</h1>
+    <h1>@ViewData["Title"]</h1>
     <div class="bg-img">
         <img class="bg-img" src="~/img/bg.jpg" alt="">
         <div class="content">
@@ -221,33 +222,36 @@
                         <i class="fas fa-envelope fa-fw"></i>
                         Email
                     </label>
-                    <span asp-validation-for="Input.Email" class="text-danger">
-                    </span>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
                 </div>
-                <div class="form-floating mb-3">
+
+ @*                <div class="form-floating mb-3">
                     <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
                     <label asp-for="Input.Password">
                         <i class="fas fa-lock fa-fw"></i>
                         Password
                     </label>
-                    <span asp-validation-for="Input.Password" class="text-danger">
-                    </span>
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
                 <div class="form-floating mb-3">
                     <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
                     <label asp-for="Input.ConfirmPassword">
-                        <i class="fas fa-lock fa-fw"></i> 
+                        <i class="fas fa-lock fa-fw"></i>
                         Confirm Password
                     </label>
-                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger">
-                    </span>
-                </div>
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                </div> *@
                 <div class="form-floating mb-3">
                     <select asp-for="Input.Role" class="form-select" asp-items="@Model.Input.RolesList" aria-required="true">
                         <option disabled selected>Select Role</option>
                     </select>
-                    <span asp-validation-for="Input.Role" class="text-danger">
-                    </span>
+                    <span asp-validation-for="Input.Role" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <select asp-for="Input.Faculty" class="form-select" asp-items="@Model.Input.Faculties" aria-required="true">
+                        <option disabled selected>Select Faculty</option>
+                    </select>
+                    <span asp-validation-for="Input.Faculty" class="text-danger"></span>
                 </div>
                 <div class="button-flex">
                     <span>
@@ -255,15 +259,15 @@
                             Back to List
                         </a>
                     </span>
-                    <button id="registerSubmit" type="submit" class="btn btn-primary">
+                    <button id="registerSubmit" type="submit" class="btn btn-primary" style="margin-left: 99px;">
                         Create
                     </button>
                 </div>
             </form>
-
         </div>
         <div class="col-md-6 col-md-offset-2">
             <section>
+
                 @{
                     if ((Model.ExternalLogins?.Count ?? 0) == 0)
                     {

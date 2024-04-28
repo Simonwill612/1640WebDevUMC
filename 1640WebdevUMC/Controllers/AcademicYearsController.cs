@@ -26,6 +26,22 @@ namespace _1640WebDevUMC.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        // GET: AcademicYears/Data
+        public async Task<JsonResult> Data()
+        {
+            var academicYearsData = await _context.AcademicYears
+                .GroupBy(a => a.UploadDate.Month)
+                .Select(g => new {
+                    Month = g.Key,
+                    Count = g.Count()
+                })
+                .ToListAsync();
+
+            return Json(academicYearsData);
+        }
+
+
+
         // GET: AcademicYears/Details/5
         public async Task<IActionResult> Details(string id)
         {

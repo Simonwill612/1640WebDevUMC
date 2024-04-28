@@ -24,7 +24,7 @@ namespace _1640WebDevUMC.Models
         public string AcademicYearID { get; set; } = string.Empty;
         public virtual AcademicYear? AcademicYear { get; set; }
         public bool IsPublic { get; set; }
-
+        public DateTime UploadTime { get; set; } 
         public virtual ICollection<File> Files { get; set; } = new List<File>();
         public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }

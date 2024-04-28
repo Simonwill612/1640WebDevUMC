@@ -60,7 +60,6 @@
     <None Include="Areas\Identity\Pages\Account\Manage\TwoFactorAuthentication.cshtml" />
     <None Include="Areas\Identity\Pages\Account\Manage\_Layout.cshtml" />
     <None Include="Areas\Identity\Pages\Account\Manage\_ManageNav.cshtml" />
-    <None Include="Areas\Identity\Pages\Account\Manage\_StatusMessage.cshtml" />
     <None Include="Areas\Identity\Pages\Account\Manage\_ViewImports.cshtml" />
     <None Include="Areas\Identity\Pages\Account\Register.cshtml" />
     <None Include="Areas\Identity\Pages\Account\RegisterConfirmation.cshtml" />
@@ -73,6 +72,9 @@
     <None Include="Areas\Identity\Pages\_ValidationScriptsPartial.cshtml" />
     <None Include="Areas\Identity\Pages\_ViewImports.cshtml" />
     <None Include="Areas\Identity\Pages\_ViewStart.cshtml" />
+    <None Include="Views\Dashboard\Index.cshtml" />
+    <None Include="Views\Guest\Details.cshtml" />
+    <None Include="Views\Guest\Index.cshtml" />
     <None Include="Views\Student\Index.cshtml" />
     <None Include="Views\Student\Upload.cshtml" />
     <None Include="wwwroot\js\site.js" />
@@ -115,13 +117,6 @@
     <None Include="wwwroot\lib\jquery\dist\jquery.js" />
     <None Include="wwwroot\lib\jquery\dist\jquery.min.js" />
     <None Include="wwwroot\lib\jquery\dist\jquery.min.map" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="Views\Guest\Details.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,9 @@
+﻿@model int
+
+<h1>Choose Contributions</h1>
+
+<form asp-controller="Guest" asp-action="Index" method="get">
+    <label for="numberOfContributions">Number of Contributions:</label>
+    <input type="number" id="numberOfContributions" name="numberOfContributions" value="@Model" min="1" max="100" required>
+    <button type="submit">Submit</button>
+</form>

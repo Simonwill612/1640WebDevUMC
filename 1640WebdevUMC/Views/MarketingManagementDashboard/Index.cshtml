@@ -1,111 +1,65 @@
-﻿@{
+﻿@model IEnumerable<_1640WebDevUMC.Models.Contribution>
+
+@{
+    ViewData["Title"] = "Student";
     Layout = "~/Views/Shared/MaketingManageLayout.cshtml";
+    var currentUserEmail = User.Identity.Name; // Get the current user's email
 }
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
 
-        h1 {
-            margin-bottom: 20px;
-        }
 
-        .btn-danger {
-            color: #fff;
-            background-color: #dc3545;
-            border-color: #dc3545;
-        }
-
-            .btn-danger:hover {
-                color: #fff;
-                background-color: #c82333;
-                border-color: #bd2130;
-            }
-
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        tr:hover {
-            background-color: #f8f9fa;
-        }
-
-        .action-column {
-            width: 100px;
-        }
-
-        .tag-a {
-            color: white;
-        }
-
-            .tag-a:hover {
-                color: white;
-            }
-    </style>
-</head>
-<body>
-    <h1 style="margin-left: -46px;">Management Account</h1>
-    <p>
-        <a href="/Identity/Account/Register" class="btn btn-primary" style="margin-left: -44px;">Create new account</a>
-    </p>
-    <div class="container-fluid pt-4 px-4">
-        <div class="bg-light text-center rounded p-4" style="margin-left: -68px;">
-            <div class="d-flex align-items-center justify-content-between mb-4">
-            </div>
-            <div class="table-responsive">
-                <table class="table text-start align-middle table-bordered table-hover mb-0">
-                    <thead>
-                        <tr class="text-dark">
-                            <th scope="col">ID</th>
-                            <th scope="col">EMAIL</th>
-                            <th scope="col">EMAIL CONFIRMED</th>
-                            <th scope="col">PASSWORD</th>
-                            <th scope="col">ROLE</th>
-                            <th scope="col">FACULTY</th> <!-- New column for Faculty -->
-                            <th scope="col">Action</th>
+<h1 style="margin-left: -46px;">Management Contributions</h1>
+<p>
+    <a href="/Contributions/Create" class="btn btn-primary" style="margin-left: -44px;">Create new Contributions</a>
+</p>
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-light text-center rounded p-4" style="margin-left: -68px;">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+        </div>
+        <div class="table-responsive">
+            <table class="table text-start align-middle table-bordered table-hover mb-0">
+                <thead>
+                    <tr class="text-dark">
+                        <th scope="col">Title</th>
+                        <th scope="col">Content</th>
+                        <th scope="col">ApplicationUser</th>
+                        <th scope="col">Course</th>
+                        <th scope="col">Status</th> <!-- Add Status column -->
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Title)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Content)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ApplicationUser.Email)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AcademicYear.AcademicYearID)
+                            </td>
+                            <td>
+                                @if (item.IsPublic)
+                                {
+                                    <span class="badge bg-success">Public</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Private</span>
+                                }
+                            </td>
+                            <td>
+                                <button class="btn btn-danger"><a class="tag-a" asp-action="Details" asp-route-id="@item.ContributionID" style="color:aliceblue">Details</a></button>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var user in Model)
-                        {
-                            @if (!user.Roles.Contains("Admin"))
-                            {
-                                <tr>
-                                    <td>@user.Id</td>
-                                    <td>@user.Email</td>
-                                    <td>@user.EmailConfirmed</td>
-                                    <td>*********</td>
-                                    <td>@string.Join(", ", user.Roles)</td>
-                                    <td>@string.Join(", ", user.Faculties)</td> <!-- Display the faculties -->
-                                    <td style="display: flex; gap: 5px;">
-                                        <button class="btn btn-danger"><a class="tag-a" asp-action="Edit" asp-route-id="@user.Id">Edit</a></button>
-                                        <button class="btn btn-danger"><a class="tag-a" asp-action="Details" asp-route-id="@user.Id">Details</a></button>
-                                        <button class="btn btn-danger"><a class="tag-a" asp-action="Delete" asp-route-id="@user.Id">Delete</a></button>
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
-            </div>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
-</body>
-
-</html>
+</div>

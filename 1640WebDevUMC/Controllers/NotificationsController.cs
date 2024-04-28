@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using _1640WebDevUMC.Data;
 using _1640WebDevUMC.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace _1640WebDevUMC.Controllers
 {
+    [Authorize(Roles = "Admin")]
+
     public class NotificationsController : Controller
     {
         private readonly ApplicationDbContext _context;

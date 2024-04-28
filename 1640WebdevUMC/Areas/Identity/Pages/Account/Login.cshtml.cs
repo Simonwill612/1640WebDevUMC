@@ -87,7 +87,7 @@ namespace _1640WebDevUMC.Areas.Identity.Pages.Account
                     {
                         return RedirectToAction("Index","MarketingCoordinatorDashboard");
                     }
-                    else if (await _userManager.IsInRoleAsync(user, "Marketing Manager"))
+                    else if (await _userManager.IsInRoleAsync(user, "Marketing Managerment"))
                     {
                         return RedirectToAction("Index", "MarketingManagementDashboard");
                     }

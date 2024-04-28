@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using _1640WebDevUMC.Data;
 using _1640WebDevUMC.Models;
@@ -22,10 +20,11 @@ namespace _1640WebDevUMC.Controllers
         // GET: Faculties
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Faculties.ToListAsync());
+            List<Faculty> faculties = await _context.Faculties.ToListAsync();
+            return View(faculties);
         }
 
-        // GET: Faculties/Details/5
+        // GET: Faculty/Details/5
         public async Task<IActionResult> Details(string id)
         {
             if (id == null)
@@ -43,18 +42,16 @@ namespace _1640WebDevUMC.Controllers
             return View(faculty);
         }
 
-        // GET: Faculties/Create
+        // GET: Faculty/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Faculties/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Faculty/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FacultyID,FacultyName")] Faculty faculty)
+        public async Task<IActionResult> Create([Bind("FacultyID,CodeSubject,FacultyName")] Faculty faculty)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +62,7 @@ namespace _1640WebDevUMC.Controllers
             return View(faculty);
         }
 
-        // GET: Faculties/Edit/5
+        // GET: Faculty/Edit/5
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -81,12 +78,10 @@ namespace _1640WebDevUMC.Controllers
             return View(faculty);
         }
 
-        // POST: Faculties/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Faculty/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("FacultyID,FacultyName")] Faculty faculty)
+        public async Task<IActionResult> Edit(string id, [Bind("FacultyID,CodeSubject,FacultyName")] Faculty faculty)
         {
             if (id != faculty.FacultyID)
             {
@@ -116,7 +111,7 @@ namespace _1640WebDevUMC.Controllers
             return View(faculty);
         }
 
-        // GET: Faculties/Delete/5
+        // GET: Faculty/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -134,17 +129,13 @@ namespace _1640WebDevUMC.Controllers
             return View(faculty);
         }
 
-        // POST: Faculties/Delete/5
+        // POST: Faculty/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var faculty = await _context.Faculties.FindAsync(id);
-            if (faculty != null)
-            {
-                _context.Faculties.Remove(faculty);
-            }
-
+            _context.Faculties.Remove(faculty);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

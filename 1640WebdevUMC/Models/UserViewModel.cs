@@ -10,6 +10,8 @@
         public IList<string> AllRoles { get; set; }
         public IList<string> Faculties { get; set; }
         public IList<string> AllFaculties { get; set; } // New property for all faculties
+        public int NumberOfContributions { get; set; }
+        public string Faculty { get; set; }
 
         public UserViewModel()
         {
